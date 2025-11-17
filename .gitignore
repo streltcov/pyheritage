@@ -1,0 +1,27 @@
+# Environment files;
+.env
+.venv
+env/
+venv/
+
+# Python cache;
+__pycache__/
+pyheritage/__pycache__/
+tests/__pycache__/
+
+# Setuptools;
+*.egg
+*.egg-info
+dist/
+build/
+eggs/
+var/
+sdist/
+lib/
+lib64/
+
+# Editors/IDE;
+.DS_Store
+.idea/
+.vs-code/
+
