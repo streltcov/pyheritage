@@ -1,0 +1,54 @@
+[flake8]
+ignore =
+    E116, F407, W191, W686,
+    N814, N817,
+    SIM119,
+    C405, C406,
+    ANN002, ANN003
+
+select =
+    # --- PEP-8 ---
+    E101, E111, E117, E121, E221, E222, E223, E224, E225,
+    E241, E242, E251, E261, E262, E265, E274, E275,
+    E301, E302, E303, E304, E305, E306,
+    E401, E501, E502, E722,
+
+    # --- pyflakes ---
+    F401, F402, F405, F501, F601, F602, F621, F631, F632,
+    F811, F822, F831, F841,
+
+    # --- Absolute imports ---
+    ABS101,
+
+    # --- Annotations ---
+    ANN001, ANN201, ANN202, ANN204, ANN205, ANN206,
+
+    # --- Comprehensions ---
+    C101, C102, C400, C401, C402,
+
+    # --- Cognitive complexity ---
+    CFQ001, CFQ002, CFQ003,
+
+    # --- Pydantic ---
+    PYD001, PYD002, PYD005
+
+    # --- Bugbear ---
+    B002, B003, B004, B005, B006, B007, B008, B009, B010, B011, B012, B013,
+    B014, B015, B016, B017, B018, B019, B020, B021, B022, B023, B024, B025,
+    B026, B027, B029, B030
+
+    # --- Code complexity and readability ---
+    SIM101, SIM102, SIM103, SIM105, SIM112, SIM113, SIM115, SIM116, SIM118,
+    SIM120, SIM210, SIM401, SIM988,
+
+    # --- Naming ---
+    N801, N802, N803, N804, N805, N806, N807, N811, N812, N813, N815, N816, N818
+
+# per-file-ignores:
+
+max-line-length = 120
+max-complexity = 6
+indent-size = 4
+verbose = True
+statistics = True
+count = True
