@@ -1,0 +1,229 @@
+[MAIN]
+clear-cache-post-run = no
+enable-all-extensions = no
+extension-pkg-whitelist = pydantic
+fail-under = 10
+ignore = CVS
+jobs = 1
+limit-inference-results = 100
+load-plugins=
+    pylint.extensions.docparams,
+    pylint.extensions.docstyle,
+    pylint_pydantic
+persistent = yes
+py-version = 3.11
+recursive = no
+unsafe-load-any-extension = no
+verbose = yes
+
+
+# =================================================================================================================== #
+[BASIC]
+# =================================================================================================================== #
+argument-naming-style = snake_case
+attr-naming-style = snake_case
+bad-names = foo,
+            bar,
+            baz,
+class-attribute-naming-style = any
+class-const-naming-style = UPPER_CASE
+class-naming-style = PascalCase
+const-naming-style = UPPER_CASE
+docstring-min-length = -1
+function-naming-style = snake_case
+good-names = BaseModel,
+             Field,
+             validator,
+             root_validator,
+             field_validator,
+             model_validator,
+             computed_field,
+             ConfigDict,
+             Config,
+             db,
+             id,
+             pk,
+             v,
+             i,
+             j,
+             k,
+             ex,
+             dt,
+             run,
+             _
+include-naming-hint = no
+inlinevar-naming-style = any
+method-naming-style = snake_case
+module-naming-style = snake_case
+property-classes = abc.abstractproperty
+variable-naming-style = snake_case
+
+
+# =================================================================================================================== #
+[CLASSES]
+# =================================================================================================================== #
+check-protected-access-in-special-methods = no
+defining-attr-methods = __init__,
+                        __new__,
+                        __post_init__,
+                        model_post_init
+exclude-protected = _asdict,
+                    _fields,
+                    _replace,
+                    _source,
+                    _make,
+                    os._exit
+valid-classmethod-first-arg = cls
+valid-metaclass-classmethod-first-arg = mcs
+
+
+# =================================================================================================================== #
+[DESIGN]
+# =================================================================================================================== #
+max-args = 15
+max-bool-expr = 5
+max-branches = 12
+max-locals = 15
+max-parents = 20
+max-positional-arguments = 5
+max-public-methods = 30
+max-returns = 6
+max-statements = 50
+min-public-methods = 0
+
+
+# =================================================================================================================== #
+[EXCEPTIONS]
+# =================================================================================================================== #
+overgeneral-exceptions = builtins.BaseException,
+                         builtins.Exception
+
+
+# =================================================================================================================== #
+[FORMAT]
+# =================================================================================================================== #
+indent-after-paren = 4
+indent-string = '    '
+max-line-length = 120
+max-module-lines = 1500
+single-line-class-stmt = no
+single-line-if-stmt = no
+
+
+# =================================================================================================================== #
+[IMPORTS]
+# =================================================================================================================== #
+allow-reexport-from-package = yes
+allow-wildcard-with-all = no
+deprecated-modules = urllib2
+
+
+# =================================================================================================================== #
+[LOGGING]
+# =================================================================================================================== #
+logging-format-style = new
+logging-modules = logging
+
+
+# =================================================================================================================== #
+[MESSAGES CONTROL]
+# =================================================================================================================== #
+confidence = HIGH,
+             CONTROL_FLOW,
+             INFERENCE,
+             INFERENCE_FAILURE,
+             UNDEFINED
+disable = raw-checker-failed,
+          bad-inline-option,
+          locally-disabled,
+          file-ignored,
+          suppressed-message,
+          useless-suppression,
+          deprecated-pragma,
+          use-symbolic-message-instead,
+          use-implicit-booleaness-not-comparison-to-string,
+          use-implicit-booleaness-not-comparison-to-zero,
+          too-many-instance-attributes,
+          too-many-arguments,
+          no-name-in-module
+
+
+# =================================================================================================================== #
+[MISCELLANEOUS]
+# =================================================================================================================== #
+notes = FIXME,
+        XXX,
+        TODO
+
+
+# =================================================================================================================== #
+[REFACTORING]
+# =================================================================================================================== #
+max-nested-blocks = 5
+never-returning-functions = sys.exit,
+                            argparse.parse_error
+
+
+# =================================================================================================================== #
+[REPORTS]
+# =================================================================================================================== #
+evaluation = max(0, 0 if fatal else 10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10))
+output-format = colorized
+reports = yes
+score = yes
+
+
+# =================================================================================================================== #
+[SIMILARITIES]
+# =================================================================================================================== #
+ignore-comments = yes
+ignore-docstrings = yes
+ignore-imports = yes
+ignore-signatures = yes
+min-similarity-lines = 8
+
+
+# =================================================================================================================== #
+[SPELLING]
+# =================================================================================================================== #
+max-spelling-suggestions = 4
+spelling-ignore-comment-directives = fmt: on,fmt: off,noqa:,noqa,nosec,isort:skip,mypy:
+
+
+# =================================================================================================================== #
+[STRING]
+# =================================================================================================================== #
+check-quote-consistency = no
+check-str-concat-over-line-jumps = no
+
+
+# =================================================================================================================== #
+[TYPECHECK]
+# =================================================================================================================== #
+contextmanager-decorators = contextlib.contextmanager
+generated-members = pydantic.*,
+                    model_fields,
+                    model_computed_fields,
+                    model_config,
+                    model_extra,
+                    model_fields_set
+ignore-none = yes
+ignored-classes = optparse.Values,
+                  thread._local,
+                  _thread._local,
+                  pydantic.BaseModel,
+                  pydantic.main.BaseModel,
+                  pydantic.generics.GenericModel
+missing-member-hint = yes
+missing-member-hint-distance = 1
+missing-member-max-choices = 1
+mixin-class-rgx = .*[Mm]ixin
+
+
+# =================================================================================================================== #
+[VARIABLES]
+# =================================================================================================================== #
+allow-global-unused-variables = no
+callbacks = callback,_
+dummy-variables-rgx = ^(_+[^_]|_$)
+allowed-redefined-builtins = id
