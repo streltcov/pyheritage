@@ -6,11 +6,27 @@
 
 
 import uuid
+from abc import ABC
 
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class Identity(BaseModel):
+__all__ = ('CRMEntityBase', 'PropertyMixin', 'crm_entity',)
+
+
+ENTITY_REGISTRY: dict[str, type] = {}
+
+
+class PropertyMixin(ABC, BaseModel):
+    """Base class for property mixin classes;
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class Identity(ABC, BaseModel):
     """Node identification - not a CRM-class;
 
     """
@@ -22,6 +38,9 @@ class Identity(BaseModel):
     )
 
 
+# ******************************************************************************************************************* #
+
+
 class CRMEntityBase(Identity):
     """CIDOC CRM entities base class;
 
@@ -30,3 +49,24 @@ class CRMEntityBase(Identity):
     model_config = ConfigDict(
         extra='allow',
     )
+
+
+# ******************************************************************************************************************* #
+
+
+def crm_entity(label: str) -> CRMEntityBase:
+    """Entity decorator;
+
+    Adds entity class to entity registry;
+    Adds CRM code and CRM label to entity class attributes;
+
+    """
+    def wrapper(cls: CRMEntityBase) -> CRMEntityBase:
+        code = label.split(" ")[0]
+        cls.crm_code = code
+        cls.crm_label = label
+        ENTITY_REGISTRY[code] = cls
+
+        return cls
+
+    return wrapper
