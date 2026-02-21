@@ -11,7 +11,7 @@ from abc import ABC
 from pydantic import BaseModel, ConfigDict, Field
 
 
-__all__ = ('CRMEntityBase', 'PropertyMixin', 'crm_entity',)
+__all__ = ('CRMEntityBase', 'PropertyMixin', 'entity_register', )
 
 
 ENTITY_REGISTRY: dict[str, type] = {}
@@ -54,7 +54,7 @@ class CRMEntityBase(Identity):
 # ******************************************************************************************************************* #
 
 
-def crm_entity(label: str) -> CRMEntityBase:
+def entity_register(label: str) -> callable:
     """Entity decorator;
 
     Adds entity class to entity registry;
@@ -65,7 +65,7 @@ def crm_entity(label: str) -> CRMEntityBase:
         code = label.split(" ")[0]
         cls.crm_code = code
         cls.crm_label = label
-        ENTITY_REGISTRY[code] = cls
+        ENTITY_REGISTRY[code] = cls.__class__
 
         return cls
 
