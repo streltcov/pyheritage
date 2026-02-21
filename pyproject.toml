@@ -5,7 +5,9 @@ description = "Pydantic models for the CIDOC Conceptual Reference Model (CRM)"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "edtf>=5.0.0",
     "pydantic>=2.12.4",
+    "pygeoif>=1.6.0",
 ]
 
 [dependency-groups]
