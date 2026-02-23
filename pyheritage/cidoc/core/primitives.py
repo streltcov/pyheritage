@@ -9,8 +9,9 @@ https://cidoc-crm.org/html/cidoc_crm_v7.0.html
 
 from __future__ import __annotations__  # noqa
 
-from typing import Optional
+from typing import Any, Optional
 
+from edtf import EDTFObject
 from pydantic import Field
 
 from pyheritage.cidoc.core.base import CRMEntityBase, entity_register
@@ -50,6 +51,8 @@ class E60Number(E59PrimitiveValue):
 
     value: int | float = Field(default=0)
 
+    # ------------------------------ #
+
     def __repr__(self) -> str:
         return f'E60({self.value})'
 
@@ -67,6 +70,19 @@ class E61TimePrimitive(E59PrimitiveValue):
     """
 
     value: str = Field(default='')
+    _parsed: Optional[EDTFObject] = Field(default=None, exclude=True, repr=False, description='Cached parsing result'
+                                                                                              ' (not serialized)')
+
+    # ------------------------------ #
+
+    @property
+    def parsed(self) -> Optional[Any]:
+        """Parsed EDTF value;
+
+        """
+        return self._parsed
+
+    # ------------------------------ #
 
     def __repr__(self) -> str:
         return f'E61({self.value})'
@@ -94,8 +110,12 @@ class E62String(E59PrimitiveValue):
     value: str = ''
     language: Optional[str] = Field(default=None)
 
+    # ------------------------------ #
+
     def __str__(self) -> str:
         return self.value
+
+    # ------------------------------ #
 
     def __repr__(self) -> str:
         language = f'{self.value} - {self.language}' if self.language else f'{self.value}'
@@ -124,6 +144,8 @@ class E94SpacePrimitive(E59PrimitiveValue):
     value: str = Field(default='')
     srs: str = Field(default='ESPG:4326', description='Spatial Reference System (EPSG Code)')
 
+    # ------------------------------ #
+
     def __repr__(self) -> str:
         return f'{self.value}'
 
@@ -145,6 +167,8 @@ class E95SpaceTimePrimitive(E59PrimitiveValue):
 
     spatial: Optional[E94SpacePrimitive] = None
     temporal: Optional[E61TimePrimitive] = None
+
+    # ------------------------------ #
 
     def __repr__(self) -> str:
         return f'{self.spatial.value}'
