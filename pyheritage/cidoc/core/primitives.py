@@ -9,9 +9,9 @@ https://cidoc-crm.org/html/cidoc_crm_v7.0.html
 
 from __future__ import __annotations__  # noqa
 
-from typing import Any, Optional
+from typing import Any, Optional, Self
 
-from edtf import EDTFObject
+from edtf import EDTFObject, text_to_edtf
 from pydantic import Field
 
 from pyheritage.cidoc.core.base import CRMEntityBase, entity_register
@@ -81,6 +81,114 @@ class E61TimePrimitive(E59PrimitiveValue):
 
         """
         return self._parsed
+
+    # ------------------------------ #
+
+    @classmethod
+    def from_text(cls, text: str) -> Self:
+        """Creates E61 object from text description;
+
+        Args:
+            text (str): date in text format;
+
+        Raises:
+            ValueError - if the date couldn't be recognized from the text;
+
+        """
+        value = text_to_edtf(text)
+
+        if value is None:
+            raise ValueError(f'Unable to parse: {text}')
+
+        return cls(value=value)
+
+    # ------------------------------ #
+
+    @classmethod
+    def from_year(cls, year: int, approximate: bool = False) -> Self:
+        """Creates E61 object from the numeric value of the year;
+
+        Args:
+            year (int): year (negative for BCE);
+            approximate (bool): flag for approximate value;
+
+        """
+        value = f'{year:04d}' if year >= 0 else f'{-abs(year):04d}'
+
+        if approximate:
+            value += '~'
+
+        return cls(value=value)
+
+    # ------------------------------ #
+
+    @classmethod
+    def from_date(cls, year: int, month: int, day: int) -> Self:
+        """Creates E81 object from date values;
+
+        Args:
+            year (int): numeric value for year;
+            month (int): numeric value for month;
+            day (int): numeric value for day;
+
+        """
+        prefix = f'{year:04d}' if year >= 0 else f'{-abs(year):04d}'
+        value = f"{prefix}-{month:02d}-{day:02d}"
+
+        return cls(value=value)
+
+    # ------------------------------ #
+
+    @classmethod
+    def from_century(cls, century: int, approximate: bool = False) -> Self:
+        """Creates E61 object from century value;
+
+        from_century(16) -> 15xx" (century)";
+
+        Args:
+            century (int): century value;
+            approximate (bool): flag for approximate value;
+
+        """
+        value = f"{century - 1:02d}xx"
+
+        if approximate:
+            value += '~'
+
+        return cls(value=value)
+
+    # ------------------------------ #
+
+    @classmethod
+    def from_decade(cls, start: int) -> Self:
+        """Creates E61 object from decade value;
+
+        from_decade(1950) -> "195x";
+
+        Args:
+            start (int): numeric value for decade;
+
+        """
+        value = f"{start // 10}x"
+
+        return cls(value=value)
+
+    # ------------------------------ #
+
+    @classmethod
+    def from_interval(cls, start: int, end: int) -> Self:
+        """Creates E61 object from time interval;
+
+        from_interval(1501, 1520) -> "1501/1520";
+
+        Args:
+            start (str): start value for time interval;
+            end (str): end value for tim interval;
+
+        """
+        value = f"{start}/{end}"
+
+        return cls(value=value)
 
     # ------------------------------ #
 
