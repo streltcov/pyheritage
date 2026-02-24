@@ -11,8 +11,9 @@ from __future__ import __annotations__  # noqa
 
 from typing import Any, Optional, Self
 
-from edtf import EDTFObject, text_to_edtf
-from pydantic import Field
+from edtf import EDTFObject, parse_edtf, text_to_edtf
+from edtf.parser.edtf_exceptions import EDTFParseException
+from pydantic import Field, field_validator
 
 from pyheritage.cidoc.core.base import CRMEntityBase, entity_register
 
@@ -72,6 +73,44 @@ class E61TimePrimitive(E59PrimitiveValue):
     value: str = Field(default='')
     _parsed: Optional[EDTFObject] = Field(default=None, exclude=True, repr=False, description='Cached parsing result'
                                                                                               ' (not serialized)')
+
+    # ------------------------------ #
+
+    @classmethod
+    @field_validator('value')
+    def validate_edtf(cls, value: str) -> str:
+        """Validation method for 'value' field;
+
+        Args:
+            value (str): EDTF time value to validate;
+
+        """
+        if not value:
+            return value
+
+        try:
+            parse_edtf(value)
+        except EDTFParseException:
+            raise ValueError(
+                f"Invalid EDTF value: '{value}'. "
+                f"See https://www.loc.gov/standards/datetime/"
+            )
+        return value
+
+    # ------------------------------ #
+
+    def model_post_init(self, context: Any) -> None:  # noqa
+        """Model post init method;
+
+        """
+        if self.value:
+            try:
+                object.__setattr__(self, '_parsed', parse_edtf(self.value))
+            except EDTFParseException as e:
+                raise ValueError(
+                    f"Invalid EDTF value: {self.value}",
+                    f"See https://www.loc.gov/standards/datetime",
+                ) from e
 
     # ------------------------------ #
 
