@@ -9,6 +9,8 @@ https://cidoc-crm.org/html/cidoc_crm_v7.0.html
 
 from __future__ import __annotations__  # noqa
 
+import re
+from enum import Enum
 from typing import Any, Optional, Self
 
 from edtf import EDTFObject, parse_edtf, text_to_edtf
@@ -20,6 +22,29 @@ from pyheritage.cidoc.core.base import CRMEntityBase, entity_register
 
 __all__ = ('E59PrimitiveValue', 'E60Number', 'E61TimePrimitive', 'E62String', 'E94SpacePrimitive',
            'E95SpaceTimePrimitive', )
+
+
+# ******************************************************************************************************************* #
+
+
+class TimePrecision(str, Enum):
+    """The accuracy level of the time primitive;
+
+    It is determined by the python-edtf library or manually by the string format;
+
+    """
+
+    MILLENNIUM = "millennium"
+    CENTURY = "century"
+    DECADE = "decade"
+    YEAR = "year"
+    MONTH = "month"
+    DAY = "day"
+    DATETIME = "datetime"
+    UNKNOWN = "unknown"
+
+
+# ******************************************************************************************************************* #
 
 
 @entity_register(label='E59 Primitive Value')
@@ -122,6 +147,144 @@ class E61TimePrimitive(E59PrimitiveValue):
         return self._parsed
 
     # ------------------------------ #
+
+    @property
+    def precision(self) -> str:
+        """Dynamic property - time primitive precision level;
+
+        """
+        if not self.value:
+            return TimePrecision.UNKNOWN
+
+        value = self.value.rstrip("~?%")
+
+        if 'T' in value:
+            return TimePrecision.DATETIME
+
+        if 'xxx' in value:
+            return TimePrecision.MILLENNIUM
+
+        if 'xx' in value:
+            return TimePrecision.CENTURY
+
+        if 'x' in value:
+            return TimePrecision.DECADE
+
+        parts = value.lstrip("-").split("-")
+
+        if len(parts) >= 3:
+            return TimePrecision.DAY
+
+        if len(parts) == 2:
+            return TimePrecision.MONTH
+
+        return TimePrecision.YEAR
+
+    # ------------------------------ #
+
+    @property
+    def is_approximate(self) -> bool:
+        """Dynamic property - checks if time primitive value is approximate;
+
+        """
+        return bool(self.value) and self.value[-1] in ("~", "%", )
+
+    # ------------------------------ #
+
+    @property
+    def is_uncertain(self) -> bool:
+        """Dynamic property - checks if time primitive value is uncertain;
+
+        """
+        return bool(self.value) and self.value[-1] in ("?", "%", )
+
+    # ------------------------------ #
+
+    @property
+    def is_interval(self) -> bool:
+        """Dynamic property - checks if time primitive value is time interval;
+
+        """
+        return "/" in self.value
+
+    # ------------------------------ #
+
+    @property
+    def is_open(self) -> bool:
+        """Dynamic property - checks if time primitive value is open;
+
+        """
+        return ".." in self.value
+
+    # ------------------------------ #
+
+    @property
+    def is_bce(self) -> bool:
+        """Dynamic property - checks if time primitive value is BCE;
+
+        """
+        return self.value.startswith('-')
+
+    # ------------------------------ #
+
+    @property
+    def year(self) -> Optional[int]:
+        """Dynamic property - year from EDTF time primitive;
+
+        """
+        if not self.value:
+            return None
+
+        value = self.value.split("/")[0].rstrip("~?%").replace("x", "0")
+        match = re.match(r"^(-?\d+)", value)
+
+        return int(match.group(1)) if match else None
+
+    # ------------------------------ #
+
+    @property
+    def lower_strict(self) -> Optional[Any]:
+        """Earliest possible date;
+
+        """
+        if self._parsed and hasattr(self._parsed, 'lower_strict'):
+            return self._parsed.lower_strict()
+
+        return None
+
+    # ------------------------------ #
+
+    @property
+    def upper_strict(self) -> Optional[Any]:
+        """Latest possible date;
+
+        """
+        if self._parsed and hasattr(self._parsed, 'upper_strict'):
+            return self._parsed.upper_strict()
+
+        return None
+
+    # ------------------------------ #
+
+    # @property
+    # def sort_key(self) -> str:
+    #     if self._parsed and hasattr(self._parsed, 'lower_strict'):
+    #         try:
+    #             ls = self._parsed.lower_strict()
+    #             return f"{ls.tm_year:05d}-{ls.tm_mon:02d}-{ls.tm_mday:02d}"
+    #         except Exception:
+    #             pass
+    #
+    #     if not self.value:
+    #         return ""
+    #
+    #     clean = self.value.split("/")[0].rstrip("~?%").replace("x", "0")
+    #
+    #     return clean
+
+    # ------------------------------ #
+
+    # ===== Factory methods =====
 
     @classmethod
     def from_text(cls, text: str) -> Self:
@@ -232,7 +395,14 @@ class E61TimePrimitive(E59PrimitiveValue):
     # ------------------------------ #
 
     def __repr__(self) -> str:
-        return f'E61({self.value})'
+        extras = []
+
+        if self.is_approximate: extras.append('≈')
+        if self.is_uncertain: extras.append('?')
+        if self.is_interval: extras.append('interval')
+        suffix = f" [{','.join(extras)}]" if extras else ""
+
+        return f'E61({self.value}{suffix})'
 
 
 # ******************************************************************************************************************* #
