@@ -140,8 +140,8 @@ class E61TimePrimitive(E59PrimitiveValue):
     # ------------------------------ #
 
     @property
-    def parsed(self) -> Optional[Any]:
-        """Parsed EDTF value;
+    def parsed(self) -> Optional[EDTFObject]:
+        """Parsed EDTF object (python-edtf);
 
         """
         return self._parsed
@@ -150,7 +150,17 @@ class E61TimePrimitive(E59PrimitiveValue):
 
     @property
     def precision(self) -> str:
-        """Dynamic property - time primitive precision level;
+        """Dynamic property - determine the level of temporal precision;
+
+        Precision levels (defined in TimePrecision enum):
+            * MILLENNIUM — "2xxx"
+            * CENTURY — "15xx"
+            * DECADE`` — "150x"
+            * YEAR`` — "1503", "-0196"
+            * MONTH — "1503-03"
+            * DAY — "1503-03-15"
+            * DATETIME — "1503-03-15T10:30:00"
+            * UNKNOWN — empty string or unrecognized format
 
         """
         if not self.value:
@@ -184,7 +194,14 @@ class E61TimePrimitive(E59PrimitiveValue):
 
     @property
     def is_approximate(self) -> bool:
-        """Dynamic property - checks if time primitive value is approximate;
+        """Whether the date is marked approximate;
+
+        Examples:
+            E61TimePrimitive("1703~").is_approximate     # True  (approximate)
+            E61TimePrimitive("1703?").is_approximate     # False (uncertain, not approximate)
+            E61TimePrimitive("1703").is_approximate      # False (exact)
+            E61TimePrimitive("1703%").is_approximate     # True  (approximate + uncertain)
+
 
         """
         return bool(self.value) and self.value[-1] in ("~", "%", )
@@ -193,7 +210,13 @@ class E61TimePrimitive(E59PrimitiveValue):
 
     @property
     def is_uncertain(self) -> bool:
-        """Dynamic property - checks if time primitive value is uncertain;
+        """Whether the date is marked as uncertain;
+
+        Examples:
+            E61TimePrimitive("1703?").is_uncertain       # True  (uncertain)
+            E61TimePrimitive("1703%").is_uncertain       # True  (uncertain + approximate)
+            E61TimePrimitive("1703").is_uncertain        # False (exact)
+            E61TimePrimitive("1703~").is_uncertain       # False (approximate, not uncertain)
 
         """
         return bool(self.value) and self.value[-1] in ("?", "%", )
@@ -202,7 +225,13 @@ class E61TimePrimitive(E59PrimitiveValue):
 
     @property
     def is_interval(self) -> bool:
-        """Dynamic property - checks if time primitive value is time interval;
+        """Whether the value represents an EDTF interval;
+
+        Examples:
+            E61TimePrimitive("1703/1721").is_interval    # True
+            E61TimePrimitive("1703/..").is_interval      # True
+            E61TimePrimitive("../1721").is_interval      # True
+            E61TimePrimitive("1703").is_interval         # False
 
         """
         return "/" in self.value
@@ -211,7 +240,13 @@ class E61TimePrimitive(E59PrimitiveValue):
 
     @property
     def is_open(self) -> bool:
-        """Dynamic property - checks if time primitive value is open;
+        """Whether the value is an open-ended EDTF interval;
+
+        Examples:
+            E61TimePrimitive("1703/..").is_open          # True  (open end)
+            E61TimePrimitive("../1721").is_open          # True  (open start)
+            E61TimePrimitive("1703/1721").is_open        # False (closed interval)
+            E61TimePrimitive("1703").is_open             # False (not an interval)
 
         """
         return ".." in self.value
@@ -220,7 +255,14 @@ class E61TimePrimitive(E59PrimitiveValue):
 
     @property
     def is_bce(self) -> bool:
-        """Dynamic property - checks if time primitive value is BCE;
+        """Whether the date is before the Common Era;
+
+        Examples:
+            E61("-0196").is_bce             # True  (197 BCE)
+            E61("-0001").is_bce             # True  (2 BCE)
+            E61("0000").is_bce              # False (1 BCE in astronomical numbering)
+            E61("1503").is_bce              # False
+            E61("").is_bce                  # False
 
         """
         return self.value.startswith('-')
@@ -229,7 +271,13 @@ class E61TimePrimitive(E59PrimitiveValue):
 
     @property
     def year(self) -> Optional[int]:
-        """Dynamic property - year from EDTF time primitive;
+        """Exact year from EDTF time primitive as an integer;
+
+        Examples:
+            E61TimePrimitive("1703").year                # 1703
+            E61TimePrimitive("-0196").year               # -196
+            E61TimePrimitive("2022-01-15").year          # 2024
+            E61TimePrimitive("15xx").year                # 1500
 
         """
         if not self.value:
@@ -244,7 +292,12 @@ class E61TimePrimitive(E59PrimitiveValue):
 
     @property
     def lower_strict(self) -> Optional[Any]:
-        """Earliest possible date;
+        """Earliest possible date as time.struct_time;
+
+        Delegates to edtf.lower_strict();
+
+        Examples:
+            E61TimePrimitive("17xx").lower_strict      # time.struct_time(tm_year=1700, tm_mon=1, tm_mday=1, ...)
 
         """
         if self._parsed and hasattr(self._parsed, 'lower_strict'):
@@ -256,7 +309,12 @@ class E61TimePrimitive(E59PrimitiveValue):
 
     @property
     def upper_strict(self) -> Optional[Any]:
-        """Latest possible date;
+        """Latest possible date as time.struct_time;
+
+        Delegates to edtf.upper_strict();
+
+        Examples:
+            E61TimePrimitive("17xx").upper_strict      # time.struct_time(tm_year=1799, tm_mon=12, tm_mday=31, ...)
 
         """
         if self._parsed and hasattr(self._parsed, 'upper_strict'):
@@ -266,21 +324,116 @@ class E61TimePrimitive(E59PrimitiveValue):
 
     # ------------------------------ #
 
-    # @property
-    # def sort_key(self) -> str:
-    #     if self._parsed and hasattr(self._parsed, 'lower_strict'):
-    #         try:
-    #             ls = self._parsed.lower_strict()
-    #             return f"{ls.tm_year:05d}-{ls.tm_mon:02d}-{ls.tm_mday:02d}"
-    #         except Exception:
-    #             pass
-    #
-    #     if not self.value:
-    #         return ""
-    #
-    #     clean = self.value.split("/")[0].rstrip("~?%").replace("x", "0")
-    #
-    #     return clean
+    @property
+    def sort_key(self) -> str:
+        """Normalized key for sorting and comparing dates;
+
+        Transforms th EDTF value into a string suitable for correct lexicographic comparison;
+        Used internally by dunder comparison operators and '__hash__' method;
+
+        Note:
+            This is a pragmatic simplified implementation
+
+            * Intervals are compared by their start date;
+            * Dates of different precision are compared by their lower bounds;
+            * Approximate dates are treated as equal to exact dates;
+
+        """
+        if self._parsed and hasattr(self._parsed, 'lower_strict'):
+            ls = self._parsed.lower_strict()
+            return f"{ls.tm_year:05d}-{ls.tm_mon:02d}-{ls.tm_mday:02d}"
+
+        if not self.value:
+            return ""
+
+        clean = self.value.split("/")[0].rstrip("~?%").replace("x", "0")
+
+        return clean
+
+    # ------------------------------ #
+
+    # ===== Comparison operators =====
+
+    def __eq__(self, other) -> bool:  # noqa
+        """Checks equality of two temporal primitives;
+
+        Returns:
+            True if both objects/values has the same 'sort_key' attribute;
+            NotImplemented if type not supported;
+
+        """
+        if isinstance(other, E61TimePrimitive):
+            return self.sort_key == other.sort_key
+
+        return NotImplemented
+
+    # ------------------------------ #
+
+    def __lt__(self, other) -> bool:  # noqa
+        """Checks if this time primitive is strictly earlier than another;
+
+        Returns:
+            True if this time primitive is earlier
+            NotImplemented if type not supported;
+
+        """
+        if isinstance(other, E61TimePrimitive):
+            return self.sort_key < other.sort_key
+
+        return NotImplemented
+
+    # ------------------------------ #
+
+    def __le__(self, other) -> bool:  # noqa
+        """Checks if this time primitive is earlier than or equal to another;
+
+        Returns:
+            True if current time primitive is earlier or equal;
+            NotImplemented if type not supported;
+
+        """
+        if isinstance(other, E61TimePrimitive):
+            return self == other or self < other
+
+        return NotImplemented
+
+    # ------------------------------ #
+
+    def __gt__(self, other) -> bool:  # noqa
+        """Checks if this time primitive is strictly later than another;
+
+        Returns:
+            True if current time primitive later;
+            NotImplemented if type not supported;
+
+        """
+        if isinstance(other, E61TimePrimitive):
+            return self.sort_key > other.sort_key
+
+        return NotImplemented
+
+    # ------------------------------ #
+
+    def __ge__(self, other):  # noqa
+        """Checks if this time primitive is later than or equal to another;
+
+        Returns:
+            True if current time primitive is later or equal;
+            NotImplemented if type not supported;
+
+        """
+        if isinstance(other, E61TimePrimitive):
+            return self == other or self > other
+
+        return NotImplemented
+
+    # ------------------------------ #
+
+    def __hash__(self) -> int:
+        """Computes hash based on `sort_key`
+
+        """
+        return hash(self.sort_key)
 
     # ------------------------------ #
 
