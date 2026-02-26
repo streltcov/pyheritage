@@ -12,17 +12,17 @@ from __future__ import annotations  # noqa
 import math
 import re
 from enum import Enum
-from typing import Any, Optional, Self
+from typing import Annotated, Any, Optional, Self
 
 from edtf import EDTFObject, parse_edtf, text_to_edtf
 from edtf.parser.edtf_exceptions import EDTFParseException
-from pydantic import Field, field_validator, PrivateAttr
+from pydantic import BeforeValidator, Field, field_validator, PrivateAttr
 
 from pyheritage.cidoc.core.base import CRMEntityBase, entity_register
 
 
 __all__ = ('E59PrimitiveValue', 'E60Number', 'E61TimePrimitive', 'E62String', 'E94SpacePrimitive',
-           'E95SpaceTimePrimitive', )
+           'E95SpaceTimePrimitive', 'CoercedNumber', 'CoercedTime', 'CoercedString', 'CoercedSpace', )
 
 
 # ******************************************************************************************************************* #
@@ -716,3 +716,117 @@ class E95SpaceTimePrimitive(E59PrimitiveValue):
             parts.append(repr(self.temporal))
 
         return f"E95({', '.join(parts) or 'empty'})"
+
+
+# ******************************************************************************************************************* #
+
+# ----------------------------------------------------------------------------------- #
+# ----- Coercion functions;                                                     ----- #
+# ----- automatically wrap bare Python values in the appropriate CRM primitives ----- #
+# ----------------------------------------------------------------------------------- #
+
+
+def _coerce_e60(value: Any) -> E60Number:
+    """Coerce a value to class 'E60Number';
+
+    This function is not intended to be called directly - it is bound to the 'CoercedNumber' type alias;
+    Allows users to pass plain numeric values where 'E60Number' is expected;
+
+    Returns:
+        E60Number instance;
+
+    Raises:
+        ValueError: if value cannot be coerced to E60Number;
+
+    """
+    if isinstance(value, E60Number):
+        return value
+
+    if isinstance(value, (int, float)):
+        return E60Number(value=value)
+
+    if isinstance(value, dict):
+        return E60Number(**value)
+
+    raise ValueError(f"Cannot coerce {value!r} to E60")
+
+
+def _coerce_e61(value: Any) -> E61TimePrimitive:
+    """Coerce a value to class 'E61TimePrimitive';
+
+    This function is not intended to be called directly - it is bound to the 'CoercedTime' type alias;
+    Allows users to pass plain EDTF strings where 'E61TimePrimitive' is expected;
+
+    Returns:
+        E61TimePrimitive instance;
+
+    Raises:
+        ValueError: if value cannot be coerced to E61TimePrimitive;
+
+    """
+    if isinstance(value, E61TimePrimitive):
+        return value
+
+    if isinstance(value, str):
+        return E61TimePrimitive(value=value)
+
+    if isinstance(value, dict):
+        return E61TimePrimitive(**value)
+
+    raise ValueError(f"Cannot coerce {value!r} to E61")
+
+
+def _coerce_e62(value: Any) -> E62String:
+    """Coerce a value to class 'E62String';
+
+    This function is not intended to be called directly - it is bound to the 'CoercedString' type alias;
+    Allows users to pass plain Python strings where 'E62String' is expected;
+
+    Returns:
+        E62String instance;
+
+    Raises:
+        ValueError: if value cannot be coerced to E62String;
+
+    """
+    if isinstance(value, E62String):
+        return value
+
+    if isinstance(value, str):
+        return E62String(value=value)
+
+    if isinstance(value, dict):
+        return E62String(**value)
+
+    raise ValueError(f"Cannot coerce {value!r} to E62")
+
+
+def _coerce_e94(value: Any) -> E94SpacePrimitive:
+    """Coerce a value to class 'E94SpacePrimitive';
+
+    This function is not intended to be called directly - it is bound to the `CoercedSpace` type alias;
+    Allows users to pass plain WKT or GeoJSON strings where 'E94SpacePrimitive' is expected;
+
+    Returns:
+        E94SpacePrimitive instance;
+
+    Raises:
+        ValueError: if value cannot be coerced to E94SpacePrimitive;
+
+    """
+    if isinstance(value, E94SpacePrimitive):
+        return value
+
+    if isinstance(value, str):
+        return E94SpacePrimitive(value=value)
+
+    if isinstance(value, dict):
+        return E94SpacePrimitive(**value)
+
+    raise ValueError(f"Cannot coerce {value!r} to E94")
+
+
+CoercedNumber = Annotated[E60Number, BeforeValidator(_coerce_e60)]
+CoercedTime = Annotated[E61TimePrimitive, BeforeValidator(_coerce_e61)]
+CoercedString = Annotated[E62String, BeforeValidator(_coerce_e62)]
+CoercedSpace = Annotated[E94SpacePrimitive, BeforeValidator(_coerce_e94)]
