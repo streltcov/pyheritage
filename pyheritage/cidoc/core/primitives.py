@@ -7,7 +7,7 @@ https://cidoc-crm.org/html/cidoc_crm_v7.0.html
 """
 
 
-from __future__ import __annotations__  # noqa
+from __future__ import annotations  # noqa
 
 import re
 from enum import Enum
@@ -15,7 +15,7 @@ from typing import Any, Optional, Self
 
 from edtf import EDTFObject, parse_edtf, text_to_edtf
 from edtf.parser.edtf_exceptions import EDTFParseException
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, PrivateAttr
 
 from pyheritage.cidoc.core.base import CRMEntityBase, entity_register
 
@@ -96,8 +96,7 @@ class E61TimePrimitive(E59PrimitiveValue):
     """
 
     value: str = Field(default='')
-    _parsed: Optional[EDTFObject] = Field(default=None, exclude=True, repr=False, description='Cached parsing result'
-                                                                                              ' (not serialized)')
+    __parsed: Optional[EDTFObject] = PrivateAttr(default=None)
 
     # ------------------------------ #
 
@@ -144,7 +143,7 @@ class E61TimePrimitive(E59PrimitiveValue):
         """Parsed EDTF object (python-edtf);
 
         """
-        return self._parsed
+        return self.__parsed
 
     # ------------------------------ #
 
@@ -300,8 +299,8 @@ class E61TimePrimitive(E59PrimitiveValue):
             E61TimePrimitive("17xx").lower_strict      # time.struct_time(tm_year=1700, tm_mon=1, tm_mday=1, ...)
 
         """
-        if self._parsed and hasattr(self._parsed, 'lower_strict'):
-            return self._parsed.lower_strict()
+        if self.__parsed and hasattr(self.__parsed, 'lower_strict'):
+            return self.__parsed.lower_strict()
 
         return None
 
@@ -317,8 +316,8 @@ class E61TimePrimitive(E59PrimitiveValue):
             E61TimePrimitive("17xx").upper_strict      # time.struct_time(tm_year=1799, tm_mon=12, tm_mday=31, ...)
 
         """
-        if self._parsed and hasattr(self._parsed, 'upper_strict'):
-            return self._parsed.upper_strict()
+        if self.__parsed and hasattr(self._parsed, 'upper_strict'):
+            return self.__parsed.upper_strict()
 
         return None
 
@@ -339,8 +338,8 @@ class E61TimePrimitive(E59PrimitiveValue):
             * Approximate dates are treated as equal to exact dates;
 
         """
-        if self._parsed and hasattr(self._parsed, 'lower_strict'):
-            ls = self._parsed.lower_strict()
+        if self.__parsed and hasattr(self.__parsed, 'lower_strict'):
+            ls = self.__parsed.lower_strict()
             return f"{ls.tm_year:05d}-{ls.tm_mon:02d}-{ls.tm_mday:02d}"
 
         if not self.value:
@@ -550,9 +549,15 @@ class E61TimePrimitive(E59PrimitiveValue):
     def __repr__(self) -> str:
         extras = []
 
-        if self.is_approximate: extras.append('≈')
-        if self.is_uncertain: extras.append('?')
-        if self.is_interval: extras.append('interval')
+        if self.is_approximate:
+            extras.append('≈')
+
+        if self.is_uncertain:
+            extras.append('?')
+
+        if self.is_interval:
+            extras.append('interval')
+
         suffix = f" [{','.join(extras)}]" if extras else ""
 
         return f'E61({self.value}{suffix})'
@@ -577,7 +582,7 @@ class E62String(E59PrimitiveValue):
 
     """
 
-    value: str = ''
+    value: str = Field(default='')
     language: Optional[str] = Field(default=None)
 
     # ------------------------------ #
