@@ -48,6 +48,21 @@ class TimePrecision(str, Enum):
 # ******************************************************************************************************************* #
 
 
+class SpatialFormat(str, Enum):
+    """Supported spatial formats;
+
+    Used by E94SpatialPrimitive entity model;
+
+    """
+
+    WKT = "wkt"
+    GEOJSON = "geojson"
+    UNKNOWN = "unknown"
+
+
+# ******************************************************************************************************************* #
+
+
 @entity_register(label='E59 Primitive Value')
 class E59PrimitiveValue(CRMEntityBase):
     """'E59 Primitive Value' CRM entity model;
@@ -667,15 +682,37 @@ class E95SpaceTimePrimitive(E59PrimitiveValue):
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E95
 
     Attributes:
-        spatial (E94SpacePrimitive)
-        temporal (E61TimePrimitive)
+        spatial (E94SpacePrimitive): spatial component (E94SpacePrimitive entity model);
+        temporal (E61TimePrimitive): temporl component (E61TimePrimitive entity model);
 
     """
 
-    spatial: Optional[E94SpacePrimitive] = None
-    temporal: Optional[E61TimePrimitive] = None
+    spatial: Optional[E94SpacePrimitive] = Field(default=None, description='Spatial component')
+    temporal: Optional[E61TimePrimitive] = Field(default=None, description='Temporal component')
+
+    # ------------------------------ #
+
+    @property
+    def has_spatial(self) -> bool:
+        """Is the spatial component defined;"""
+        return self.spatial is not None and bool(self.spatial.value)
+
+    # ------------------------------ #
+
+    @property
+    def has_temporal(self) -> bool:
+        """Is the temporal component defined."""
+        return self.temporal is not None and bool(self.temporal.value)
 
     # ------------------------------ #
 
     def __repr__(self) -> str:
-        return f'{self.spatial.value}'
+        parts = []
+
+        if self.has_spatial:
+            parts.append(repr(self.spatial))
+
+        if self.has_temporal:
+            parts.append(repr(self.temporal))
+
+        return f"E95({', '.join(parts) or 'empty'})"
