@@ -9,6 +9,7 @@ https://cidoc-crm.org/html/cidoc_crm_v7.0.html
 
 from __future__ import annotations  # noqa
 
+import math
 import re
 from enum import Enum
 from typing import Any, Optional, Self
@@ -76,6 +77,19 @@ class E60Number(E59PrimitiveValue):
     """
 
     value: int | float = Field(default=0)
+
+    # ------------------------------ #
+
+    @classmethod
+    @field_validator("value")
+    def must_be_finite(cls, value: float | int) -> float | int:
+        """Validation method for 'value' field;
+
+        """
+        if isinstance(value, float) and not math.isfinite(value):
+            raise ValueError(f"E60 Number must be finite, got {value}")
+
+        return value
 
     # ------------------------------ #
 
@@ -584,6 +598,24 @@ class E62String(E59PrimitiveValue):
 
     value: str = Field(default='')
     language: Optional[str] = Field(default=None)
+
+    # ------------------------------ #
+
+    @classmethod
+    @field_validator("language")
+    def validate_language_tag(cls, value: Optional[str]) -> Optional[str]:
+        """Validation method for 'language' field;
+
+        Checks if the 'language' field matches the BCP format;
+
+        """
+        if value is None:
+            return value
+
+        if not re.match(r"^[a-zA-Z]{2,3}(-[a-zA-Z0-9]{2,8})*$", value):
+            raise ValueError(f"Invalid BCP 47 language tag: '{value}'")
+
+        return value
 
     # ------------------------------ #
 
