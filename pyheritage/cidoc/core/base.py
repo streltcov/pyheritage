@@ -31,7 +31,7 @@ class Identity(ABC, BaseModel):
 
     """
 
-    _id: str = Field(
+    id: str = Field(
         default_factory=lambda: f"{uuid.uuid4()}",
         alias="@id",
         description="Node identifier, not a CRM-property"
