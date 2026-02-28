@@ -9,6 +9,7 @@ https://cidoc-crm.org/html/cidoc_crm_v7.0.html
 
 from __future__ import annotations  # noqa
 
+import json
 import math
 import re
 from enum import Enum
@@ -17,6 +18,7 @@ from typing import Annotated, Any, Optional, Self
 from edtf import EDTFObject, parse_edtf, text_to_edtf
 from edtf.parser.edtf_exceptions import EDTFParseException
 from pydantic import BeforeValidator, Field, field_validator, PrivateAttr
+from pygeoif import from_wkt, shape
 
 from pyheritage.cidoc.core.base import CRMEntityBase, entity_register
 
@@ -58,6 +60,16 @@ class SpatialFormat(str, Enum):
     WKT = "wkt"
     GEOJSON = "geojson"
     UNKNOWN = "unknown"
+
+
+# ******************************************************************************************************************* #
+
+
+_WKT_PREFIX = re.compile(
+    r"^\s*(POINT|LINESTRING|POLYGON|MULTIPOINT|MULTILINESTRING|"
+    r"MULTIPOLYGON|GEOMETRYCOLLECTION)\s*[\(Z]",
+    re.IGNORECASE,
+)
 
 
 # ******************************************************************************************************************* #
@@ -665,6 +677,81 @@ class E94SpacePrimitive(E59PrimitiveValue):
 
     value: str = Field(default='')
     srs: str = Field(default='ESPG:4326', description='Spatial Reference System (EPSG Code)')
+    _geometry: Optional[Any] = PrivateAttr(default=None)
+
+    # ------------------------------ #
+
+    @classmethod
+    @field_validator("value")
+    def validate_spatial_value(cls, value: str) -> str:
+        """Validate that the value is well-formed WKT or GeoJSON;
+
+        If this validator passes, model_post_init is guaranteed to receive a parseable string. Empty strings
+        are allowed (unfilled primitive);
+
+        Raises:
+            ValueError: If the value is neither valid WKT nor valid GeoJSON;
+        
+        """
+        if not value or not value.strip():
+            return value
+
+        value_stripped = value.strip()
+
+        if _WKT_PREFIX.match(value_stripped):
+            try:
+                from_wkt(value_stripped)
+                return value
+            except (ValueError, TypeError) as e:
+                raise ValueError(
+                    f"Invalid WKT: {e}. "
+                    f"Input: {value_stripped[:80]}..."
+                ) from e
+
+        if value_stripped.startswith("{"):
+            try:
+                parsed = json.loads(value_stripped)
+            except json.JSONDecodeError as e:
+                raise ValueError(
+                    f"Invalid JSON in spatial value: {e}"
+                ) from e
+            try:
+                shape(parsed)
+                return value
+            except (AttributeError, KeyError, TypeError) as e:
+                raise ValueError(
+                    f"Invalid GeoJSON geometry: {e}. "
+                    f"Expected a dict with 'type' and 'coordinates'."
+                ) from e
+
+        raise ValueError(
+            f"Spatial value must be WKT or GeoJSON. "
+            f"Got: {value_stripped[:80]}..."
+        )
+
+    # ------------------------------ #
+
+    def model_post_init(self, context: Any) -> None:
+        """Parse validated value into a pygeoif geometry object;
+
+        Raises:
+            RuntimeError: If a validated value cannot be parsed
+
+        """
+        if not self.value or not self.value.strip():
+            return
+
+        value = self.value.strip()
+
+        if _WKT_PREFIX.match(value):
+            self._geometry = from_wkt(value)
+        elif value.startswith("{"):
+            self._geometry = shape(json.loads(value))
+        else:
+            raise RuntimeError(
+                f"Value passed validation but matches neither "
+                f"WKT nor GeoJSON pattern: {value[:80]!r}"
+            )
 
     # ------------------------------ #
 
