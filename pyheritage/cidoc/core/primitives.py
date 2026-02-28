@@ -18,7 +18,7 @@ from typing import Annotated, Any, Optional, Self
 from edtf import EDTFObject, parse_edtf, text_to_edtf
 from edtf.parser.edtf_exceptions import EDTFParseException
 from pydantic import BeforeValidator, Field, field_validator, PrivateAttr
-from pygeoif import from_wkt, shape
+from pygeoif import from_wkt, geometry, shape
 
 from pyheritage.cidoc.core.base import CRMEntityBase, entity_register
 
@@ -752,6 +752,88 @@ class E94SpacePrimitive(E59PrimitiveValue):
                 f"Value passed validation but matches neither "
                 f"WKT nor GeoJSON pattern: {value[:80]!r}"
             )
+
+    # ------------------------------ #
+
+    @property
+    def geometry(self) -> Optional[Any]:
+        """Parsed pygeoif geometry object;
+
+        Always available for values that passed validation. None only for empty primitives;
+
+        Returns:
+            pygeoif geometry instance or None;
+
+        """
+        return self._geometry
+
+    # ------------------------------ #
+
+    @property
+    def is_point(self) -> bool:
+        """Whether the geometry is a point;"""
+        return isinstance(self._geometry, geometry.Point)
+
+    # ------------------------------ #
+
+    @property
+    def is_polygon(self) -> bool:
+        """Whether the geometry is a polygon or multipolygon;"""
+        return isinstance(self._geometry, (geometry.Polygon, geometry.MultiPolygon))
+
+    # ------------------------------ #
+
+    @property
+    def is_line(self) -> bool:
+        """Whether the geometry is a line or multiline;"""
+        return isinstance(self._geometry, (geometry.LineString, geometry.MultiLineString))
+
+    # ------------------------------ #
+
+    @property
+    def geometry_type(self) -> Optional[str]:
+        """Type of geometry: Point, LineString, Polygon, etc;
+
+        Uses pygeoif geom_type attribute;
+
+        Returns:
+            Geometry type string, or None;
+
+        """
+        if self._geometry:
+            return self._geometry.geom_type
+
+        return None
+
+    # ------------------------------ #
+
+    @property
+    def coordinates(self) -> Optional[tuple[float, ...]]:
+        """Coordinates for point geometry;
+
+        Returns:
+            (longitude, latitude[, altitude]) or None for non-point geometries;
+
+        """
+        if isinstance(self._geometry, geometry.Point):
+            return tuple(self._geometry.coords[0])
+
+        return None
+
+    # ------------------------------ #
+
+    @property
+    def bounds(self) -> Optional[tuple[float, float, float, float]]:
+        """Bounding box: (min_x, min_y, max_x, max_y);
+
+        Returns:
+            Bounding box tuple or None;
+
+        """
+        if self._geometry:
+            return self._geometry.bounds
+
+        return None
 
     # ------------------------------ #
 
