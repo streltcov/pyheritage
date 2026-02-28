@@ -837,6 +837,37 @@ class E94SpacePrimitive(E59PrimitiveValue):
 
     # ------------------------------ #
 
+    def to_wkt(self) -> Optional[str]:
+        """Represent as WKT string;
+
+        Works for any geometry type;
+
+        Returns:
+            WKT string, or None if geometry is empty;
+
+        """
+        if self._geometry:
+            return self._geometry.wkt
+
+        return None
+
+    # ------------------------------ #
+
+    def to_geojson(self) -> Optional[dict]:
+        """Represent as GeoJSON geometry dict;
+
+        Uses the __geo_interface__ protocol;
+
+        Returns:
+            GeoJSON geometry dict, or None;
+
+        """
+        if self._geometry:
+            return self._geometry.__geo_interface__
+        return None
+
+    # ------------------------------ #
+
     def __repr__(self) -> str:
         return f'{self.value}'
 
