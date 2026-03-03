@@ -5,9 +5,14 @@
 Each is defined with its own properties, because these properties are not required by other entity models;
 
 Module defines:
+    - P2 has type (is type of)
     - P72 has language
+    - P90 has value
+    - P91 has unit (is unit of)
     - P190 has symbolic content
     - E41 Appellation
+    - E52 Time Span
+    - E54 Dimension
     - E90 Symbolic Object
 
 """
@@ -20,10 +25,55 @@ from typing import Any, Optional
 from pydantic import Field
 
 from pyheritage.cidoc.core.base import CRMEntityBase, entity_register
-from pyheritage.cidoc.core.primitives import CoercedString
+from pyheritage.cidoc.core.primitives import CoercedNumber, CoercedString
 
 
 __all__ = ('P72HasLanguage', 'P190HasSymbolicContent', 'E90SymbolicObject', 'E42Identifier', 'E41Appellation',)
+
+
+class P2HasType:
+    """'P2 has type (is type of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P2
+
+    Domain:
+        - E1 CRM Entity
+    Range:
+        - E55 Type
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        - E1 CRM Entity. P137 exemplifies (is exemplified by): E55 Type
+        - E13 Attribute Assignment. P177 assigned property type: E55 Type
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property allows sub typing of CIDOC CRM entities - a form of specialisation – through the use of a
+        terminological hierarchy, or thesaurus;
+
+        The CIDOC CRM is intended to focus on the high-level entities and relationships needed to describe data
+        structures. Consequently, it does not specialise entities any further than is required for this immediate
+        purpose. However, entities in the isA hierarchy of the CIDOC CRM may by specialised into any number of sub
+        entities, which can be defined in the E55 Type hierarchy. E41 Appellation, for example, may be specialised
+        into “e-mail address”, “telephone number”, “post office box”, “URL” etc. none of which figures explicitly
+        in the CIDOC CRM hierarchy. A comprehensive explanation about refining CIDOC CRM concepts by E55 Type is
+        given in the section “About Types” in the section on “Specific Modelling Constructs” of this document;
+
+    Properties:
+        -
+    Examples:
+        - “enquiries@cidoc-crm.org” (E41) has type e-mail address (E55)
+    In First Order Logic:
+        - P2(x,y) ⊃ E1(x)
+        - P2(x,y) ⊃ E55(y)
+
+    """
+
+    p2_has_type: list[Any] = Field(default_factory=list)
+
+
+# ******************************************************************************************************************* #
 
 
 class P72HasLanguage:
@@ -58,7 +108,156 @@ class P72HasLanguage:
         - P72(x,y) ⊃ E56(y)
 
     """
-    p72_has_language: Optional[Any] = None
+
+    p72_has_language: Optional[Any] = Field(default=None)
+
+
+# ******************************************************************************************************************* #
+
+
+class P82AtSomeTimeWithin:
+    """'P82 at some time within' CRM property;
+
+    Domain:
+        - E52 Time-Span
+    Range:
+        - E61 Time Primitive
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property describes the maximum period of time within which an E52 Time-Span falls;
+
+        Since Time-Spans may not have precisely known temporal extents, the CIDOC CRM supports statements about
+        the minimum and maximum temporal extents of Time-Spans. This property allows a Time-Span’s maximum temporal
+        extent (i.e. its outer boundary) to be assigned an E61 Time Primitive value. Time Primitives are treated
+        by the CIDOC CRM as application or system specific date intervals, and are not further analysed;
+
+    Properties:
+        -
+    Examples:
+        - the time-span of the development of the CIDOC CRM (E52) at some time within 1992-infinity (E61)
+    In First Order Logic:
+        - P82 (x,y) ⊃ E52(x)
+        - P82 (x,y) ⊃ E61(y)
+
+    """
+
+    p82_at_some_time_within: Optional[Any] = Field(default=None)
+
+
+# ******************************************************************************************************************* #
+
+
+class P86FallsWithin:
+    """'P86 falls within (contains)' CRM property;
+
+    Domain:
+        - E52 Time-Span
+    Range:
+        - E52 Time-Span
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property describes the inclusion relationship between two instances of E52 Time-Span;
+
+        This property supports the notion that a the temporal extent of an instance of E52 Time-Span falls within the
+        temporal extent of another instance of E52 Time-Span. It addresses temporal containment only, and no
+        contextual link between the two instances of E52 Time-Span is implied;
+
+        This property is transitive;
+
+    Properties:
+        -
+    Examples:
+        - the time-span of the Apollo 11 moon mission (E52) falls within the time-span of the reign of
+          Queen Elizabeth II (E52)
+    In First Order Logic:
+        - P86(x,y) ⊃ E52(x)
+        - P86(x,y) ⊃ E52(y)
+
+    """
+
+    p86_falls_within: Optional[Any] = Field(default=None)
+
+
+# ******************************************************************************************************************* #
+
+
+class P90HasValue:
+    """'P90 has value' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P90
+
+    Domain:
+        - E54 Dimension
+    Range:
+        - E60 Number
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        - E97 Monetary Amount. P181 has amount: E60 Number
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property allows an instance of E54 Dimension to be approximated by an instance of E60 Number primitive;
+
+    Properties:
+        -
+    Examples:
+        - height of silver cup 232 (E54) has value 226 (E60)
+    In First Order Logic:
+        - P90(x,y) ⊃ E54(x)
+        - P90(x,y) ⊃ E60(y)
+
+    """
+
+    p90_has_value: Optional[CoercedNumber] = Field(default=None)
+
+
+# ******************************************************************************************************************* #
+
+
+class P91HasUnit:
+    """'P91 has unit (is unit of) CRM property';
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P91
+
+    Domain:
+        - E54 Dimension
+    Range:
+        - E58 Measurement Unit
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        - E97 Monetary Amount. P180 has currency (was currency of): E98 Currency
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property shows the type of unit an instance of E54 Dimension was expressed in;
+
+    Properties:
+        -
+    Examples:
+        - height of silver cup 232 (E54) has unit mm (E58)
+    In First Order Logic:
+        - P91(x,y) ⊃ E54(x)
+        - P91(x,y) ⊃ E58(y)
+
+    """
+
+    p91_has_unit: Optional[Any] = Field(default=None)
 
 
 # ******************************************************************************************************************* #
@@ -111,6 +310,42 @@ class P190HasSymbolicContent:
     """
 
     p190_has_symbolic_content: Optional[CoercedString] = Field(default=None)
+
+
+# ******************************************************************************************************************* #
+
+
+class P191HadDuration:
+    """'P191 had duration (was duration of)' CRM property;
+
+    Domain:
+        - E52 Time-Span
+    Range:
+        - E54 Dimension
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        one to one (1,1:1,1)
+
+    Scope Note:
+        This property describes the length of time covered by an instance of E52 Time-Span. It allows an instance of
+        E52 Time-Span to be associated with an instance of E54 Dimension representing duration independent from the
+        actual beginning and end. Indeterminacy of the duration value can be expressed by assigning a numerical
+        interval to the property P90 has value of E54 Dimension;
+
+    Properties:
+        -
+    Examples:
+        - the time span of the Battle of Issos 333 B.C.E. (E52) had duration Battle of Issos duration (E54)
+    In First Order Logic:
+        - P191(x,y) ⊃ E52(x)
+        - P191(x,y) ⊃ E54(y)
+
+    """
+
+    p191_had_duration: Optional[Any] = Field(default=None)
 
 
 # ******************************************************************************************************************* #
@@ -277,5 +512,141 @@ class E42Identifier(E41Appellation):
         - E42(x) ⊃ E41(x)
     Properties:
         -
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label="E54 Dimension")
+class E54Dimension(P90HasValue, P91HasUnit, P2HasType, CRMEntityBase):
+    """'E54 Dimension' CRM entity model;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E54
+
+    SubClass Of:
+        - E1 CRM Entity
+    SuperClass Of:
+        - E97 Monetary Amount
+    Scope Note:
+        This class comprises quantifiable properties that can be measured by some calibrated means and can be
+        approximated by values, i.e. points or regions in a mathematical or conceptual space, such as natural or real
+        numbers, RGB values etc;
+
+        An instance of E54 Dimension represents the true quantity, independent from its numerical approximation,
+        e.g. in inches or in cm. The properties of the class E54 Dimension allow for expressing the numerical
+        approximation of the values of instances of E54 Dimension. If the true values belong to a non-discrete
+        space, such as spatial distances, it is recommended to record them as approximations by intervals or regions
+        of indeterminacy enclosing the assumed true values. For instance, a length of 5 cm may be recorded as
+        4.5-5.5 cm, according to the precision of the respective observation. Note, that interoperability of values
+        described in different units depends critically on the representation as value regions;
+
+        Numerical approximations in archaic instances of E58 Measurement Unit used in historical records should be
+        preserved. Equivalents corresponding to current knowledge should be recorded as additional instances of
+        E54 Dimension as appropriate;
+
+    Examples:
+        - The 250 metric ton weight of the Luxor Obelisk
+        - The 5.17 m height of the statue of David by Michaelangelo
+        - The 530.2 carats of the Great Star of Africa diamond
+        - The AD1262-1312, 1303-1384 calibrated C14 date for the Shroud of Turin
+        - The 33 m diameter of the Stonehenge Sarcen Circle
+        - The 755.9 foot length of the sides of the Great Pyramid at Giza
+        - Christies’ hammer price for “Vase with Fifteen Sunflowers” (E97) has currency British Pounds (E98)
+        - The time span of the Battle of Issos 333 B.C.E. (E52) had duration Battle of Issos duration (E54)
+    In First Order Logic:
+        - E54(x) ⊃ E1(x)
+    Properties:
+        - P90 has value: E60 Number
+        - P91 has unit (is unit of): E58 Measurement Unit
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label="E97 Monetary Amount")
+class E97MonetaryAmount(E54Dimension):
+    """'E97 Monetary Amount' CRM entity model;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E97
+
+    SubClass Of:
+        - E54 Dimension
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises quantities of monetary possessions or obligations in terms of their nominal value with
+        respect to a particular currency. These quantities may be abstract accounting units, the nominal value of
+        a heap of coins or bank notes at the time of validity of the respective currency, the nominal value of a bill
+        of exchange or other documents expressing monetary claims or obligations. It specifically excludes amounts
+        expressed in terms of weights of valuable items, like gold and diamonds, and quantities of other non-currency
+        items, like goats or stocks and bonds;
+
+    Examples:
+        - Christies’ hammer price for “Vase with Fifteen Sunflowers” (E97) has currency British Pounds (E98)
+    In First Order Logic:
+        - E97(x) ⊃ E54(x)
+    Properties:
+        - P180 has currency (was currency of): E98 Currency
+        - P181 has amount: E60 Number
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label="E52 Time-Span")
+class E52TimeSpan(P82AtSomeTimeWithin, P86FallsWithin, P191HadDuration, CRMEntityBase):
+    """'E52 Time Span' CRM entity model;
+
+    SubClass Of:
+        - E1 CRM Entity
+    SuperClass Of:1
+        -
+    Scope Note:
+        This class comprises abstract temporal extents, in the sense of Galilean physics, having a beginning, an end
+         and a duration;
+
+        Instances of E52 Time-Span have no semantic connotations about phenomena happening within the temporal extent
+        they represent. They do not convey any meaning other than a positioning on the “time-line” of chronology. The
+        actual extent of an instance of E52 Time-Span can be approximated by properties of E52 Time-Span giving inner
+        and outer bounds in the form of dates (instances of E61 Time Primitive). Comparing knowledge about time-spans
+        is fundamental for chronological reasoning;
+
+        Some instances of E52 Time-Span may be defined as the actual, in principle observable, temporal extent of
+        instances of E2 Temporal Entity via the property P4 has time-span (is time-span of): E52 Time-Span. They
+        constitute phenomenal time-spans as defined in CRMgeo (Doerr and Hiebel 2013). Since our knowledge of history
+        is imperfect and physical phenomena are fuzzy in nature, the extent of phenomenal time-spans can only be
+        described in approximation. An extreme case of approximation, might, for example, define an instance of
+        E52 Time-Span having unknown beginning, end and duration. It may, nevertheless, be associated with other
+        descriptions by which we can infer knowledge about it, such as in relative chronologies;
+
+        Some instances of E52 may be defined precisely as representing a declaration of a temporal extent, as, for
+        instance, done in a business contract. They constitute declarative time-spans as defined in CRMgeo (Doerr and
+        Hiebel 2013) and can be described via the property E61 Time Primitive P170 defines time
+        (time is defined by): E52 Time-Span;
+
+        When used as a common E52 Time-Span for two events, it will nevertheless describe them as being simultaneous,
+        even if nothing else is known;
+
+    Examples:
+        - 1961
+        - From 12-17-1993 to 12-8-1996
+        - 14h30 – 16h22 4th July 1945
+        - 9.30 am 1.1.1999 to 2.00 pm 1.1.1999
+        - duration of the Ming Dynasty (Chan, 2011)
+    In First Order Logic:
+        - E52(x) ⊃ E1(x)
+    Properties:
+        - P79 beginning is qualified by: E62 String
+        - P80 end is qualified by: E62 String
+        - P81 ongoing throughout: E61 Time Primitive
+        - P82 at some time within: E61 Time Primitive
+        - P86 falls within (contains): E52 Time-Span
+        - P191 had duration (was duration of): E54 Dimension
 
     """
