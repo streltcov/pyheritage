@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
-"""CIDOC CRM entities, representing primitive values (numbers, strings, spatial  etc.)
+"""CIDOC-CRM entity classes;
+
+Represents CIDOC-CRM version 7.0 (released on June 2020);
+
+Models should not be imported directly from this module!;
 
 https://cidoc-crm.org/html/cidoc_crm_v7.0.html
 
@@ -12,7 +16,6 @@ from __future__ import annotations  # noqa
 import json
 import math
 import re
-from enum import Enum
 from typing import Annotated, Any, Optional, Self
 
 from edtf import EDTFObject, parse_edtf, text_to_edtf
@@ -20,49 +23,13 @@ from edtf.parser.edtf_exceptions import EDTFParseException
 from pydantic import BeforeValidator, Field, field_validator, PrivateAttr
 from pygeoif import from_wkt, geometry, shape
 
-from pyheritage.cidoc.core.base import CRMEntityBase, entity_register
+from pyheritage.cidoc.core.base import entity_register
+from pyheritage.cidoc.core.crm_base import E1CRMEntity
+from pyheritage.cidoc.core.enums import TimePrecision
 
 
 __all__ = ('E59PrimitiveValue', 'E60Number', 'E61TimePrimitive', 'E62String', 'E94SpacePrimitive',
            'E95SpaceTimePrimitive', 'CoercedNumber', 'CoercedTime', 'CoercedString', 'CoercedSpace', )
-
-
-# ******************************************************************************************************************* #
-
-
-class TimePrecision(str, Enum):
-    """The accuracy level of the time primitive;
-
-    It is determined by the python-edtf library or manually by the string format;
-
-    """
-
-    MILLENNIUM = "millennium"
-    CENTURY = "century"
-    DECADE = "decade"
-    YEAR = "year"
-    MONTH = "month"
-    DAY = "day"
-    DATETIME = "datetime"
-    UNKNOWN = "unknown"
-
-
-# ******************************************************************************************************************* #
-
-
-class SpatialFormat(str, Enum):
-    """Supported spatial formats;
-
-    Used by E94SpatialPrimitive entity model;
-
-    """
-
-    WKT = "wkt"
-    GEOJSON = "geojson"
-    UNKNOWN = "unknown"
-
-
-# ******************************************************************************************************************* #
 
 
 _WKT_PREFIX = re.compile(
@@ -76,7 +43,7 @@ _WKT_PREFIX = re.compile(
 
 
 @entity_register(label='E59 Primitive Value')
-class E59PrimitiveValue(CRMEntityBase):
+class E59PrimitiveValue(E1CRMEntity):
     """'E59 Primitive Value' CRM entity model;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E59
