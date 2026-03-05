@@ -23,8 +23,8 @@ from edtf.parser.edtf_exceptions import EDTFParseException
 from pydantic import BeforeValidator, Field, field_validator, PrivateAttr
 from pygeoif import from_wkt, geometry, shape
 
+from pyheritage.cidoc.core._crm_base import E1CRMEntity
 from pyheritage.cidoc.core.base import entity_register
-from pyheritage.cidoc.core.crm_base import E1CRMEntity
 from pyheritage.cidoc.core.enums import TimePrecision
 
 
