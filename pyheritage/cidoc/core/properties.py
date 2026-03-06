@@ -5,11 +5,20 @@
 """
 
 
+from __future__ import annotations
+
 from typing import Any, Optional
 
 from pydantic import Field
 
 from pyheritage.cidoc.core.base import PropertyMixin
+
+
+__all__ = ('P1IsIdentifiedBy', 'P2HasType', 'P3HasNote', 'P4HasTimeSpan', 'P5ConsistsOf', 'P7TookPlaceAt',
+           'P8TookPlaceOnOrWithin', 'P9ConsistsOf', 'P10FallsWithin', 'P11HadParticipant', 'P12OccurredInPresenceOf',
+           'P13Destroyed', 'P14CarriedOutBy', 'P15WasInfluencedBy', 'P16UsedSpecificObject', 'P17WasMotivatedBy',
+           'P19WasIntendedUseOf', 'P20HadSpecificPurpose', 'P21HadGeneralPurpose', 'P22TransferredTitleTo',
+           'P23TransferredTitleFrom', 'P24TransferredTitleOf', 'P25Moved', )
 
 
 class P1IsIdentifiedBy(PropertyMixin):
@@ -54,13 +63,14 @@ class P1IsIdentifiedBy(PropertyMixin):
 
     """
 
-    p1_is_identified_by: Optional[str] = Field(default=None, description='P1 is identified by (identifies)')
+    p1_is_identified_by: Optional[str] = Field(default=None, description='P1 is identified by'
+                                                                                      ' (identifies)')
 
 
 # ******************************************************************************************************************* #
 
 
-class P2HasType:
+class P2HasType(PropertyMixin):
     """'P2 has type (is type of)' CRM property;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P2
