@@ -7,18 +7,24 @@
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any, Optional, TYPE_CHECKING
 
 from pydantic import Field
 
 from pyheritage.cidoc.core.base import PropertyMixin
 
 
+if TYPE_CHECKING:
+    from pyheritage.cidoc.core._primitives import CoercedNumber, CoercedString
+
+
 __all__ = ('P1IsIdentifiedBy', 'P2HasType', 'P3HasNote', 'P4HasTimeSpan', 'P5ConsistsOf', 'P7TookPlaceAt',
            'P8TookPlaceOnOrWithin', 'P9ConsistsOf', 'P10FallsWithin', 'P11HadParticipant', 'P12OccurredInPresenceOf',
            'P13Destroyed', 'P14CarriedOutBy', 'P15WasInfluencedBy', 'P16UsedSpecificObject', 'P17WasMotivatedBy',
            'P19WasIntendedUseOf', 'P20HadSpecificPurpose', 'P21HadGeneralPurpose', 'P22TransferredTitleTo',
-           'P23TransferredTitleFrom', 'P24TransferredTitleOf', 'P25Moved', )
+           'P23TransferredTitleFrom', 'P24TransferredTitleOf', 'P25Moved', 'P26MovedTo', 'P72HasLanguage',
+           'P82AtSomeTimeWithin', 'P86FallsWithin', 'P90HasValue', 'P91HasUnit', 'P190HasSymbolicContent',
+           'P191HadDuration', )
 
 
 class P1IsIdentifiedBy(PropertyMixin):
@@ -1094,3 +1100,278 @@ class P26MovedTo(PropertyMixin):
     """
 
     p26_moved_to: Optional[str] = Field(derfault=None, description='P26 moved to (was destination of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P72HasLanguage:
+    """'P72 has language' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P72
+
+    Domain:
+        - E33 Linguistic Object
+    Range:
+        - E56 Language
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property associates an instance(s) of E33 Linguistic Object with an instance of E56 Language in which it
+        is, at least partially, expressed;
+
+        Linguistic Objects are composed in one or more human Languages. This property allows these languages to be
+        documented;
+
+    Properties:
+        -
+    Examples:
+        - the American Declaration of Independence (E33) has language 18th Century English (E56)
+    In First Order Logic:
+        - P72(x,y) ⊃ E33(x)
+        - P72(x,y) ⊃ E56(y)
+
+    """
+
+    p72_has_language: Optional[Any] = Field(default=None)
+
+
+# ******************************************************************************************************************* #
+
+
+class P82AtSomeTimeWithin:
+    """'P82 at some time within' CRM property;
+
+    Domain:
+        - E52 Time-Span
+    Range:
+        - E61 Time Primitive
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property describes the maximum period of time within which an E52 Time-Span falls;
+
+        Since Time-Spans may not have precisely known temporal extents, the CIDOC CRM supports statements about
+        the minimum and maximum temporal extents of Time-Spans. This property allows a Time-Span’s maximum temporal
+        extent (i.e. its outer boundary) to be assigned an E61 Time Primitive value. Time Primitives are treated
+        by the CIDOC CRM as application or system specific date intervals, and are not further analysed;
+
+    Properties:
+        -
+    Examples:
+        - the time-span of the development of the CIDOC CRM (E52) at some time within 1992-infinity (E61)
+    In First Order Logic:
+        - P82 (x,y) ⊃ E52(x)
+        - P82 (x,y) ⊃ E61(y)
+
+    """
+
+    p82_at_some_time_within: Optional[Any] = Field(default=None)
+
+
+# ******************************************************************************************************************* #
+
+
+class P86FallsWithin:
+    """'P86 falls within (contains)' CRM property;
+
+    Domain:
+        - E52 Time-Span
+    Range:
+        - E52 Time-Span
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property describes the inclusion relationship between two instances of E52 Time-Span;
+
+        This property supports the notion that a the temporal extent of an instance of E52 Time-Span falls within the
+        temporal extent of another instance of E52 Time-Span. It addresses temporal containment only, and no
+        contextual link between the two instances of E52 Time-Span is implied;
+
+        This property is transitive;
+
+    Properties:
+        -
+    Examples:
+        - the time-span of the Apollo 11 moon mission (E52) falls within the time-span of the reign of
+          Queen Elizabeth II (E52)
+    In First Order Logic:
+        - P86(x,y) ⊃ E52(x)
+        - P86(x,y) ⊃ E52(y)
+
+    """
+
+    p86_falls_within: Optional[Any] = Field(default=None)
+
+
+# ******************************************************************************************************************* #
+
+
+class P90HasValue:
+    """'P90 has value' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P90
+
+    Domain:
+        - E54 Dimension
+    Range:
+        - E60 Number
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        - E97 Monetary Amount. P181 has amount: E60 Number
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property allows an instance of E54 Dimension to be approximated by an instance of E60 Number primitive;
+
+    Properties:
+        -
+    Examples:
+        - height of silver cup 232 (E54) has value 226 (E60)
+    In First Order Logic:
+        - P90(x,y) ⊃ E54(x)
+        - P90(x,y) ⊃ E60(y)
+
+    """
+
+    p90_has_value: Optional[CoercedNumber] = Field(default=None)
+
+
+# ******************************************************************************************************************* #
+
+
+class P91HasUnit:
+    """'P91 has unit (is unit of) CRM property';
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P91
+
+    Domain:
+        - E54 Dimension
+    Range:
+        - E58 Measurement Unit
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        - E97 Monetary Amount. P180 has currency (was currency of): E98 Currency
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property shows the type of unit an instance of E54 Dimension was expressed in;
+
+    Properties:
+        -
+    Examples:
+        - height of silver cup 232 (E54) has unit mm (E58)
+    In First Order Logic:
+        - P91(x,y) ⊃ E54(x)
+        - P91(x,y) ⊃ E58(y)
+
+    """
+
+    p91_has_unit: Optional[Any] = Field(default=None)
+
+
+# ******************************************************************************************************************* #
+
+
+class P190HasSymbolicContent:
+    """'P190 has symbolic content' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P190
+
+    Domain:
+        - E90 Symbolic Object
+    Range:
+        - E62 String
+    SubProperty Of:
+        - E1 CRM Entity. P3 has note: E62 String
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E90 Symbolic Object with a complete, identifying representation of its
+        content in the form of an instance of E62 String;
+
+        This property only applies to instances of E90 Symbolic Object that can be represented completely in this
+        form. The representation may be more specific than the symbolic level defining the identity condition of the
+        represented. This depends on the type of the symbolic object represented. For instance, if a name has type
+        "Modern Greek character sequence", it may be represented in a loss-free Latin transcription, meaning however
+        the sequence of Greek letters;
+
+        As another example, if the represented object has type "English words sequence", American English or British
+        English spelling variants may be chosen to represent the English word "colour" without defining a different
+        symbolic object. If a name has type "European traditional name", no particular string may define its content;
+
+    Properties:
+        -
+    Examples:
+        - The materials description (E33) of the painting has symbolic content “Oil, French Watercolors on Paper,
+          Graphite and Ink on Canvas, with an Oak frame.”
+        - The title (E35) of Einstein’s 1915 text has symbolic content “Relativity, the Special and the General
+          Theory“
+        - The story of Little Red Riding Hood (E33) has symbolic content “Once upon a time there lived in a certain
+          village …”
+        - The inscription (E34) on Rijksmuseum object SK-A-1601 has symbolic content “B”
+    In First Order Logic:
+        P190(x,y) ⊃ E90(x)
+        P190(x,y) ⊃ E62(y)
+
+    """
+
+    p190_has_symbolic_content: Optional[CoercedString] = Field(default=None)
+
+
+# ******************************************************************************************************************* #
+
+
+class P191HadDuration:
+    """'P191 had duration (was duration of)' CRM property;
+
+    Domain:
+        - E52 Time-Span
+    Range:
+        - E54 Dimension
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        one to one (1,1:1,1)
+
+    Scope Note:
+        This property describes the length of time covered by an instance of E52 Time-Span. It allows an instance of
+        E52 Time-Span to be associated with an instance of E54 Dimension representing duration independent from the
+        actual beginning and end. Indeterminacy of the duration value can be expressed by assigning a numerical
+        interval to the property P90 has value of E54 Dimension;
+
+    Properties:
+        -
+    Examples:
+        - the time span of the Battle of Issos 333 B.C.E. (E52) had duration Battle of Issos duration (E54)
+    In First Order Logic:
+        - P191(x,y) ⊃ E52(x)
+        - P191(x,y) ⊃ E54(y)
+
+    """
+
+    p191_had_duration: Optional[Any] = Field(default=None)
