@@ -68,11 +68,11 @@ class E3ConditionState(P5ConsistsOf, E2TemporalEntity):
         characterized as an instance “wrecked” of E55 Type;
 
     Examples:
-        the "reconstructed" state of the “Amber Room” in Tsarskoje Selo from summer 2003 until now (Owen, 2009)
-        the "ruined" state of Peterhof Palace near Saint Petersburg from 1944 to 1946 (Maddox, 2015)
-        the state of my turkey in the oven at 14:30 on 25 December, 2002 (P2 has type: E55 Type “still not cooked”)
-        the topography of the leaves of Sinai Printed Book 3234.2361 on the 10th of July 2007 (described as: of
-        type "cockled")
+        - the "reconstructed" state of the “Amber Room” in Tsarskoje Selo from summer 2003 until now (Owen, 2009)
+        - the "ruined" state of Peterhof Palace near Saint Petersburg from 1944 to 1946 (Maddox, 2015)
+        - the state of my turkey in the oven at 14:30 on 25 December, 2002 (P2 has type: E55 Type “still not cooked”)
+        - the topography of the leaves of Sinai Printed Book 3234.2361 on the 10th of July 2007 (described as: of
+          type "cockled")
 
     In First Order Logic:
         E3(x) ⊃ E2(x)

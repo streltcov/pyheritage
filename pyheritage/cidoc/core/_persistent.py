@@ -11,22 +11,29 @@ Module implements:
     - E25 Human-Made Feature
     - E26 Physical Feature
     - E27 Site
+    - E41 Appellation
+    - E42 Identifier
+    - E54 Dimension
     - E70 Thing
     - E71 Human-Made Thing
     - E72 Legal Object
     - E77 Persistent Item
     - E78 Curated Holding
+    - E90 Symbolic Object
+    - E97 Monetary Amount
 
 """
 
 
 from pyheritage.cidoc.core._crm_base import E1CRMEntity
+from pyheritage.cidoc.core._spacetime import E54Dimension
 from pyheritage.cidoc.core.base import entity_register
 
 
 __all__ = ('E18PhysicalThing', 'E19PhysicalObject', 'E20BiologicalObject', 'E22HumanMadeObject',
-           'E24PhysicalHumanMadeObject', 'E25HumanMadeFeature', 'E26PhysicalFeature', 'E27Site', 'E70Thing',
-           'E71HumanMadeThing', 'E72LegalObject', 'E77PersistentItem', 'E78CuratedHolding', )
+           'E24PhysicalHumanMadeObject', 'E25HumanMadeFeature', 'E26PhysicalFeature', 'E27Site', 'E41Appellation',
+           'E42Identifier', 'E54Dimension', 'E70Thing', 'E71HumanMadeThing', 'E72LegalObject', 'E77PersistentItem',
+           'E78CuratedHolding', 'E90SymbolicObject', 'E97MonetaryAmount', )
 
 
 @entity_register(label='E77 Persistent Item')
@@ -583,5 +590,196 @@ class E78CuratedHolding(E24PhysicalHumanMadeObject):
         E78(x) ⊃ E24(x)
     Properties:
         P109 has current or former curator (is current or former curator of): E39 Actor
+
+    """
+
+
+@entity_register(label="E90 Symbolic Object")
+class E90SymbolicObject(E1CRMEntity):
+    """E90 Symbolic Object entity model;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E90
+
+    SubClass Of:
+        - E28 Conceptual Object
+        - E72 Legal Object
+    SuperClass Of:
+        - E41 Appellation
+        - E73 Information Object
+
+    Scope Note:
+        This class comprises identifiable symbols and any aggregation of symbols, such as characters, identifiers,
+        traffic signs, emblems, texts, data sets, images, musical scores, multimedia objects, computer program code
+        or mathematical formulae that have an objectively recognizable structure and that are documented as single
+        units;
+
+        It includes sets of signs of any nature, which may serve to designate something, or to communicate some
+        propositional content. An instance of E90 Symbolic Object may or may not have a specific meaning, for
+        example an arbitrary character string;
+
+        In some cases, the content of an instance of E90 Symbolic Object may completely be represented by
+        a serialized digital content model, such as a sequence of ASCII-encoded characters, an XML or HTML document,
+        or a TIFF image. The property P3 has note and its subproperty P190 has symbolic content allow for the
+        description of this content model. In order to disambiguate which symbolic level is the carrier of the
+        meaning, the property P3.1 has type can be used to specify the encoding (e.g. "bit", "Latin character",
+        RGB pixel);
+
+    Examples:
+        - ‘ecognizabl’
+        - The “no-smoking” sign (E36)
+        - “BM000038850.JPG” (E41)
+        - image BM000038850.JPG from the Clayton Herbarium in London (E36)
+        - The distribution of form, tone and colour found on Leonardo da Vinci’s painting named “Mona Lisa”
+          in daylight (E36)
+        - The Italian text of Dante’s “Divina Commedia” as found in the authoritative critical edition La Commedia
+          secondo l’antica vulgata a cura di Giorgio Petrocchi, Milano: Mondadori, 1966-67 (= Le Opere di Dante
+          Alighieri, Edizione Nazionale a cura della Società Dantesca Italiana, VII, 1-4) (E33)
+    In First Order Logic:
+        - E90(x) ⊃ E28(x)
+        - E90(x) ⊃ E72(x)
+    Properties:
+        = P106 is composed of (forms part of): E90 Symbolic Object
+        - P190 has symbolic content: E62 String
+
+    """
+
+
+@entity_register(label="E41 Appellation")
+class E41Appellation(E90SymbolicObject):
+    """E41 Appellation entity model;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E41
+
+    SubClass Of:
+        - E90 Symbolic Object
+    SuperClass Of:
+        - E35 Title
+        - E42 Identifier
+        - E61 Time Primitive
+        - E94 Space Primitive
+        - E95 Spacetime Primitive
+    Scope Note:
+        This class comprises signs, either meaningful or not, or arrangements of signs following a specific syntax,
+        that are used or can be used to refer to and identify a specific instance of some class or category within
+        a certain context;
+
+        Instances of E41 Appellation do not identify things by their meaning, even if they happen to have one, but
+        instead by convention, tradition, or agreement. Instances of E41 Appellation are cultural constructs; as such,
+        they have a context, a history, and a use in time and space by some group of users. A given instance of
+        E41 Appellation can have alternative forms, i.e., other instances of E41 Appellation that are always regarded
+        as equivalent independent from the thing it denotes;
+
+        Different languages may use different appellations for the same thing, such as the names of major cities. Some
+        appellations may be formulated using a valid noun phrase of a particular language. In these cases, the
+        respective instances of E41 Appellation should also be declared as instances of E33 Linguistic Object. Then
+        the language using the appellation can be declared with the property P72 has language: E56 Language;
+
+        Instances of E41 Appellation may be used to identify any instance of E1 CRM Entity and sometimes are
+        characteristic for instances of more specific subclasses E1 CRM Entity, such as for instances of
+        E52 Time-Span (for instance “dates”), E39 Actor, E53 Place or E28 Conceptual Object. Postal addresses and
+        E-mail addresses are characteristic examples of identifiers used by services transporting things between
+        clients;
+
+        Even numerically expressed identifiers for extents in space or time are also regarded as instances of
+        E41 Appellation, such as Gregorian dates or spatial coordinates, even though they allow for determining some
+        time or location by a known procedure starting from a reference point and by virtue of that fact play a double
+        role as instances of E59 Primitive Value;
+
+        E41 Appellation should not be confused with the act of naming something. Cf. E15 Identifier Assignment
+
+    Examples:
+        - "Martin"
+        - “Aquae Sulis Minerva”
+        - "the Merchant of Venice" (E35) (McCullough, 2005)
+        - "Spigelia marilandica (L.) L." [not the species, just the name] (Hershberger, Jenkins and Robacker, 2015)
+        - "information science" [not the science itself, but the name through which we refer to it in an
+           English-speaking context]
+        - “安” [Chinese “an”, meaning “peace”]
+        - “6°5’29”N 45°12’13”W” (example of spatial coordinate)
+        - “Black queen’s bishop 4” [chess coordinate] (example of spatial coordinate)
+        - “19-MAR-1922” (example of date)
+        - “+41 22 418 5571” (example of contact point)
+        - "weasel@paveprime.com" (example of contact point)
+        - “CH-1211, Genève” (example of place appellation)
+        - “1-29-3 Otsuka, Bunkyo-ku, Tokyo, 121, Japan” (example of address)
+        - “the poop deck of H.M.S Victory” (example of section definition)
+        - “the Venus de Milo’s left buttock” (example of section definition)
+    In First Order Logic:
+        - E41(x) ⊃ E90(x)
+    Properties:
+        - P139 has alternative form: E41 Appellation
+
+    """
+
+
+@entity_register(label="E42 Identifier")
+class E42Identifier(E41Appellation):
+    """E42 Identifier entity model;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E42
+
+    SubClass Of:
+        - E41 Appellation
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises strings or codes assigned to instances of E1 CRM Entity in order to identify them
+        uniquely and permanently within the context of one or more organisations. Such codes are often known as
+        inventory numbers, registration codes, etc. and are typically composed of alphanumeric sequences. Postal
+        addresses, telephone numbers, urls and e-mail addresses are characteristic examples of identifiers used by
+        services transporting things between clients;
+
+        The class E42 Identifier is not normally used for machine-generated identifiers used for automated processing
+        unless these are also used by human agents;
+
+    Examples:
+        - “MM.GE.195”
+        - “13.45.1976”
+        - “OXCMS: 1997.4.1”
+        - ISSN “0041-5278”
+        - ISRC “FIFIN8900116”
+        - Shelf mark “Res 8 P 10”
+        - “Guillaume de Machaut (1300?-1377)” [a controlled personal name heading that follows the French rules]
+          (Reaney, 1974)
+        - “+41 22 418 5571”
+        - weasel@paveprime.com
+        - “1-29-3 Otsuka, Bunkyo-ku, Tokyo, 121, Japan”
+        - “Rue David Dufour 5, CH-1211, Genève”
+    In First Order Logic:
+        - E42(x) ⊃ E41(x)
+    Properties:
+        -
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label="E97 Monetary Amount")
+class E97MonetaryAmount(E54Dimension):
+    """'E97 Monetary Amount' CRM entity model;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E97
+
+    SubClass Of:
+        - E54 Dimension
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises quantities of monetary possessions or obligations in terms of their nominal value with
+        respect to a particular currency. These quantities may be abstract accounting units, the nominal value of
+        a heap of coins or banknotes at the time of validity of the respective currency, the nominal value of a bill
+        of exchange or other documents expressing monetary claims or obligations. It specifically excludes amounts
+        expressed in terms of weights of valuable items, like gold and diamonds, and quantities of other non-currency
+        items, like goats or stocks and bonds;
+
+    Examples:
+        - Christies’ hammer price for “Vase with Fifteen Sunflowers” (E97) has currency British Pounds (E98)
+    In First Order Logic:
+        - E97(x) ⊃ E54(x)
+    Properties:
+        - P180 has currency (was currency of): E98 Currency
+        - P181 has amount: E60 Number
 
     """
