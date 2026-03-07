@@ -22,9 +22,11 @@ __all__ = ('P1IsIdentifiedBy', 'P2HasType', 'P3HasNote', 'P4HasTimeSpan', 'P5Con
            'P8TookPlaceOnOrWithin', 'P9ConsistsOf', 'P10FallsWithin', 'P11HadParticipant', 'P12OccurredInPresenceOf',
            'P13Destroyed', 'P14CarriedOutBy', 'P15WasInfluencedBy', 'P16UsedSpecificObject', 'P17WasMotivatedBy',
            'P19WasIntendedUseOf', 'P20HadSpecificPurpose', 'P21HadGeneralPurpose', 'P22TransferredTitleTo',
-           'P23TransferredTitleFrom', 'P24TransferredTitleOf', 'P25Moved', 'P26MovedTo', 'P72HasLanguage',
-           'P82AtSomeTimeWithin', 'P86FallsWithin', 'P90HasValue', 'P91HasUnit', 'P190HasSymbolicContent',
-           'P191HadDuration', )
+           'P23TransferredTitleFrom', 'P24TransferredTitleOf', 'P25Moved', 'P26MovedTo', 'P28CustodySurrenderedBy',
+           'P29CustodyReceivedBy', 'P30TransferredCustodyOf', 'P31HasModified', 'P32UsedGeneralTechnique',
+           'P33UsedSpecificTechnique', 'P34Concerned', 'P35Identified', 'P37Assigned', 'P38Deassigned',
+           'P39Measured', 'P40ObservedDimension', 'P72HasLanguage', 'P82AtSomeTimeWithin', 'P86FallsWithin',
+           'P90HasValue', 'P91HasUnit', 'P190HasSymbolicContent', 'P191HadDuration', )
 
 
 class P1IsIdentifiedBy(PropertyMixin):
@@ -1105,7 +1107,554 @@ class P26MovedTo(PropertyMixin):
 # ******************************************************************************************************************* #
 
 
-class P72HasLanguage:
+class P27MovedFrom(PropertyMixin):
+    """'P27 moved from (was origin of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P27
+
+    Domain:
+        E9 Move
+    Range:
+        E53 Place
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies an origin, an instance of E53 Place, of an instance of E9 Move;
+
+        A move will be linked to an origin, such as the move of an artifact from storage to display. A move may be
+        linked to many starting instances of E53 Place by multiple instances of this property. In this case the move
+        describes the picking up of a set of objects. The area of the move includes the origin(s), route and
+        destination(s);
+
+        Therefore the described origin is an instance of E53 Place which P89 falls within (contains) the instance of
+        E53 Place the move P7 took place at;
+
+    Properties:
+        -
+    Examples:
+        - the movement of the Tut-Ankh-Amun Exhibition (E9) moved from The Egyptian Museum in Cairo (E53)
+    In First Order Logic:
+        P27(x,y) ⊃ E9(x)
+        P27(x,y) ⊃ E53(y)
+        P27(x,y) ⊃ (∃z)[ E53(z) ∧ P7(x,z) ∧ P89(y,z)]
+
+    """
+
+    P27_moved_from: Optional[str] = Field(default=None, description='P27 moved from (was origin of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P28CustodySurrenderedBy(PropertyMixin):
+    """'P28 custody surrendered by (surrendered custody through)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P28
+
+    Domain:
+        E10 Transfer of Custody
+    Range:
+        E39 Actor
+    SubProperty Of:
+        E7 Activity. P14 carried out by (performed): E39 Actor
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies the instance(s) of E39 Actor who surrender custody of an instance of
+        E18 Physical Thing in an instance of E10 Transfer of Custody;
+
+        The property will typically describe an Actor surrendering custody of an object when it is handed over to
+        someone else’s care. On occasion, physical custody may be surrendered involuntarily – through accident, loss
+        or theft;
+
+        In reality, custody is either transferred to someone or from someone, or both;
+
+    Properties:
+        -
+    Examples:
+        - the Secure Deliveries Inc. crew (E74) surrendered custody through The delivery of the paintings by Secure
+          Deliveries Inc. to the National Gallery (E10);
+    In First Order Logic:
+        P28(x,y) ⊃ E10(x)
+        P28(x,y) ⊃ E39(y)
+        P28(x,y) ⊃ P14(x,y)
+
+    """
+
+    p28_custody_surrendered_by: Optional[str] = Field(default=None, description='P28 custody surrendered by'
+                                                                                ' (surrendered custody through)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P29CustodyReceivedBy(PropertyMixin):
+    """'P29 custody received by (received custody through)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P29
+
+    Domain:
+        E10 Transfer of Custody
+    Range:
+        E39 Actor
+    SubProperty Of:
+        E7 Activity. P14 carried out by (performed): E39 Actor
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies the instance(s) E39 Actor who receive custody of an instance of E18 Physical Thing
+        in an instance of E10 Transfer of Custody;
+
+        The property will typically describe Actors receiving custody of an object when it is handed over from another
+        Actor’s care. On occasion, physical custody may be received involuntarily or illegally – through accident,
+        unsolicited donation, or theft;
+
+        In reality, custody is either transferred to someone or from someone, or both;
+
+    Properties:
+        -
+    Examples:
+        - representatives of The National Gallery (E74) received custody through. The delivery of the paintings by
+          Secure Deliveries Inc. to the National Gallery (E10)
+    In First Order Logic:
+        P29 (x,y) ⊃ E10(x)
+        P29 (x,y) ⊃ E39(y)
+        P29(x,y) ⊃ P14(x,y)
+
+    """
+
+    p29_custody_received_by: Optional[str] = Field(default=None, description='P29 custody received by'
+                                                                             ' (received custody through)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P30TransferredCustodyOf(PropertyMixin):
+    """'P30 transferred custody of (custody transferred through)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P30
+
+    Domain:
+        E10 Transfer of Custody
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance(s) of E18 Physical Thing concerned in an instance of
+        E10 Transfer of Custody;
+
+        The property will typically describe the object that is handed over by an instance of E39 Actor to to the
+        custody of another instance of E39 Actor. On occasion, physical custody may be transferred involuntarily or
+        illegally – through accident, unsolicited donation, or theft;
+
+    Properties:
+        -
+    Examples:
+        - the delivery of the paintings by Secure Deliveries Inc. to the National Gallery (E10) transferred custody of
+          paintings from The Iveagh Bequest (E19)
+    In First Order Logic:
+        P30 (x,y) ⊃ E10(x)
+        P30 (x,y) ⊃ E18(y)
+
+    """
+
+    p30_transferred_custody_of: Optional[str] = Field(default=None, description='P30 transferred custody of'
+                                                                                ' (custody transferred through)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P31HasModified(PropertyMixin):
+    """'P31 has modified (was modified by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P31
+
+    Domain:
+        E11 Modification
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        E5 Event. P12 occurred in the presence of (was present at): E77 Persistent Item
+    SuperProperty Of:
+        E12 Production. P108 has produced (was produced by): E24 Physical Human-Made Thing
+        E79 Part Addition. P110 augmented (was augmented by): E24 Physical Human-Made Thing
+        E80 Part Removal. P112 diminished (was diminished by): E24 Physical Human-Made Thing
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance of E24 Physical Human-Made Thing modified in an instance of
+        E11 Modification;
+
+    Properties:
+        -
+    Examples:
+        - rebuilding of the Reichstag (E11) has modified the Reichstag in Berlin (E24)
+    In First Order Logic:
+        P31(x,y) ⊃ E11(x)
+        P31(x,y) ⊃ E18(y)
+        P31(x,y) ⊃ P12(x,y)
+
+    """
+
+    p31_has_modified: Optional[str] = Field(default=None, description='P31 has modified (was modified by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P32UsedGeneralTechnique(PropertyMixin):
+    """'P32 used general technique (was technique of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P32
+
+    Domain:
+        E7 Activity
+    Range:
+        E55 Type
+    SubProperty Of:
+        E7 Activity. P125 used object of type (was type of object used in): E55 Type
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies the technique or method, modelled as an instance of E55 Type, that was employed in
+        an instance of E7 Activity;
+
+        These techniques should be drawn from an external E55 Type hierarchy of consistent terminology of general
+        techniques or methods such as embroidery, oil-painting, carbon dating, etc. Specific documented techniques
+        should be described as instances of E29 Design or Procedure. This property identifies the technique that was
+        employed in an act of modification;
+
+    Properties:
+        -
+    Examples:
+        - ornamentation of silver cup 113 (E11) used general technique gold-plating (E55) (Design or Procedure Type)
+    In First Order Logic:
+        P32(x,y) ⊃ E7(x)
+        P32(x,y) ⊃ E55(y)
+        P32(x,y) ⊃ P125(x,y)
+
+    """
+
+    p32_used_general_technique: Optional[str] = Field(default=None, description='P32 used general technique'
+                                                                                ' (was technique of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P33UsedSpecificTechnique(PropertyMixin):
+    """'P33 used specific technique (was used by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P33
+
+    Domain:
+        E7 Activity
+    Range:
+        E29 Design or Procedure
+    SubProperty Of:
+        E7 Activity. P16 used specific object (was used for): E70 Thing
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies a specific instance of E29 Design or Procedure in order to carry out an instance of
+        E7 Activity or parts of it;
+
+        The property differs from P32 used general technique (was technique of) in that P33 refers to an instance of
+        E29 Design or Procedure, which is a concrete information object in its own right rather than simply being
+        a term or a method known by tradition;
+
+        Typical examples would include intervention plans for conservation or the construction plans of a building;
+
+    Properties:
+        -
+    Examples:
+        - Ornamentation of silver cup 232 (E11) used specific technique ‘Instructions for golden chase work by
+          A N Other’ (E29)
+        - Rebuilding of Reichstag (E11) used specific technique Architectural plans by Foster and Partners (E29)
+    In First Order Logic:
+        P33(x,y) ⊃ E7(x)
+        P33(x,y) ⊃ E29(y)
+        P33(x,y) ⊃ P16(x,y)
+
+    """
+
+    p33_used_specific_technique: Optional[str] = Field(default=None, description='P33 used specific technique'
+                                                                                 ' (was used by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P34Concerned(PropertyMixin):
+    """'P34 concerned (was assessed by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P34
+
+    Domain:
+        E14 Condition Assessment
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        E13 Attribute Assignment. P140 assigned attribute to (was attributed by): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance of E18 Physical Thing that was assessed during an instance of
+        E14 Condition Assessment activity;
+
+        Conditions may be assessed either by direct observation or using recorded evidence. In the latter case the
+        instance of E18 Physical Thing does not need to be present or extant at the time of assessment;
+
+    Properties:
+        -
+    Examples:
+        - 1997 condition assessment of the silver collection (E14) concerned silver cup 232 (E22)
+    In First Order Logic:
+        P34(x,y) ⊃ E14(x)
+        P34(x,y) ⊃ E18(y)
+        P34(x,y) ⊃ P140(x,y)
+
+    """
+
+    p34_concerned: Optional[str] = Field(default=None, description='P34 concerned (was assessed by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P35Identified(PropertyMixin):
+    """'P35 has identified (was identified by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P35
+
+    Domain:
+        E14 Condition Assessment
+    Range:
+        E3 Condition State
+    SubProperty Of:
+        E13 Attribute Assignment. P141 assigned (was assigned by): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance of E3 Condition State that was observed in an instance of
+        E14 Condition Assessment activity;
+
+    Properties:
+        -
+    Examples:
+        - 1997 condition assessment of silver cup 232 (E14) has identified oxidation traces were present in 1997 (E3)
+          has type oxidation traces (E55)
+    In First Order Logic:
+        P35(x,y) ⊃E14(x)
+        P35(x,y) ⊃ E3(y)
+        P35(x,y) ⊃ P141(x,y)
+
+    """
+
+    p35_identified: Optional[str] = Field(default=None, description='P35 has identified (was identified by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P37Assigned(PropertyMixin):
+    """'P37 assigned (was assigned by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P37
+
+    Domain:
+        E15 Identifier Assignment
+    Range:
+        E42 Identifier
+    SubProperty Of:
+        E13 Attribute Assignment. P141 assigned (was assigned by): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property records the identifier that was assigned to an item in an instance of P37 Identifier Assignment;
+
+        The same identifier may be assigned on more than one occasion;
+
+        An Identifier might be created prior to an assignment;
+
+    Properties:
+        -
+    Examples:
+        - 01 June 1997 Identifier Assignment of the silver cup donated by Martin Doerr (E15) assigned “232” (E42)
+    In First Order Logic:
+        P37(x,y) ⊃ E15(x)
+        P37(x,y) ⊃ E42(y)
+        P37(x,y) ⊃ P141(x,y)
+
+    """
+
+    p37_assigned: Optional[str] = Field(default=None, description='P37 assigned (was assigned by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P38Deassigned(PropertyMixin):
+    """'P38 deassigned (was deassigned by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P38
+
+    Domain:
+        E15 Identifier Assignment
+    Range:
+        E42 Identifier
+    SubProperty Of:
+        E13 Attribute Assignment. P141 assigned (was assigned by): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property records the identifier that was deassigned from an instance of E1 CRM Entity;
+
+        Deassignment of an identifier may be necessary when an item is taken out of an inventory, a new numbering
+        system is introduced or items are merged or split up;
+
+        The same identifier may be deassigned on more than one occasion;
+
+    Properties:
+        -
+    Examples:
+        - 31 July 2001 Identifier Assignment of the silver cup OXCMS:2001.1.32 (E15) deassigned “232” (E42)
+    In First Order Logic:
+        P38(x,y) ⊃ E15(x)
+        P38(x,y) ⊃ E42(y)
+        P38(x,y) ⊃ P141(x,y)
+
+    """
+
+    p38_deassigned: Optional[str] = Field(default=None, description='P38 deassigned (was deassigned by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P39Measured(PropertyMixin):
+    """'P39 measured (was measured by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P39
+
+    Domain:
+        E16 Measurement
+    Range:
+        E1 CRM Entity
+    SubProperty Of:
+        E13 Attribute Assignment. P140 assigned attribute to (was attributed by): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property associates an instance of E16 Measurement with the instance of E1 CRM Entity to which it
+        applied. An instance of E1 CRM Entity may be measured more than once. Material and immaterial things and
+        processes may be measured, e.g. the number of words in a text, or the duration of an event;
+
+    Properties:
+        -
+    Examples:
+        31 August 1997 measurement of height of silver cup 232 (E16) measured silver cup 232 (E22)
+    In First Order Logic:
+        P39(x,y) ⊃ E16(x)
+        P39(x,y) ⊃ E1(y)
+        P39(x,y) ⊃ P140(x,y)
+
+    """
+
+    p39_measured: Optional[str] = Field(default=None, description='P39 measured (was measured by)')
+
+
+# ******************************************************************************************************************* #
+
+class P40ObservedDimension(PropertyMixin):
+    """'P40 observed dimension (was observed in)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P40
+
+    Domain:
+        E16 Measurement
+    Range:
+        E54 Dimension
+    SubProperty Of:
+        E13 Attribute Assignment. P141 assigned (was assigned by): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property records the dimension that was observed in an E16 Measurement Event;
+
+        E54 Dimension can be any quantifiable aspect of E70 Thing. Weight, image colour depth and monetary value are
+        dimensions in this sense. One measurement activity may determine more than one dimension of one object;
+
+        Dimensions may be determined either by direct observation or using recorded evidence. In the latter case the
+        measured Thing does not need to be present or extant;
+
+        Even though knowledge of the value of a dimension requires measurement, the dimension may be an object of
+        discourse prior to, or even without, any measurement being made;
+
+    Properties:
+        -
+    Examples:
+        - 31 August 1997 measurement of height of silver cup 232 (E16) observed dimension silver cup 232 height
+          (E54) has unit mm (E58), has value 224 (E60)
+    In First Order Logic:
+        P40(x,y) ⊃ E16(x)
+        P40(x,y)⊃ E54(y)
+        P40(x,y) ⊃ P141(x,y)
+
+    """
+
+    p40_observed_dimension: Optional[str] = Field(default=None, description='P40 observed dimension'
+                                                                            ' (was observed in)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P72HasLanguage(PropertyMixin):
     """'P72 has language' CRM property;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P72
@@ -1144,7 +1693,7 @@ class P72HasLanguage:
 # ******************************************************************************************************************* #
 
 
-class P82AtSomeTimeWithin:
+class P82AtSomeTimeWithin(PropertyMixin):
     """'P82 at some time within' CRM property;
 
     Domain:
@@ -1182,7 +1731,7 @@ class P82AtSomeTimeWithin:
 # ******************************************************************************************************************* #
 
 
-class P86FallsWithin:
+class P86FallsWithin(PropertyMixin):
     """'P86 falls within (contains)' CRM property;
 
     Domain:
@@ -1222,7 +1771,7 @@ class P86FallsWithin:
 # ******************************************************************************************************************* #
 
 
-class P90HasValue:
+class P90HasValue(PropertyMixin):
     """'P90 has value' CRM property;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P90
@@ -1257,7 +1806,7 @@ class P90HasValue:
 # ******************************************************************************************************************* #
 
 
-class P91HasUnit:
+class P91HasUnit(PropertyMixin):
     """'P91 has unit (is unit of) CRM property';
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P91
@@ -1292,7 +1841,7 @@ class P91HasUnit:
 # ******************************************************************************************************************* #
 
 
-class P190HasSymbolicContent:
+class P190HasSymbolicContent(PropertyMixin):
     """'P190 has symbolic content' CRM property;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P190
@@ -1344,7 +1893,7 @@ class P190HasSymbolicContent:
 # ******************************************************************************************************************* #
 
 
-class P191HadDuration:
+class P191HadDuration(PropertyMixin):
     """'P191 had duration (was duration of)' CRM property;
 
     Domain:
