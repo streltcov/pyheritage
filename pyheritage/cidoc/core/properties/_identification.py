@@ -1,8 +1,24 @@
 # -*- coding: utf-8 -*-
 
-"""Identification CRM properties (mixin classes for entity models);
+"""Identification, naming, and typing properties;
+
+(Mixin classes for CRM entities);
 
 CIDOC-CRM v7.0
+
+---------------------------------------------
+Properties
+---------------------------------------------
+P1   is identified by              E1  -> E41
+P2   has type                      E1  -> E55
+P3   has note                      E1  -> E62
+P48  has preferred identifier      E1  -> E42
+P102 has title                     E71 -> E35
+P127 has broader term              E55 -> E55
+P137 exemplifies                   E55 -> E55
+P139 has alternative form          E41 -> E41
+P150 defines typical parts of      E55 -> E55
+P190 has symbolic content          E90 -> E62
 
 """
 

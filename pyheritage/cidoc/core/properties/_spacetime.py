@@ -1,11 +1,46 @@
 # -*- coding: utf-8 -*-
 
-"""Spacetime CRM properties (mixin classes for entity models);
+"""Spatiotemporal framework properties;
+
+(Mixin classes for entity models);
 
 CIDOC-CRM v7.0
 
+---------------------------------------------
+Properties
+---------------------------------------------
+P79  beginning is qualified by     E52 -> E62
+P80  end is qualified by           E52 -> E62
+P81  ongoing throughout            E52 -> E61
+P82  at some time within           E52 -> E61
+P86  falls within                  E52 -> E52
+P170 defines time                  E61 -> E52
+P191 had duration                  E52 -> E54
+P87  is identified by              E53 -> E41
+P89  falls within                  E53 -> E53
+P121 overlaps with                 E53 -> E53
+P122 borders with                  E53 -> E53
+P157 is at rest relative to        E53 -> E18
+P168 place is defined by           E53 -> E94
+P171 at some place within          E53 -> E94
+P172 contains                      E53 -> E53
+P189 approximates                  E53 -> E53
+P90  has value                     E54 -> E60
+P91  has unit                      E54 -> E58
+P180 has currency                  E97 -> E98
+P181 has amount                    E97 -> E60
+P132 spatiotemporally overlaps     E92 -> E92
+P133 is spatiotemporally separated E92 -> E92
+P160 has temporal projection       E92 -> E52
+P161 has spatial projection        E92 -> E53
+P169 defines spacetime volume      E95 -> E92
+P195 was a presence of             E93 -> E18
+P197 covered parts of              E93 -> E53
+
 """
 
+
+from __future__ import annotations
 
 from typing import Any, Optional, TYPE_CHECKING
 

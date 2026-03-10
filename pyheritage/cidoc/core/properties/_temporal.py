@@ -4,8 +4,77 @@
 
 CIDOC-CRM v7.0
 
+----------------------------------------------
+Properties
+----------------------------------------------
+P4   has time-span                  E2  -> E52
+P5   consists of                    E3  -> E3
+P7   took place at                  E4  -> E53
+P8   took place on or within        E4  -> E18
+P9   consists of                    E4  -> E4
+P10  falls within                   E4  -> E4
+P11  had participant                E5  -> E39
+P12  occurred in the presence of    E5  -> E77
+P14  carried out by                 E7  -> E39
+P15  was influenced by              E7  -> E1
+P16  used specific object           E7  -> E70
+P17  was motivated by               E7  -> E1
+P19  was intended use of            E7  -> E71
+P20  had specific purpose           E7  -> E55
+P21  had general purpose            E7  -> E55
+P32  used general technique         E7  -> E55
+P33  used specific technique        E11 -> E29
+P34  concerned                      E14 -> E18
+P35  has identified                 E14 -> E3
+P37  assigned                       E15 -> E42
+P39  measured                       E16 -> E18
+P40  observed dimension             E16 -> E54
+P41  classified                     E17 -> E1
+P42  assigned                       E17 -> E55
+P22  transferred title to           E8  -> E39
+P23  transferred title from         E8  -> E39
+P24  transferred title of           E8  -> E18
+P25  moved                          E9  -> E19
+P26  moved to                       E9  -> E53
+P27  moved from                     E9  -> E53
+P28  custody surrendered by         E10 -> E39
+P29  custody received by            E10 -> E39
+P30  transferred custody of         E10 -> E18
+P31  has modified                   E11 -> E18
+P92  brought into existence         E63 -> E77
+P93  took out of existence          E64 -> E77
+P94  has created                    E65 -> E28
+P95  has formed                     E66 -> E74
+P96  by mother                      E67 -> E21
+P97  from father                    E67 -> E21
+P98  brought into life              E67 -> E21
+P99  dissolved                      E68 -> E74
+P100 was death of                   E69 -> E21
+P108 has produced                   E12 -> E24
+P110 augmented                      E79 -> E24
+P111 added                          E79 -> E18
+P112 diminished                     E80 -> E24
+P113 removed                        E80 -> E18
+P123 resulted in                    E81 -> E77
+P124 transformed                    E81 -> E77
+P134 continued                      E7  -> E7
+P136 was based on                   E13 -> E1
+P140 assigned attribute to          E13 -> E1
+P141 assigned                       E13 -> E1
+P142 used constituent               E15 -> E90
+P143 joined                         E85 -> E39
+P144 joined with                    E85 -> E74
+P145 separated                      E86 -> E39
+P146 separated from                 E86 -> E74
+P147 curated                        E87 -> E78
+P151 was formed from                E66 -> E74
+P179 had sales price                E96 -> E97
+P186 produced thing of product type E12 -> E99
+
 """
 
+
+from __future__ import annotations
 
 from typing import Optional
 
