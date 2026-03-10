@@ -37,7 +37,9 @@ from pyheritage.cidoc.core.base import PropertyMixin
 
 
 __all__ = ('P67RefersTo', 'P68ForeseesUseOf', 'P69HasAssociationWith', 'P70Documents', 'P71Lists', 'P72HasLanguage',
-           'P73HasTranslation', )
+           'P73HasTranslation', 'P104IsSubjectTo', 'P105RightHeldBy', 'P106IsComposedOf', 'P129IsAbout',
+           'P138Represents', 'P148HasComponent', 'P165Incorporates', 'P187HasProductionPlan',
+           'P188RequiresProductionTool', )
 
 
 class P67RefersTo(PropertyMixin):
@@ -341,3 +343,404 @@ class P73HasTranslation(PropertyMixin):
     """
 
     p73_has_translation: Optional[str] = Field(default=None, description='P73 has translation (is translation of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P104IsSubjectTo(PropertyMixin):
+    """'P104 is subject to (applies to)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P104
+
+    Domain:
+        E72 Legal Object
+    Range:
+        E30 Right
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property links a particular instance of E72 Legal Object to the instances of E30 Right to which it is
+        subject;
+
+        The Right is held by an E39 Actor as described by P75 possesses (is possessed by);
+
+    Properties:
+        -
+    Examples:
+        - Beatles back catalogue (E72) is subject to reproduction right on Beatles back catalogue (E30)
+    In First Order Logic:
+        P104(x,y) ⊃ E72(x)
+        P104(x,y) ⊃ E30(y)
+
+    """
+
+    p104_is_subject_to: Optional[str] = Field(default=None, description='P104 is subject to (applies to)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P105RightHeldBy(PropertyMixin):
+    """'P105 right held by (has right on)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P105
+
+    Domain:
+        E72 Legal Object
+    Range:
+        E39 Actor
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        E18 Physical Thing. P52 has current owner (is current owner of): E39 Actor
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies the instance of E39 Actor who holds the instances of E30 Right to an instance of
+        E72 Legal Object;
+
+        It is a superproperty of P52 has current owner (is current owner of) because ownership is a right that is held
+        on the owned object;
+
+        P105 right held by (has right on) is a shortcut of the fully developed path E72 Legal Object,P104 is subject
+        to, E30 Right, P75i is possessed by, E39 Actor;
+
+    Properties:
+        -
+    Examples:
+        - Beatles back catalogue (E73) right held by Michael Jackson (E21)
+    In First Order Logic:
+        P105(x,y) ⊃ E72(x)
+        P105(x,y) ⊃ E39(y)
+
+    """
+
+    p105_right_held_by: Optional[str] = Field(default=None, description='P105 right held by (has right on)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P106IsComposedOf(PropertyMixin):
+    """'P106 is composed of (forms part of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P106
+
+    Domain:
+        E90 Symbolic Object
+    Range:
+        E90 Symbolic Object
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        E73 Information Object. P165 incorporates (is incorporated in): E90 Symbolic Object
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E90 Symbolic Object with a part of it that is by itself an instance of
+        E90 Symbolic Object, such as fragments of texts or clippings from an image;
+
+        This property is transitive;
+
+    Properties:
+        -
+    Examples:
+        - This Scope note P106 (E33) is composed of fragments of texts (E33)
+        - ‘recognizable’ P106 (E90) is composed of ‘ecognizabl’ (E90)
+    In First Order Logic:
+        P106(x,y) ⊃ E90(x)
+        P106(x,y) ⊃ E90(y)
+
+    """
+
+    p106_is_composed_of: Optional[str] = Field(default=None, description='P106 is composed of (forms part of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P129IsAbout(PropertyMixin):
+    """'P129 is about (is subject of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P129
+
+    Domain:
+        E89 Propositional Object
+    Range:
+        E1 CRM Entity
+    SubProperty Of:
+        E89 Propositional Object. P67 refers to (is referred to by): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property documents that an instance of E89 Propositional Object has as subject an instance of
+        E1 CRM Entity;
+
+        This differs from P67 refers to (is referred to by), which refers to an instance of E1 CRM Entity, in that it
+        describes the primary subject or subjects of an instance of E89 Propositional Object;
+
+    Properties:
+        -
+    Examples:
+        - The text entitled ‘Reach for the sky’ (E33) is about Douglas Bader (E21)
+    In First Order Logic:
+        P129(x,y) ⊃ E89(x)
+        P129(x,y) ⊃ E1(y)
+        P129(x,y) ⊃ P67(x,y)
+
+    """
+
+    p129_is_about: Optional[str] = Field(default=None, description='P129 is about (is subject of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P138Represents(PropertyMixin):
+    """'P138 represents (has representation)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P138
+
+    Domain:
+        E36 Visual Item
+    Range:
+        E1 CRM Entity
+    SubProperty Of:
+        E89 Propositional Object. P67 refers to (is referred to by): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property establishes the relationship between an instance of E36 Visual Item and the instance of
+        E1 CRM Entity that it visually represents;
+
+        Any entity may be represented visually. This property is part of the fully developed path from
+        E24 Physical Human-Made Thing through P65 shows visual item (is shown by), E36 Visual Item,
+        P138 represents (has representation) to E1 CRM Entity, which is shortcut by P62depicts (is depicted by);
+        P138.1 mode of representation allows the nature of the representation to be refined;
+
+        This property is also used for the relationship between an original and a digitisation of the original by the
+        use of techniques such as digital photography, flatbed or infrared scanning. Digitisation is here seen as
+        a process with a mechanical, causal component rendering the spatial distribution of structural and optical
+        properties of the original and does not necessarily include any visual similarity identifiable by
+        human observation."
+
+    Properties:
+        P138.1 mode of representation: E55 Type
+    Examples:
+        - the digital file found at http://www.emunch.no/N/full/No-MM_N0001-01.jpg (E36) represents page 1 of
+          Edward Munch's manuscript MM N 1, Munch-museet (E22) mode of representation Digitisation(E55)
+        - The 3D model VAM_A.200-1946_trace_1M.ply (E73) represents Victoria & Albert Museum’s Madonna and child
+          sculpture (visual work) A.200-1946 (E22) mode of representation 3D surface (E55)
+    In First Order Logic:
+        P138(x,y) ⊃ E36(x)
+        P138(x,y) ⊃ E1(y)
+        P138(x,y,z) ⊃ [P138(x,y) ∧ E55(z)]
+        P138(x,y) ⊃ P67(x,y)
+
+    """
+
+    p138_represents: Optional[str] = Field(default=None, description='P138 represents (has representation)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P148HasComponent(PropertyMixin):
+    """'P148 has component (is component of)' CRM  property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P148
+
+    Domain:
+        E89 Propositional Object
+    Range:
+        E89 Propositional Object
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        (0:n,0:n)
+
+    Scope Note:
+        This property associates an instance of E89 Propositional Object with a structural part of it that is by
+        itself an instance of E89 Propositional Object;
+
+        This property is transitive
+
+    Properties:
+        -
+    Examples:
+        - Dante’s “Divine Comedy” (E89) has component Dante’s “Hell” (E89)
+    In First Order Logic:
+        P148(x,y) ⊃ E89(x)
+        P148(x,y) ⊃ E89(y)
+
+    """
+
+    p148_has_component: Optional[str] = Field(default=None, description='P148 has component (is component of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P165Incorporates(PropertyMixin):
+    """'P165 incorporates (is incorporated in)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P165
+
+    Domain:
+        E73 Information Object
+    Range:
+        E90 Symbolic Object
+    SubProperty Of:
+        E90 Symbolic Object. P106 is composed of (forms part of): E90 Symbolic Object
+    SuperProperty Of:
+        -
+    Quantification:
+        (0,n :0,n)
+
+    Scope Note:
+        This property associates an instance of E73 Information Object with an instance of E90 Symbolic Object (or any
+        of its subclasses) that was included in it;
+
+        This property makes it possible to recognise the autonomous status of the incorporated signs, which were
+        created in a distinct context, and can be incorporated in many distinct self-contained expressions, and to
+        highlight the difference between structural and accidental whole-part relationships between conceptual
+        entities;
+
+        It accounts for many cultural facts that are quite frequent and significant: the inclusion of a poem in
+        an anthology, the re-use of an operatic aria in a new opera, the use of a reproduction of a painting for
+        a book cover or a CD booklet, the integration of textual quotations, the presence of lyrics in a song that
+        sets those lyrics to music, the presence of the text of a play in a movie based on that play, etc.;
+
+        In particular, this property allows for modelling relationships of different levels of symbolic specificity,
+        such as the natural language words making up a particular text, the characters making up the words and
+        punctuation, the choice of fonts and page layout for the characters;
+
+        When restricted to information objects, that is, seen as a property with E73 Information Object as domain and
+        range the property is transitive;
+
+        A digital photograph of a manuscript page incorporates the text of a manuscript page, if the respective text
+        is defined as a sequence of symbols of a particular type, such as Latin characters, and the resolution and
+        quality of the digital image is sufficient to resolve these symbols so they are readable on the digital image;
+
+    Properties:
+        -
+    Examples:
+        - The content of Charles-Moïse Briquet’s ‘Les Filigranes: dictionnaire historique des marques du papier’ (E32)
+          P165 incorporates the visual aspect of the watermark used around 1358-61 by some Spanish papermaker(s) and
+          identified as ‘Briquet 4019’ (E37)
+        - The visual content of Jacopo Amigoni’s painting known as ‘The Singer Farinelli and friends’ (E36)
+          P165 incorporates the musical notation of Farinelli’s musical work entitled ‘La Partenza’ (E73)
+        - The visual content of Nicolas Poussin’s painting entitled ‘Les Bergers d’Arcadie’ (E36) P165 incorporates
+          the Latin phrase ‘Et in Arcadia ego’ (E33)
+    In First Order Logic:
+        P165(x,y) ⊃ E73(x)
+        P165(x,y) ⊃ E90(y)
+        P165(x,y) ⊃ P106(x,y)
+
+    """
+
+    p165_incorporates: Optional[str] = Field(default=None, description='P165 incorporates (is incorporated in)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P187HasProductionPlan(PropertyMixin):
+    """'P187 has production plan (is production plan for)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P187
+
+    Domain:
+        E99 Product Type
+    Range:
+        E29 Design or Procedure
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        one to many (1,n:1,1)
+
+    Scope Note:
+        This property associates an instance of E99 Product Type with an instance of E29 Design or Procedure that
+        completely determines the production of instances of E18 Physical Thing. The resulting instances of
+        E18 Physical Thing are considered exemplars of this instance of E99 Product Type when the process specified
+        is correctly executed. Note that the respective instance of E29 Design or Procedure may not necessarily be
+        fixed in a written/graphical form, and may require the use of tools or models unique to the product type. The
+        same instance of E99 Product Type may be associated with several variant plans;
+
+    Properties:
+        -
+    Examples:
+        - the production plans (E29) for Volkswagen Type 11 (Beetle) (E99)
+    In First Order Logic:
+        P187(x,y) ⊃ E99(x)
+        P187(x,y) ⊃ E29(y)
+
+    """
+
+    p187_has_production_plan: Optional[str] = Field(
+        default=None,
+        description='P187 has production plan (is production plan for)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P188RequiresProductionTool(PropertyMixin):
+    """'P188 requires production tool (is production tool for)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P188
+
+    Domain:
+        E99 Product Type
+    Range:
+        E19 Physical Object
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        one to many (1,n:1,1)
+
+    Scope Note:
+        This property associates an instance of E99 Product Type with an instance of E19 Physical Object that is
+        needed for the production of an instance of E18 Physical Thing. When the process of production is correctly
+        executed in accordance with the plan and using the specified instance of E19 Physical Object, the resulting
+        instance of E18 Physical Thing is considered an exemplar of this instance of E99 Product Type. The instance of
+        E19 Physical Object may bear distinct features that are transformed into characteristic features of the
+        resulting instance of E18 Physical Thing. Examples include models and mouldsl
+
+    Properties:
+        -
+    Examples:
+        - the luggage compartment lid mould (E19) for the Volkswagen Type 11 (Beetle) (E99)
+          (https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Volkswagen_Type_1_
+          (Auto_classique_St._Lazare_%2710).jpg/220px-Volkswagen_Type_1_(Auto_classique_St._Lazare_%2710).jpg)
+    In First Order Logic:
+        P188(x,y) ⊃ E99(x)
+        P188(x,y) ⊃ E19(y)
+
+    """
+
+    p188_requires_production_tool: Optional[str] = Field(
+        default=None,
+        description='P188 requires production tool (is production tool for)'
+    )

@@ -22,15 +22,6 @@ P17  was motivated by               E7  -> E1
 P19  was intended use of            E7  -> E71
 P20  had specific purpose           E7  -> E55
 P21  had general purpose            E7  -> E55
-P32  used general technique         E7  -> E55
-P33  used specific technique        E11 -> E29
-P34  concerned                      E14 -> E18
-P35  has identified                 E14 -> E3
-P37  assigned                       E15 -> E42
-P39  measured                       E16 -> E18
-P40  observed dimension             E16 -> E54
-P41  classified                     E17 -> E1
-P42  assigned                       E17 -> E55
 P22  transferred title to           E8  -> E39
 P23  transferred title from         E8  -> E39
 P24  transferred title of           E8  -> E18
@@ -41,6 +32,15 @@ P28  custody surrendered by         E10 -> E39
 P29  custody received by            E10 -> E39
 P30  transferred custody of         E10 -> E18
 P31  has modified                   E11 -> E18
+P32  used general technique         E7  -> E55
+P33  used specific technique        E11 -> E29
+P34  concerned                      E14 -> E18
+P35  has identified                 E14 -> E3
+P37  assigned                       E15 -> E42
+P39  measured                       E16 -> E18
+P40  observed dimension             E16 -> E54
+P41  classified                     E17 -> E1
+P42  assigned                       E17 -> E55
 P92  brought into existence         E63 -> E77
 P93  took out of existence          E64 -> E77
 P94  has created                    E65 -> E28
