@@ -2,18 +2,20 @@
 
 """Spatial-Temporal CRM frame;
 
-Module implements:
-    - E52 Time-Span
-    - E53 Place
-    - E54 Dimension
-    - E92 Spacetime Volume
-    - E93 Presence
+-------------------------
+Entities
+-------------------------
+E52 Time-Span
+E53 Place
+E54 Dimension
+E92 Spacetime Volume
+E93 Presence
 
 """
 
 
-from pyheritage.cidoc.core._crm_base import E1CRMEntity
 from pyheritage.cidoc.core.base import entity_register
+from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
 
 
 __all__ = ('E52TimeeSpan', 'E53Place', 'E54Dimension', 'E92SpaceTimeVolume', 'E93Presence', )

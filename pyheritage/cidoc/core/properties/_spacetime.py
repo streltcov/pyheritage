@@ -49,7 +49,7 @@ from pyheritage.cidoc.core.base import PropertyMixin
 
 
 if TYPE_CHECKING:
-    from pyheritage.cidoc.core._primitives import CoercedNumber
+    from pyheritage.cidoc.core.entities._primitives import CoercedNumber
 
 
 __all__ = ('P79BeginningIsQualifiedBy', 'P80EndIsQualifiedBy', 'P81OngoingThroughout', 'P82AtSomeTimeWithin',

@@ -9,8 +9,8 @@ CRM entrypoint - all entities must be imported only from this module;
 
 from typing import Optional
 
-from pyheritage.cidoc.core._crm_base import E1CRMEntity
-from pyheritage.cidoc.core._persistent import (
+from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
+from pyheritage.cidoc.core.entities._persistent import (
     E18PhysicalThing,
     E19PhysicalObject,
     E20BiologicalObject,
@@ -26,7 +26,7 @@ from pyheritage.cidoc.core._persistent import (
     E90SymbolicObject,
     E97MonetaryAmount,
 )
-from pyheritage.cidoc.core._primitives import (
+from pyheritage.cidoc.core.entities._primitives import (
     E59PrimitiveValue,
     E60Number,
     E61TimePrimitive,
@@ -34,8 +34,14 @@ from pyheritage.cidoc.core._primitives import (
     E94SpacePrimitive,
     E95SpaceTimePrimitive,
 )
-from pyheritage.cidoc.core._spacetime import E52TimeeSpan, E53Place, E54Dimension, E92SpaceTimeVolume, E93Presence
-from pyheritage.cidoc.core._temporal import E2TemporalEntity, E3ConditionState
+from pyheritage.cidoc.core.entities._spacetime import (
+    E52TimeeSpan,
+    E53Place,
+    E54Dimension,
+    E92SpaceTimeVolume,
+    E93Presence,
+)
+from pyheritage.cidoc.core.entities._temporal import E2TemporalEntity, E3ConditionState
 
 
 __all__ = ('E1CRMEntity', 'E2TemporalEntity', 'E3ConditionState', 'E18PhysicalThing', 'E19PhysicalObject',

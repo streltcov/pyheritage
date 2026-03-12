@@ -2,32 +2,34 @@
 
 """Persistent items CRM entities;
 
-Module implements:
-    - E18 Physical Thing
-    - E19 Physical Object
-    - E20 Biological Object
-    - E22 Human-Made Object
-    - E24 Physical Human Made Object
-    - E25 Human-Made Feature
-    - E26 Physical Feature
-    - E27 Site
-    - E41 Appellation
-    - E42 Identifier
-    - E54 Dimension
-    - E70 Thing
-    - E71 Human-Made Thing
-    - E72 Legal Object
-    - E77 Persistent Item
-    - E78 Curated Holding
-    - E90 Symbolic Object
-    - E97 Monetary Amount
+-------------------------
+Entities
+-------------------------
+E18 Physical Thing
+E19 Physical Object
+E20 Biological Object
+E22 Human-Made Object
+E24 Physical Human Made Object
+E25 Human-Made Feature
+E26 Physical Feature
+E27 Site
+E41 Appellation
+E42 Identifier
+E54 Dimension
+E70 Thing
+E71 Human-Made Thing
+E72 Legal Object
+E77 Persistent Item
+E78 Curated Holding
+E90 Symbolic Object
+E97 Monetary Amount
 
 """
 
 
-from pyheritage.cidoc.core._crm_base import E1CRMEntity
-from pyheritage.cidoc.core._spacetime import E54Dimension
 from pyheritage.cidoc.core.base import entity_register
+from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
+from pyheritage.cidoc.core.entities._spacetime import E54Dimension
 
 
 __all__ = ('E18PhysicalThing', 'E19PhysicalObject', 'E20BiologicalObject', 'E22HumanMadeObject',

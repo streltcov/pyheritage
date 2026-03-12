@@ -2,14 +2,16 @@
 
 """Temporal phenomena entities;
 
-Module implements:
-    - E2 Temporal Entity
-    - E3 Condition State
+-------------------------
+Entities
+-------------------------
+E2 Temporal Entity
+E3 Condition State
 
 """
 
 
-from pyheritage.cidoc.core._crm_base import E1CRMEntity
+from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
 from pyheritage.cidoc.core.properties import P4HasTimeSpan, P5ConsistsOf
 
 

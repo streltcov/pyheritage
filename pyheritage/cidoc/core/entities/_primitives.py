@@ -8,6 +8,16 @@ Models should not be imported directly from this module!;
 
 https://cidoc-crm.org/html/cidoc_crm_v7.0.html
 
+-------------------------
+Entities
+-------------------------
+E59 Primitive Value
+E60 Number
+E61 Time Primitive
+E62 String
+E94 Space Primitive
+E95 Space-Time Primitive
+
 """
 
 
@@ -23,8 +33,8 @@ from edtf.parser.edtf_exceptions import EDTFParseException
 from pydantic import BeforeValidator, Field, field_validator, PrivateAttr
 from pygeoif import from_wkt, geometry, shape
 
-from pyheritage.cidoc.core._crm_base import E1CRMEntity
 from pyheritage.cidoc.core.base import entity_register
+from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
 from pyheritage.cidoc.core.enums import TimePrecision
 
 

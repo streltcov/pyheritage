@@ -6,6 +6,11 @@ Represents CIDOC-CRM version 7.0 (released on June 2020);
 
 https://cidoc-crm.org/html/cidoc_crm_v7.0.html
 
+-------------------------
+Entities
+-------------------------
+E1 CRM Entity
+
 """
 
 

@@ -33,7 +33,7 @@ from pyheritage.cidoc.core.base import PropertyMixin
 
 
 if TYPE_CHECKING:
-    from pyheritage.cidoc.core._primitives import CoercedString
+    from pyheritage.cidoc.core.entities._primitives import CoercedString
 
 
 __all__ = ('P1IsIdentifiedBy', 'P2HasType', 'P3HasNote', 'P48HasPreferredIdentifier', 'P102HasTitle',
