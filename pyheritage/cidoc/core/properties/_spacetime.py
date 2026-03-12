@@ -53,7 +53,9 @@ if TYPE_CHECKING:
 
 
 __all__ = ('P79BeginningIsQualifiedBy', 'P80EndIsQualifiedBy', 'P81OngoingThroughout', 'P82AtSomeTimeWithin',
-           'P86FallsWithin', 'P89FallsWithin', 'P90HasValue', 'P91HasUnit', 'P191HadDuration', )
+           'P86FallsWithin', 'P89FallsWithin', 'P90HasValue', 'P91HasUnit', 'P121OverlapsWith', 'P122BordersWith',
+           'P132SpatiotemporallyOverlaps', 'P133IsSpatiotemporallySeparated', 'P157IsAtRestRelativeTo',
+           'P191HadDuration', 'P195WasAPresenceOf', 'P197CoveredPartsOf', )
 
 
 class P79BeginningIsQualifiedBy(PropertyMixin):
@@ -363,6 +365,241 @@ class P91HasUnit(PropertyMixin):
 # ******************************************************************************************************************* #
 
 
+class P121OverlapsWith(PropertyMixin):
+    """'P121 overlaps with' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P121
+
+    Domain:
+        E53 Place
+    Range:
+        E53 Place
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This symmetric property associates an instance of E53 Place with another instance of E53 Place
+        geometrically overlapping it;
+
+        It does not specify anything about the shared area. This property is purely spatial, in contrast to
+        the temporal overlaps described by pxxx, pxxy or pxxz, and and, spatio temporal overlaps described
+        by p132 spatiotemporally overlaps with;
+
+    Properties:
+        -
+    Examples:
+        - the territory of the United States (E53) overlaps with the Arctic (E53)
+        - The maximal extent of the Greek Kingdom (E53) overlaps with the maximal extent of the Ottoman Empire(E53)
+    In First Order Logic:
+        P121(x,y) ⊃ E53(x)
+        P121(x,y) ⊃ E53(y)
+        P121(x,y) ⊃ P121(y,x)
+
+    """
+
+    p121_overlaps_with: Optional[str] = Field(default=None, description='P121 overlaps with')
+
+
+# ******************************************************************************************************************* #
+
+
+class P122BordersWith(PropertyMixin):
+    """'P122 borders with' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#122
+
+    Domain:
+        E53 Place
+    Range:
+        E53 Place
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This symmetric property associates an instance of E53 Place with another instance of E53 Place which shares
+        a part of its borders;
+
+        This property is purely spatial, in contrast to time properties, which are purely temporal;
+
+        This property is not transitive;
+
+    Properties:
+        -
+    Examples:
+        - Scotland (E53) borders with England (E53)
+    In First Order Logic:
+        P122(x,y) ⊃ E53(x)
+        P122(x,y) ⊃ E53(y)
+        P122(x,y) ⊃ P122(y,x)
+
+    """
+
+    p122_borders_with: Optional[str] = Field(default=None, description='P122 borders with')
+
+
+# ******************************************************************************************************************* #
+
+
+class P132SpatiotemporallyOverlaps(PropertyMixin):
+    """'P132 spatiotemporally overlaps with' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#132
+
+    Domain:
+        E92 Spacetime Volume
+    Range:
+        E92 Spacetime Volume
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        E4 Period. P9 consists of (forms part of): E4 Period
+        E92 Spacetime Volume. P10 falls within (contains): E92 Spacetime Volume
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This symmetric property associates two instances of E92 Spacetime Volume that have some of their extents
+        in common. If only the fuzzy boundaries of the instances of E92 Spacetime Volume overlap, this property cannot
+        be determined from observation alone and therefore should not be applied. However, there may be other forms
+        of justification that the two instances of E92 Spacetime Volume must have some of their extents in common
+        regardless of where and when precisely;
+
+        If this property holds for two instances of E92 Spacetime Volume then it cannot be the case that P133 also
+        holds for the same two instances. Furthermore, there are cases where neither P132 nor P133 holds between
+        two instances of E92 Spacetime Volume. This would occur where only an overlap of the fuzzy boundaries of
+        the two instances of E92 Spacetime Volume occurs and no other evidence is available;
+
+    Properties:
+        -
+    Examples:
+        - the “Urnfield” period (E4) spatiotemporally overlaps with the “Hallstatt” period (E4)
+    In First Order Logic:
+        P132(x,y) ⊃ E92(x)
+        P132(x,y) ⊃ E92(y)
+        P132(x,y) ⊃ P132(y,x)
+        P132(x,y) ⊃ ¬P133(x,y)
+
+    """
+
+    p132_spatiotemporally_overlaps: Optional[str] = Field(
+        default=None,
+        description='P132 spatiotemporally overlaps with'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P133IsSpatiotemporallySeparated(PropertyMixin):
+    """'P133 is spatiotemporally separated from' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#133
+
+    Domain:
+        E92 Spacetime Volume
+    Range:
+        E92 Spacetime Volume
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This symmetric property associates two instances of E92 Spacetime Volume that have no extents in common. If
+        only the fuzzy boundaries of the instances of E92 Spacetime Volume overlap, this property cannot be determined
+        from observation alone and therefore should not be applied. However, there may be other forms of justification
+        that the two instances of E92 Spacetime Volume must not have any of their extents in common regardless of
+        where and when precisely;
+
+        If this property holds for two instances of E92 Spacetime Volume then it cannot be the case that
+        P132 spatiotemporally overlaps with also holds for the same two instances. Furthermore, there are cases
+        where neither P132 nor P133 holds between two instances of E92 Spacetime Volume. This would occur where only
+        an overlap of the fuzzy boundaries of the two instances of E92 Spacetime Volume occurs and no other evidence
+        is available;
+
+        This property is not transitive;
+
+    Properties:
+        -
+    Examples:
+        - the “Hallstatt” period (E4) is spatiotemporally separated from the “La Tène” era (E4)
+        - Kingdom of Greece (1831-1924) (E92) is spatiotemporally separated from Ottoman Empire (1299-1922) (E92)
+        - The path of the army of Alexander (335-323 B.C.) (E92) is spatiotemporally separated from
+          the Mauryan Empire (E92)
+    In First Order Logic:
+        P133(x,y) ⊃ E92(x)
+        P133(x,y) ⊃ E92(y)
+        P133(x,y) ⊃ P133(y,x)
+        P133(x,y) ⊃ ¬P132(x,y)
+
+    """
+
+    p133_is_spatiotemporally_separated: Optional[str] = Field(
+        default=None,
+        description='P133 is spatiotemporally separated from'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P157IsAtRestRelativeTo(PropertyMixin):
+    """'P157 is at rest relative to (provides reference space for)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#157
+
+    Domain:
+        E53 Place
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        E53 Place. P59i is located on or within (has section): E18 Physical Thing
+        E53 Place. P156i is occupied by (occupies): E18 Physical Thing
+    Quantification:
+        many to many, necessary, dependent (1,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E53 Place with the instance of E18 Physical Thing that determines
+        a reference space for this instance of E53 Place by being at rest with respect to this reference space. The
+        relative stability of form of an instance of E18 Physical Thing defines its default reference space. The
+        reference space is not spatially limited to the referred thing. For example, a ship determines a reference
+        space in terms of which other ships in its neighbourhood may be described. Larger constellations of matter,
+        such as continental plates, may comprise many physical features that are at rest with them and define
+        the same reference space;
+
+    Properties:
+        -
+    Examples:
+        - The spatial extent of the municipality of Athens in 2014 (E53) is at rest relative to The Royal Observatory
+          in Greenwich (E25)
+        - The place where Lord Nelson died on H.M.S. Victory (E53) is at rest relative to H.M.S. Victory (E22)
+    In First Order Logic:
+        P157(x,y) ⊃ E53(x)
+        P157(x,y) ⊃ E18(y)
+
+    """
+
+    p157_is_at_rest_relative_to: Optional[str] = Field(
+        default=None,
+        description='P157 is at rest relative to (provides reference space for)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
 class P191HadDuration(PropertyMixin):
     """'P191 had duration (was duration of)' CRM property;
 
@@ -394,3 +631,94 @@ class P191HadDuration(PropertyMixin):
     """
 
     p191_had_duration: Optional[Any] = Field(default=None)
+
+
+# ******************************************************************************************************************* #
+
+
+class P195WasAPresenceOf(PropertyMixin):
+    """'P195 was a presence of (had presence)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#195
+
+    Domain:
+        E93 Presence
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        (1,1 : 0,n)
+
+    Scope Note:
+        This property associates an instance of E93 Presence with the instance of E18 Physical Thing of which
+        it represents a temporal restriction (i.e.: a time-slice) of the thing’s trajectory through spacetime. In
+        other words, it describes where the instance of E18 Physical Thing were or moved around within
+        a given time-span. Instantiating this property constitutes a necessary part of the identity of the
+        respective instance of E93 Presence;
+
+        This property is a shortcut of the fully developed path from E18 Physical Thing through P196 defines,
+        E92 Spacetime Volume, P166 was a presence of (had presence), E93 Presence;
+
+    Properties:
+        -
+    Examples:
+        - Johann Joachim Winckelmann’s whereabouts in December 1755 (E93) was a presence
+          of Johann Joachim Winckelmann (E21)
+        - Johann Joachim Winckelmann’s whereabouts from November 19 1755 until April 9 1768 (E93) was a presence
+          of Johann Joachim Winckelmann (E21)
+    In First Order Logic:
+        P195(x,y) ⊃ E93(x),
+        P195(x,y) ⊃ E18(y),
+        P195(x,y) = (∃z)[E9(z) ∧ P196 (y,z) ∧ P166(z,x)]
+
+    """
+
+    p195_was_a_presence_of: Optional[str] = Field(default=None, description='P195 was a presence of (had presence)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P197CoveredPartsOf(PropertyMixin):
+    """'P197 covered parts of (was partially covered by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#197
+
+    Domain:
+        E93 Presence
+    Range:
+        E53 Place
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        -
+    Scope Note:
+        This property associates an instance of E93 Presence with an instance of E53 Place that geometrically overlaps
+        with the spatial projection of the respective instance of E93 Presence. A use case of this property is to
+        state through which places an object or an instance of E21 Person has or was moved within a given time-span.
+        It may also be used to describe a partial or complete, temporary or permanent extension of the spatial extent
+        of some realm into a neighboring region during a known time-span. It may also be used to describe a partial
+        or complete, temporary or permanent extension of the spatial extent of some realm into a neighboring region
+        during a known time-span. It is a shortcut of the more fully developed path from E93 Presence through
+        P161 has spatial projection, E53 Place, P121 overlaps with to E53 Place;
+
+    Properties:
+        -
+    Examples:
+        - Johann Joachim Winckelmann’s whereabouts from November 19 1755 until April 9 1768 (E93) covered parts
+          of Paestum, Italy (E53)
+        - The Byzantine Empire 1013 AD (E93) covered parts of The Italian Peninsula (E53)
+    In First Order Logic:
+        -
+
+    """
+
+    p197_covered_parts_of: Optional[str] = Field(
+        default=None,
+        description='P197 covered parts of (was partially covered by)'
+    )
