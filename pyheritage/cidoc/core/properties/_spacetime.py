@@ -55,7 +55,10 @@ if TYPE_CHECKING:
 __all__ = ('P79BeginningIsQualifiedBy', 'P80EndIsQualifiedBy', 'P81OngoingThroughout', 'P82AtSomeTimeWithin',
            'P86FallsWithin', 'P89FallsWithin', 'P90HasValue', 'P91HasUnit', 'P121OverlapsWith', 'P122BordersWith',
            'P132SpatiotemporallyOverlaps', 'P133IsSpatiotemporallySeparated', 'P157IsAtRestRelativeTo',
-           'P191HadDuration', 'P195WasAPresenceOf', 'P197CoveredPartsOf', )
+           'P160HasTemporalProjection', 'P161HasSpatialProjection', 'P168PlaceIsDefinedBy',
+           'P169DefinesSpacetimeVolume', 'P170DefinesTime', 'P171AtSomePlaceWithin', 'P172Contains',
+           'P180HasCurrency', 'P181HasAmount', 'P189Approximates', 'P191HadDuration', 'P195WasAPresenceOf',
+           'P197CoveredPartsOf', )
 
 
 class P79BeginningIsQualifiedBy(PropertyMixin):
@@ -600,8 +603,460 @@ class P157IsAtRestRelativeTo(PropertyMixin):
 # ******************************************************************************************************************* #
 
 
+class P160HasTemporalProjection(PropertyMixin):
+    """'P160 has temporal projection (is temporal projection of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#160
+
+    Domain:
+        E92 Spacetime Volume
+    Range:
+        E52 Time-Span
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        E93 Presence. P164 during (was time-span of): E52 Time-Span
+    Quantification:
+        one to one (1,1:1,1)
+
+    Scope Note:
+        This property describes the temporal projection of an instance of E92 Spacetime Volume. The property
+        P4 has time-span is the same as P160 has temporal projection if it is used to document an instance
+        of E4 Period or any subclass of it;
+
+    Properties:
+        -
+    Examples:
+        - the spatio-temporal trajectory of the H.M.S. Temeraire from its building in 1798 to its destruction
+          in 1838 (E5) has temporal projection The Time-Span of the existence of H.M.S. Temeraire
+          [P82 at some time within 1798-1838 (E61 Time Primitive)]
+        - The Battle of Waterloo 1815 (E7) has temporal projection the time-span of The Battle of Waterloo
+          [P82 at some time within Sunday, 18 June 1815 (E61 Time Primitive)]“
+    In First Order Logic:
+        P160(x,y) ⊃ E92(x)
+        P160(x,y)⊃ E52(y)
+
+    """
+
+    p160_has_temporal_projection: Optional[str] = Field(
+        default=None,
+        description='P160 has temporal projection (is temporal projection of)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P161HasSpatialProjection(PropertyMixin):
+    """'P161 has spatial projection (is spatial projection of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#161
+
+    Domain:
+        E92 Spacetime Volume
+    Range:
+        E53 Place
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        one to many, necessary, dependent (1,n:1,1)
+
+    Scope Note:
+        This property associates an instance of an instance of E92 Spacetime Volume with an instance of
+        E53 Place that is the result of the spatial projection of the instance of the E92 Spacetime Volume
+        on a reference space;
+
+        In general there can be more than one useful reference space (for reference space see p156 occupies and
+        p157 is at rest relative to) to describe the spatial projection of a spacetime volume, for example,
+        in describing a sea battle, the difference between the battle ship and the seafloor as reference spaces. Thus
+        it can be seen that the projection is not unique;
+
+        The spatial projection is the actual spatial coverage of a spacetime volume, which normally has fuzzy
+        boundaries except for instances of E92 Spacetime Volumes which are geometrically defined in the same
+        reference system as the range of this property are an exception to this and do not have fuzzy boundaries.
+        Modelling explicitly fuzzy spatial projections serves therefore as a common topological reference of different
+        spatial approximations rather than absolute geometric determination, for instance for relating outer or inner
+        spatial boundaries for the respective spacetime volumes;
+
+        In case the domain of an instance of P161 has spatial projection is an instance of E4 Period, the spatial
+        projection describes all areas that period was ever present at, for instance, the Roman Empire;
+
+        This property is part of the fully developed path from E18 Physical Thing through P196 defines,
+        E92 Spacetime Volume, P161 has spatial projection, which in turn is implied by P156 occupies (is occupied by);
+
+        This property is part of the fully developed path from E4 Period through P161 has spatial projection,
+        E53 Place, P89 falls within (contains) to E53 Place, which in turn is shortcut
+        by P7took place at (witnessed.)
+
+    Properties:
+        -
+    Examples:
+        - The Roman Empire has spatial projection all areas ever claimed by Rome
+    In First Order Logic:
+        P161(x,y) ⊃ E92(x)
+        P161(x,y) ⊃ E53(y)
+
+    """
+
+    p161_has_spatial_projection: Optional[str] = Field(
+        default=None,
+        description='P161 has spatial projection (is spatial projection of)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P168PlaceIsDefinedBy(PropertyMixin):
+    """'P168 place is defined by (defines place)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#168
+
+    Domain:
+        E53 Place
+    Range:
+        E94 Space Primitive
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        (0,n:1,1)
+
+    Scope Note:
+        This property associates an instance of E53 Place with an instance of E94 Space Primitive that defines it.
+        Syntactic variants or use of different scripts may result in multiple instances of E94 Space Primitive
+        defining exactly the same place. Transformations between different reference systems always result in new
+        definitions of places approximating each other and not in alternative definitions;
+
+    Properties:
+        -
+    Examples:
+        - the centroid from https://sws.geonames.org/735927 (E53) place is defined by 40°31'17.9"N 21°15'48.3"E
+          (E94) [a single point for approximating the centre of the city of Kastoria, Greece]
+        - Martin’s coordinates for Kastoria (E53) place is defined by 40°30'23"N 21°14'53"E, 40°31'40"N 21°16'43"E
+          (E94) [a square covering the built settlement structure of Kastoria, Greece]
+        - Martin’s centroid for Kastoria (E53) place is defined by 40°31'01.5"N 21°15'48"E (E94) [a point in the lake
+          of Kastoria in the centre of the area covered by the city
+        - the position measured by Alexander von Humboldt for the Plaza Mayor in Cumaná, Sucre,Venezuela 1799-1800AD
+          (E53) place is defined by 10°27'52"N 66°30'02"W (E94) [actually 260km west of Cumaná]
+    In First Order Logic:
+        P168(x,y) ⊃ E53(x)
+        P168(x,y) ⊃ E94(y)
+
+    """
+
+    p168_place_defined_by: Optional[str] = Field(default=None, description='P168 place is defined by (defines place)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P169DefinesSpacetimeVolume(PropertyMixin):
+    """'P169 defines spacetime volume (spacetime volume is defined by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#169
+
+    Domain:
+        E95 Spacetime Primitive
+    Range:
+        E92 Spacetime Volume
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        (1,1:0,n)
+
+    Scope Note:
+        This property associates an instance of E95 Spacetime Primitive with the instance of E92 Spacetime Volume
+        it defines;
+
+    Properties:
+        -
+    Examples:
+        - {40°30'23"N 21°14'53"E, 40°31'40"N 21°16'43"E, 200BC-2020AD} (E95) defines spacetime volume Martin’s
+          spatiotemporal enclosure 2020 for the evolution of the settlement of today’s city of Kastoria, Greece, since
+          its conquest by the Romans (E92) [a square covering the current built settlement structure of Kastoria,
+          Greece, through the years 200BC to 2020AD, which includes the extents of earlier phases of the city]
+    In First Order Logic:
+        P169(x,y) ⊃ E95(x)
+        P169(x,y) ⊃ E92(y)
+
+    """
+
+    p169_defines_spacetime_volume: Optional[str] = Field(
+        default=None,
+        description='P169 defines spacetime volume (spacetime volume is defined by)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P170DefinesTime(PropertyMixin):
+    """'P170 defines time (time is defined by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#170
+
+    Domain:
+        E61 Time Primitive
+    Range:
+        E52 Time-Span
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one (0,1:0,n)
+
+    Scope Note:
+        This property associates an instance of E61 Time Primitive with the instance of E52 Time-Span that constitutes
+        the interpretation of the terms of the time primitive as an extent in absolute, real time;
+
+    Properties:
+        -
+    Examples:
+        - (1800/1/1 0:00:00 – 1899/31/12 23:59:59)(E61) defines time The 19th century (E52)
+        - (1968/1/1 – 2018/1/1)(E61) defines time “1968/1/1 – 2018/1/1” (E52) [an arbitrary time-span during which
+          the Saint Titus reliquary was present in the Saint Titus Church in Heraklion, Crete]
+    In First Order Logic:
+        P170(x,y) ⊃ E61(x)
+        P170(x,y) ⊃ E52(y)
+
+    """
+
+    p170_defines_time: Optional[str] = Field(default=None, description='P170 defines time (time is defined by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P171AtSomePlaceWithin(PropertyMixin):
+    """'P171 at some place within' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#171
+
+    Domain:
+        E53 Place
+    Range:
+        E94 Space Primitive
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        (0,n:0,n)
+
+    Scope Note:
+        This property describes the maximum spatial extent within which an instance of E53 Place falls. Since
+        instances of E53 Places may not have precisely known spatial extents, the CIDOC CRM supports statements about
+        maximum spatial extents of instances of E53 Place. This property allows an instance of an instance of
+        E53 Places’s maximum spatial extent (i.e. its outer boundary) to be assigned an instance of
+        E94 Space Primitive value;
+
+        P171 at some place within is a shortcut of the fully developed path E53 Place, P89 falls within, E53 Place,
+        P168 place is defined by, E94 Space Primitive through a declarative Place that is not explicitly documented,
+        to a Space Primitive: declarative places are defined in CRMgeo (Doerr and Hiebel 2013);
+
+    Properties:
+        -
+    Examples:
+        - the spatial extent of the Acropolis of Athens (E53) is at some place within POLYGON ((37.969172 23.720787,
+          37.973122 23.721495 37.972741 23.728994, 37.969299 23.729735, 37.969172 23.720787)) (E94)
+    In First Order Logic:
+        P171(x,y) ⊃ E53(x)
+        P171(x,y) ⊃ E94(y)
+
+    """
+
+    p171_at_some_place_within: Optional[str] = Field(default=None, description='P171 at some place within')
+
+
+# ******************************************************************************************************************* #
+
+
+class P172Contains(PropertyMixin):
+    """'P172 contains' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#172
+
+    Domain:
+        E53 Place
+    Range:
+        E94 Space Primitive
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        (0,n:0,n)
+
+    Scope Note:
+        This property describes a minimum spatial extent which is contained within an instance of E53 Place. Since
+        instances of E53 Place may not have precisely known spatial extents, the CIDOC CRM supports statements about
+        minimum spatial extents of instances of E53 Place. This property allows an instance of E53 Places’s minimum
+        spatial extent (i.e. its inner boundary or a point being within a Place) to be assigned an instance
+        of E94 Space Primitive value;
+
+        This property is a shortcut of the fully developed path: E53 Place, P89i contains, E53 Place,
+        P168 place is defined by, E94 Space Primitive
+
+    Properties:
+        -
+    Examples:
+        - the spatial extent of the Acropolis of Athens (E53) contains POINT (37.971431 23.725947) (E94)
+    In First Order Logic:
+        P172(x,y) ⊃ E53(x)
+        P172(x,y) ⊃ E94(y)
+
+    """
+
+    p172_contains: Optional[str] = Field(default=None, description='P172 contains')
+
+
+# ******************************************************************************************************************* #
+
+
+class P180HasCurrency(PropertyMixin):
+    """'P180 has currency (was currency of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#180
+
+    Domain:
+        E97 Monetary Amount
+    Range:
+        E98 Currency
+    SubProperty Of:
+        E54 Dimension. P91 has unit (is unit of): E58 Measurement Unit
+    SuperProperty Of:
+        -
+    Quantification:
+        (1,1; 0,n)
+
+    Scope Note:
+        This property establishes the relationship between an instance of E97 Monetary Amount and the instance
+        of E98 Currency that it is measured in;
+
+    Properties:
+        -
+    Examples:
+        - Christies’ hammer price for “Vase with Fifteen Sunflowers” (E97) has currency British Pounds (E98);
+    In First Order Logic:
+        P180(x,y) ⊃ E97(x)
+        P180(x,y) ⊃ E98(y)
+        P180(x,y) ⊃ P91(x,y)
+
+    """
+
+    p180_has_currency: Optional[str] = Field(default=None, description='P180 has currency (was currency of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P181HasAmount(PropertyMixin):
+    """'P181 has amount' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#181
+
+    Domain:
+        E97 Monetary Amount
+    Range:
+        E60 Number
+    SubProperty Of:
+        E54 Dimension. P90 has value: E60 Number
+    SuperProperty Of:
+        -
+    Quantification:
+        -
+    Scope Note:
+        This property establishes the relationship between an instance of E97 Monetary Amount and the amount
+        of currency, an instance of E60 Number, that it consists of;
+
+    Properties:
+        -
+    Examples:
+        - Christies hammer price for “Vase with Fifteen Sunflowers” (E97) has amount 24,750,000 (E60);
+    In First Order Logic:
+        P181(x,y) ⊃ E97(x)
+        P181(x,y) ⊃ E60(y)
+        P181(x,y) ⊃ P90(x,y)
+
+    """
+
+    p181_has_amount: Optional[str] = Field(default=None, description='P181 has amount')
+
+
+# ******************************************************************************************************************* #
+
+
+class P189Approximates(PropertyMixin):
+    """'P189 approximates (is approximated by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#189
+
+    Domain:
+        -
+    Range:
+        E53 Place
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one (0,1:0,n)
+
+    Scope Note:
+        This property associates an instance of E53 Place with another instance of E53 Place, which is defined in
+        the same reference space, and which is used to approximate the former. The property does not necessarily state
+        the quality or accuracy of this approximation, but rather indicates the use of the first instance of place
+        to approximate the second;
+
+        In common documentation practice, find or encounter spots e.g. in archaeology, botany or zoology are often
+        related to the closest village, river or other named place without detailing the relation, e.g. if it is
+        located within the village or in a certain distance of the specified place. In this case the stated
+        “phenomenal” place found in the documentation can be seen as approximation of the actual encounter spot
+        without more specific knowledge;
+
+        In more recent documentation often point coordinate information is provided that originates from GPS
+        measurements or georeferencing from a map. This point coordinate information does not state the actual place
+        of the encounter spot but tries to approximate it with a “declarative” place. The accuracy depends on the
+        methodology used when creating the coordinates. It may be dependent on technical limitations like GPS accuracy
+        but also on the method where the GPS location is taken in relation to the measured feature. If the methodology
+        is known a maximum deviation from the measured point can be calculated and the encounter spot or feature may
+        be related to the resulting circle using an instance of P171 at some place within;
+
+        This property is not transitive;
+
+    Properties:
+        P189.1 has type: E55 Type
+    Examples:
+        - [40°31'17.9"N 21°15'48.3"E] approximates Kastoria, Greece, TGN ID: 7010880
+          (coordinates from https://sws.geonames.org/735927)
+        - [40°31'00.1"N 21°16'00.1"E] approximates Kastoria, Greece, TGN ID: 7010880
+          (coordinates from http://vocab.getty.edu/page/tgn/7010880)
+        - [40°04'60.0"N 22°21'00.0"E] approximates Mount Olympus National Park, Greece
+          (coordinates from https://www.geonames.org/6941814)
+    In First Order Logic:
+        P189(x,y) ⊃ E53(x)
+        P189(x,y) ⊃ E53 (y)
+        P189 (x,y,z) ⊃ [P189 (x,y) ∧ E55(z)]
+
+    """
+
+    p189_approximates: Optional[str] = Field(default=None, description='P189 approximates (is approximated by)')
+
+
+# ******************************************************************************************************************* #
+
+
 class P191HadDuration(PropertyMixin):
     """'P191 had duration (was duration of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#191
 
     Domain:
         - E52 Time-Span
