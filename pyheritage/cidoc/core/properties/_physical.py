@@ -31,7 +31,7 @@ P128 carries                        E18 -> E90
 P130 shows features of              E70 -> E70
 P156 occupies                       E18 -> E53
 P196 defines                        E18 -> E92
-P198 holds or supports              E18 -> E18
+Pxxx holds or supports              E18 -> E18
 
 """
 
@@ -46,7 +46,8 @@ from pyheritage.cidoc.core.base import PropertyMixin
 __all__ = ('P43HasDimension', 'P44HasCondition', 'P45ConsistsOf', 'P46IsComposedOf', 'P49HasFormerOrCurrentKeeper',
            'P50HasCurrentKeeper', 'P51HasCurrentOrFormerOwner', 'P52HasCurrentOwner', 'P53HasFormerOrCurrentLocation',
            'P54HasCurrentPermanentLocation', 'P55HasCurrentLocation', 'P56BearsFeature', 'P57HasNumberOfParts',
-           'P59HasSection',)
+           'P59HasSection', 'P62Depicts', 'P65ShowsVisualItem', 'P101HadAGeneralUse', 'P103WasIntendedFor',
+           'P128Carries', 'P130ShowsFeaturesOf', 'P156Occupies', 'P196Defines', 'PxxxHoldsOrSupports', )
 
 
 class P43HasDimension(PropertyMixin):
@@ -692,3 +693,457 @@ class P59HasSection(PropertyMixin):
     """
 
     p59_has_section: Optional[str] = Field(default=None, description='P59 has section (is located on or within)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P62Depicts(PropertyMixin):
+    """'P62 depicts (is depicted by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P62
+
+    Domain:
+        E24 Physical Human-Made Thing
+    Range:
+        E1 CRM Entity
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies something that is depicted by an instance of E24 Physical Human-Made Thing. Depicting
+        is meant in the sense that an instance of E24 Physical Human-Made Thing intentionally shows, through its
+        optical qualities or form, a representation of the entity depicted. Photographs are by default regarded as
+        being intentional in this sense. Anything that is designed to change the properties of the depiction, such as
+        an e-book reader, is specifically excluded. The property does not pertain to inscriptions or any other
+        information encoding;
+
+        This property is a shortcut of the more fully developed path from E24 Physical Human-Made Thing through P65
+        shows visual item, E36 Visual Item, P138 represents, E1CRM Entity. P138.1 mode of representation “depiction”
+        allows the nature of the depiction to be refined;
+
+    Properties:
+        P62.1 mode of depiction: E55 Type
+    Examples:
+        - The painting “La Liberté guidant le peuple” by Eugène Delacroix (E84) depicts the French “July Revolution”
+          of 1830 (E7)
+        - the 20 pence coin held by the Department of Coins and Medals of the British Museum under registration number
+          2006,1101.126 (E24) depicts Queen Elizabeth II (E21) mode of depiction Profile (E55)
+    In First Order Logic:
+        P62(x,y) ⊃ E24(x)
+        P62(x,y) ⊃ E1(y)
+        P62(x,y,z) ⊃ [P62(x,y) ∧ E55(z)]
+
+    """
+
+    p62_depicts: Optional[str] = Field(default=None, description='P62 depicts (is depicted by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P65ShowsVisualItem(PropertyMixin):
+    """'P65 shows visual item (is shown by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P65
+
+    Domain:
+        E24 Physical Human-Made Thing
+    Range:
+        E36 Visual Item
+    SubProperty Of:
+        E18 Physical Thing. P128 carries (is carried by): E90 Symbolic Object
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property documents an instance of E36 Visual Item shown by an instance of E24 Physical Human-Made Thing;
+
+        This property is similar to P62 depicts (is depicted by) in that it associates an instance of
+        E24 Physical Human-Made Thing with a visual representation. However, P65 shows visual item (is shown by)
+        differs from the P62 depicts (is depicted by) property in that it makes no claims about what the instance of
+        E36 Visual Item is deemed to represent. An instance of E36 Visual Item identifies a recognisable image or
+        visual symbol, regardless of what this image may or may not represent;
+
+        For example, all recent British coins bear a portrait of Queen Elizabeth II, a fact that is correctly
+        documented using P62 depicts (is depicted by). Different portraits have been used at different periods,
+         however. P65 shows visual item (is shown by) can be used to refer to a particular portrait;
+
+        P65 shows visual item (is shown by) may also be used for Visual Items such as signs, marks and symbols, for
+        example the 'Maltese Cross' or the 'copyright symbol’ that have no particular representational content;
+
+        This property is part of the fully developed path E24 Physical Human-Made Thing , P65 shows visual item,
+        E36 Visual Item, P138 represents,E1 CRM Entity which is shortcut by, P62 depicts (is depicted by);
+
+    Properties:
+        -
+    Examples:
+        - My T-Shirt (E22) shows visual item Mona Lisa (E36)
+    In First Order Logic: P65(x,y) ⊃ E24(x)
+        P65(x,y) ⊃ E36(y)
+        P65(x,y) ⊃ P128(x,y)
+    In First Order Logic:
+        -
+
+    """
+
+    p65_shows_visual_item: Optional[str] = Field(default=None, description='P65 shows visual item (is shown by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P101HadAGeneralUse(PropertyMixin):
+    """'P101 had as general use (was use of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P101
+
+    Domain:
+        E70 Thing
+    Range:
+        E55 Type
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E70 Thing with an instance of E55 Type describing its general usage;
+
+        It allows the relationship between particular things, both physical and immaterial, and general methods and
+        techniques of use to be documented. Thus it can be asserted that a baseball bat had a general use for sport
+        and a specific use for threatening people during the Great Train Robbery;
+
+    Properties:
+        -
+    Examples:
+        - Tony Gill’s Ford Mustang (E22) had as general use transportation (E55)
+    In First Order Logic:
+        P101(x,y) ⊃ E70(x)
+        P101(x,y) ⊃ E55(y)
+        P101(x,y) ⊃ (∃z)[E7(z) ∧ P16(z,x) ∧ P2(z,y)]
+
+    """
+
+    p101_had_a_general_use: Optional[str] = Field(default=None, description='P101 had as general use (was use of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P103WasIntendedFor(PropertyMixin):
+    """'P103 was intended for (was intention of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P103
+
+    Domain:
+        E71 Human-Made Thing
+    Range:
+        E55 Type
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property links an instance of E71 Human-Made Thing to an instance of E55 Type describing its intended
+        usage;
+
+        It creates a relation between specific human-made things, both physical and immaterial, to types of intended
+        methods and techniques of use. Note: A link between specific human-made things and a specific use activity
+        should be expressed using P19 was intended use of (was made for);
+
+    Properties:
+        -
+    Examples:
+        - this plate (E22) was intended for being destroyed at wedding reception (E55)
+    In First Order Logic:
+        P103(x,y) ⊃ E71(x)
+        P103(x,y) ⊃ E55(y)
+
+    """
+
+    p103_was_intended_for: Optional[str] = Field(default=None, description='P103 was intended for (was intention of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P128Carries(PropertyMixin):
+    """'P128 carries (is carried by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P128
+
+    Domain:
+        E18 Physical Thing
+    Range:
+        E90 Symbolic Object
+    SubProperty Of:
+        E70 Thing. P130 shows features of (features are also found on): E70 Thing
+    SuperProperty Of:
+        E24 Physical Human-Made Thing. P65 shows visual item (is shown by): E36 Visual Item
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies an instance E90 Symbolic Object carried by an instance of E18 Physical Thing. Since
+        an instance of E90 Symbolic Object is defined as an immaterial idealization over potentially multiple
+        carriers, any individual realization on a particular physical carrier may be defective, due to deterioration
+        or shortcomings in the process of creating the realization compared to the intended ideal. As long as such
+        defects do not substantially affect the complete recognition of the respective symbolic object, it is still
+        regarded as carrying an instance of this E90 Symbolic Object. If these defects are of scholarly interest, the
+        particular realization can be modelled as an instance of E25 Human-Made Feature. Note, that any instance of
+        E90 Symbolic Object incorporated (P165) in the carried symbolic object is also carried by the same instance
+        of E18 Physical Thing;
+
+    Properties:
+        -
+    Examples:
+        - Matthew’s paperback copy of Reach for the Sky (E18) carries the text of Reach for the Sky (E73)
+    In First Order Logic:
+        P128(x,y) ⊃ E18(x)
+        P128(x,y) ⊃ E90(y)
+        P128(x,y) ⊃ P130(x,y)
+
+    """
+
+    p128_carries: Optional[str] = Field(default=None, description='P128 carries (is carried by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P130ShowsFeaturesOf(PropertyMixin):
+    """'P130 shows features of (features are also found on)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P130
+
+    Domain:
+        E70 Thing
+    Range:
+        E70 Thing
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        E18 Physical Thing. P128 carries (is carried by): E90 Symbolic Object
+        E33 Linguistic Object. P73i is translation of (has translation): E33 Linguistic Object
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property generalises the notions of "copy of" and "similar to" into a directed relationship, where the
+        domain expresses the derivative or influenced item and the range the source or influencing item, if such
+        a direction can be established. The property can also be used to express similarity in cases that can be
+        stated between two objects only, without historical knowledge about its reasons. The property expresses
+        a symmetric relationship in case no direction of influence can be established either from evidence on the
+        item itself or from historical knowledge. This holds in particular for siblings of a derivation process from
+        a common source or non-causal cultural parallels, such as some weaving patterns;
+
+        The P130.1 kind of similarity property of the P130 shows features of (features are also found on) property
+        enables the relationship between the domain and the range to be further clarified, in the sense from domain
+        to range, if applicable. For example, it may be expressed if both items are product “of the same mould”, or
+        if two texts “contain identical paragraphs”;
+
+        If the reason for similarity is a sort of derivation process, i.e., that the creator has used or had in mind
+        the form of a particular thing during the creation or production, this process should be explicitly
+        modelled. In these cases, P130 shows features of can be regarded as a shortcut of such a process. However,
+        the current model does not contain any path specific enough to infer this property. Specializations of
+        the CIDOC CRM may however be more explicit, for instance describing the use of moulds etc.;
+
+        This property is not transitive;
+
+    Properties:
+        P130.1 kind of similarity: E55 Type
+    Examples:
+        - Mary Lamb’s Cymbeline [from Charles and Mary Lamb’s Tales from Shakespeare] shows features of William
+          Shakespeare’s Cymbeline
+        - The audio recording of Dante Alighieri's La divina commedia read by Enrico de Negri shows features of the
+          text of Dante Alighieri's La divina commedia
+    In First Order Logic:
+        P130 (x,y) ⊃ E70(x)
+        P130 (x,y) ⊃ E70(y)
+        P130(x,y,z) ⊃ [P130(x,y) ∧ E55(z)]
+
+    """
+
+    p130_shows_features_of: Optional[str] = Field(
+        default=None,
+        description='P130 shows features of (features are also found on)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P156Occupies(PropertyMixin):
+    """'P156 occupies (is occupied by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P156
+
+    Domain:
+        E18 Physical Thing
+    Range:
+        E53 Place
+    SubProperty Of:
+        E18 Physical Thing. P53 has former or current location (is former or current location of): E53 Place
+        E18 Physical Thing. P157i provides reference space for (is at rest relative to): E53 Place
+    SuperProperty Of:
+        -
+    Quantification:
+        one to one (0,1:1,1)
+
+    Scope Note:
+        This property describes the largest volume in space, an instance of E53 Place, that an instance of
+        E18 Physical Thing has occupied at any time during its existence, with respect to the reference space relative
+        to the physical thing itself. This allows for describing the thing itself as a place that may contain other
+        things, such as a box that may contain coins. In other words, it is the volume that contains all the points
+        which the thing has covered at some time during its existence. The reference space for the associated place
+        must be the one that is permanently at rest (P157 is at rest relative to) relative to the physical thing. For
+        instances of E19 Physical Objects it is the one which is at rest relative to the object itself, i.e. which
+        moves together with the object. For instances of E26 Physical Feature it is one which is at rest relative to
+        the physical feature itself and the surrounding matter immediately connected to it. Therefore there is
+        a 1:1 relation between the instance E18 Physical Thing and the instance of E53 Place it occupies. We include
+        in the occupied space the space filled by the matter of the physical thing and all its inner spaces;
+
+        This property implies the fully developed path from E18 Physical Thing through P196 defines,
+        E92 Spacetime Volume, P161 has spatial projection, E53 Place. However, in contrast to P156 occupies, the
+        property P161 has spatial projection does not constrain the reference space of the referred instance
+        of E53 Place;
+
+        In contrast to P156 occupies, for the property P53 has former or current location the following holds:
+
+        It does not constrain the reference space of the referred instance of E53 Place;
+
+        It identifies a possibly wider instance of E53 Place at which a thing is or has been for some unspecified
+        time span;
+
+        If the reference space of the referred instance of E53 Place is not at rest with respect to the physical thing
+        found there, the physical thing may move away after some time to another place and/or may have been at some
+        other place before. The same holds for the fully developed path from E18 Physical Thing through P196 defines,
+        E92 Spacetime Volume, P161 has spatial projection, E53 Place;
+
+    Properties:
+        -
+    Examples:
+        - The Saint Titus reliquary occupies the space of the Saint Titus reliquary [the reliquary is currently kept
+          in the Saint Titus Church in Heraklion, Crete since 1966 and contains the skull of Saint Titus]
+    In First Order Logic:
+        P156(x,y) ⊃ E53(y)
+        P156(x,y) ⊃ E18(x)
+        P156 (x,y) = [E18(x) ∧ E53(y) ∧ P196(x,z) ∧ P161(z,y) ∧ P157(y,x)]
+
+    """
+
+    p156_occupies: Optional[str] = Field(default=None, description='P156 occupies (is occupied by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P196Defines(PropertyMixin):
+    """'P196 defines (is defined by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P196
+
+    Domain:
+        E18 Physical Thing
+    Range:
+        E92 Spacetime Volume
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        one to one, necessary (1,1:0,1)
+
+    Scope Note:
+        This property associates an instance of E18 Physical Thing with the instance of E92 Spacetime Volume that
+        constitutes the complete trajectory of its geometric extent through spacetime for the whole time of the
+        existence of the instance of E18 Physical Thing;
+
+        An instance of E18 Physical Thing not only occupies a particular geometric space at each instant of its
+        existence, but in the course of its existence it also forms a trajectory through spacetime, which occupies
+        a real, that is phenomenal, volume in spacetime, i.e., the instance of E92 Spacetime Volume this property
+        associates it with. This real spatiotemporal extent of the instance of E18 Physical Thing is regarded as being
+        unique, in all its details and fuzziness; the identity and existence of the E92 Spacetime Volume depends
+        uniquely on the identity of the instance of E18 Physical Thing, whose existence defines it. It constitutes
+        a phenomenal spacetime volume as defined in CRMgeo (Doerr and Hiebel 2013);
+
+        Included in this spacetime volume are both the spaces filled by the matter of the physical thing and any inner
+        space that may exist, for instance the interior of a box. Physical things consisting of aggregations of
+        physically unconnected objects, such as a set of chessmen, occupy a finite number of individually contiguous
+        subsets of this spacetime volume equal to the number of objects that constitute the set and that are never
+        connected during its existence;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        P196(x,y) ⊃ E18(x)
+        P196(x,y) ⊃ E92(y)
+
+    """
+
+    p196_defines: Optional[str] = Field(default=None, description='P196 defines (is defined by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class PxxxHoldsOrSupports(PropertyMixin):
+    """'Pxxx holds or supports' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#Pxxx
+
+    Domain:
+        E18 Physical Thing
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        E19 Physical Object. P56 bears feature (is found on): E26 Physical Feature
+    Quantification:
+        many to many
+
+    Scope Note:
+        This property relates one instance of E18 Physical Thing which acts as a container or support, such as
+        a shelf, for another instance of E18 Physical Thing. Pxxx holds or supports is a shortcut of the more fully
+        developed path from the domain E18 Physical Thing through P59 has section, E53 Place, P53i is former or
+        current location of, to the range E18 Physical Thing. It is not a sub-property of P46 is composed of, as
+        the held or supported object is not a component of the container or support;
+
+        This property can be used to avoid explicitly instantiating the E53 Place which is defined by an instance of
+        E18 Physical Thing, especially when the only intended use of that instance of E18 Physical Thing is to act
+        as a container or surface for the storage of other instances of E18 Physical Thing. The place’s existence is
+        defined by the existence of the container or surface, and will go out of existence at the same time as the
+        Destruction of the container or surface. As such, there are very few situations in which the identity of
+        the place needs to be distinguished from the defining physical thing;
+
+    Properties:
+        -
+    Examples:
+        - The archival folder (E22) “6” _holds or supports_ the piece of paper (E22) carrying the text of a letter
+          from Alloway to Sleigh
+        - The artist’s materials box (E22) labeled “VG6” _holds or supports_ Van Gogh’s paintbrush 23 (E22)
+        - The storage box “VG” (E22) _holds or supports_ the artist’s materials box (E22) labeled “VG6”
+        - The bronze coin bank “72.AC.99” (E22) _holds or supports_ silver coin “72.AC.99-1” (E22)
+        - The bookshelf “GRI-708.1” (E22) _holds or supports_ the book (E22) “Catalog of Paintings in
+          the J. Paul Getty Museum”
+    In First Order Logic:
+        -
+
+    """
+
+    p198_holds_or_supports: Optional[str] = Field(default=None, description='Pxxx holds or supports')
