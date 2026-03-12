@@ -14,7 +14,6 @@ P80  end is qualified by           E52 -> E62
 P81  ongoing throughout            E52 -> E61
 P82  at some time within           E52 -> E61
 P86  falls within                  E52 -> E52
-P87  is identified by              E53 -> E41
 P89  falls within                  E53 -> E53
 P90  has value                     E54 -> E60
 P91  has unit                      E54 -> E58
@@ -53,7 +52,125 @@ if TYPE_CHECKING:
     from pyheritage.cidoc.core._primitives import CoercedNumber
 
 
-__all__ = ('P82AtSomeTimeWithin', 'P86FallsWithin', 'P90HasValue', 'P91HasUnit', 'P191HadDuration', )
+__all__ = ('P79BeginningIsQualifiedBy', 'P80EndIsQualifiedBy', 'P81OngoingThroughout', 'P82AtSomeTimeWithin',
+           'P86FallsWithin', 'P89FallsWithin', 'P90HasValue', 'P91HasUnit', 'P191HadDuration', )
+
+
+class P79BeginningIsQualifiedBy(PropertyMixin):
+    """'P79 beginning is qualified by' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P79
+
+    Domain:
+        E52 Time-Span
+    Range:
+        E62 String
+    SubProperty Of:
+        E1 CRM Entity. P3 has note: E62 String
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one (0,1:0,n)
+
+    Scope Note:
+        This property associates an instance of E52 Time-Span with a note detailing the scholarly or scientific
+        opinions and justifications about the certainty, precision, sources etc of its beginning. Such notes may also
+        be used to elaborate arguments about constraints or to give explanations of alternatives;
+
+    Properties:
+        -
+    Examples:
+        - the time-span of the Holocene (E52) beginning is qualified by “The formal definition and dating of
+          the GSSP (GlobalStratotype Section and Point) for the base of theHolocene using
+          the Greenland NGRIP ice core, and selected auxiliary records” (Walker et al 2009) (E62)
+    In First Order Logic:
+        P79 (x,y) ⊃ E52 (x)
+        P79 (x,y) ⊃ E62(y)
+        P79(x,y) ⊃ P3(x,y)
+
+    """
+
+    p79_beginning_is_qualified_by: Optional[str] = Field(default=None, description='P79 beginning is qualified by')
+
+
+# ******************************************************************************************************************* #
+
+
+class P80EndIsQualifiedBy(PropertyMixin):
+    """'P80 end is qualified by' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P80
+
+    Domain:
+        E52 Time-Span
+    Range:
+        E62 String
+    SubProperty Of:
+        E1 CRM Entity. P3 has note: E62 String
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one (0,1:0,n)
+
+    Scope Note:
+        This property associates an instance of E52 Time-Span with a note detailing the scholarly or scientific
+        opinions and justifications about the certainty, precision, sources etc of its end. Such notes may also
+        be used to elaborate arguments about constraints or to give explanations of alternatives;
+
+    Properties:
+        -
+    Examples:
+        - the time-span of the Holocene (E52) end is qualified by “still ongoing” (E62)
+    In First Order Logic:
+        P80(x,y) ⊃ E52(x)
+        P80(x,y) ⊃ E62(y)
+        P80(x,y) ⊃ P3(x,y)
+
+    """
+
+    p80_end_is_qualified_by: Optional[str] = Field(default=None, description='P80 end is qualified by')
+
+
+# ******************************************************************************************************************* #
+
+
+class P81OngoingThroughout(PropertyMixin):
+    """'P81 ongoing throughout';
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P81
+
+    Domain:
+        E52 Time-Span
+    Range:
+        E61 Time Primitive
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary (1,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E52 Time-Span with an instance of E61 Time Primitive specifying
+        a minimum period of time covered by it;
+
+        Since Time-Spans may not have precisely known temporal extents, there may be multiple minimum periods
+        of . Union of;
+
+    Properties:
+        -
+    Examples:
+        - the time-span of the development of the CIDOC CRM (E52) ongoing throughout 1996-2002 (E61)
+    In First Order Logic:
+        P81 (x,y) ⊃ E52(x)
+        P81 (x,y) ⊃ E61(y)
+
+    """
+
+    p81_ongoing_throughout: Optional[str] = Field(default=None, description='P81 ongoing throughout')
+
+
+# ******************************************************************************************************************* #
 
 
 class P82AtSomeTimeWithin(PropertyMixin):
@@ -129,6 +246,48 @@ class P86FallsWithin(PropertyMixin):
     """
 
     p86_falls_within: Optional[Any] = Field(default=None)
+
+
+# ******************************************************************************************************************* #
+
+
+class P89FallsWithin(PropertyMixin):
+    """'P89 falls within (contains)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P89
+
+    Domain:
+        E53 Place
+    Range:
+        E53 Place
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies an instance of E53 Place that falls wholly within the extent of another instance
+        of E53 Place;
+
+        It addresses spatial containment only, and does not imply any relationship between things or phenomena
+        occupying these places;
+
+        This property is transitive;
+
+    Properties:
+        -
+    Examples:
+        - the area covered by the World Heritage Site of Stonehenge (E53) falls within the area
+          of Salisbury Plain (E53)
+    In First Order Logic:
+        P89(x,y) ⊃ E53(x)
+        P89(x,y) ⊃ E53(y)
+
+    """
+
+    p89_falls_within: Optional[str] = Field(default=None, description='P89 falls within (contains)')
 
 
 # ******************************************************************************************************************* #
