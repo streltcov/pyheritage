@@ -77,6 +77,10 @@ P175 starts after or with start     E2  -> E2
 P176 starts after or with end       E2  -> E2
 P177 assigned property type         E13 -> E55
 P179 had sales price                E96 -> E97
+P182 ends before or with start      E2  -> E2
+P183 ends before or with end        E2  -> E2
+P184 ends after or with start       E2  -> E2
+P185 ends after or with end         E2  -> E2
 P186 produced thing of product type E12 -> E99
 
 """
@@ -102,11 +106,13 @@ __all__ = ('P4HasTimeSpan', 'P5ConsistsOf', 'P7TookPlaceAt', 'P8TookPlaceOnOrWit
            'P93TookOutOfExistence', 'P94HasCreated', 'P95HasFormed', 'P96ByMother', 'P97FromFather',
            'P98BroughtIntoLife', 'P99Dissolved', 'P100WasDeathOf', 'P108HasProduced', 'P110Augmented', 'P111Added',
            'P112Diminished', 'P113Removed', 'P123ResultedIn', 'P124Transformed', 'P125UsedObjectOfType',
-           'P126Employed', 'P134Continued', 'P136WasBasedOn', 'P140AssignedAttributeTo', 'P141Assigned',
-           'P142UsedConstituent', 'P143Joined', 'P144JoinedWith', 'P145Separated', 'P146SeparatedFrom', 'P147Curated',
-           'P151WasFormedFrom', 'P173StartsBeforeOrWithTheEndOf', 'P174StartsBeforeTheEndOf',
-           'P175StartsBeforeOrWithTheStartOf', 'P176StartsBeforeTheStartOf', 'P177AssignedPropertyType',
-           'P179HadSalesPrice', 'P186ProducedThingOfProductType', )
+           'P126Employed', 'P134Continued', 'P135CreatedType', 'P136WasBasedOn', 'P140AssignedAttributeTo',
+           'P141Assigned', 'P142UsedConstituent', 'P143Joined', 'P144JoinedWith', 'P145Separated',
+           'P146SeparatedFrom', 'P147Curated', 'P151WasFormedFrom', 'P173StartsBeforeOrWithTheEndOf',
+           'P174StartsBeforeTheEndOf', 'P175StartsBeforeOrWithTheStartOf', 'P176StartsBeforeTheStartOf',
+           'P177AssignedPropertyType', 'P179HadSalesPrice', 'P182EndsBeforeOrWitheStartOf',
+           'P183EndsBeforeTheStartOf', 'P184EndsBeforeOrWithTheEndOf', 'P185EndsBeforeTheEndOf',
+           'P186ProducedThingOfProductType', )
 
 
 class P4HasTimeSpan(PropertyMixin):
@@ -3235,6 +3241,203 @@ class P179HadSalesPrice(PropertyMixin):
     """
 
     p179_had_sales_price: Optional[str] = Field(default=None, description='P179 had sales price (was sales price of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P182EndsBeforeOrWitheStartOf(PropertyMixin):
+    """'P182 ends before or with the start of (starts after or with the end of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P182
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P176 starts before the start of (starts after the start of): E2 Temporal Entity
+        E2 Temporal Entity. P185 ends before the end of (ends after the end of): E2 Temporal Entity
+    SuperProperty Of:
+        E2 Temporal Entity. P183 ends before the start of (starts after the end of): E2 Temporal Entity
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property specifies that the temporal extent of the domain instance A of E2 Temporal Entity ends before
+        or simultaneously with the start of the temporal extent of the range instance B of E2 Temporal Entity;
+
+        In other words, if A = [Astart, Aend] and B = [Bstart, Bend], we mean Aend ≤ Bstart is true;
+
+        This property is part of the set of temporal primitives P173 – P176, P182 – P185;
+
+        This property corresponds to a disjunction (logical OR) of the following Allen temporal relations
+        [Allen, 1983]: {before, meets}
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        P182(x,y) ⊃ E2(x)
+        P182(x,y) ⊃ E2(y)
+        P182(x,y) ⊃ P176(x,y)
+        P182(x,y) ⊃ P185(x,y)
+
+    """
+
+    p182_ends_before_or_with_start_of: Optional[str] = Field(
+        default=None,
+        description='P182 ends before or with the start of (starts after or with the end of)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P183EndsBeforeTheStartOf(PropertyMixin):
+    """'P183 ends before the start of (starts after the end of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P183
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P182 ends before or with the start of (starts after or with
+        the end of): E2 Temporal Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property specifies that the temporal extent of the domain instance A of E2 Temporal Entity ends
+        definitely before the start of the temporal extent of the range instance B of E2 Temporal Entity;
+
+        In other words, if A = [Astart, Aend] and B = [Bstart, Bend], we mean Aend < Bstart is true;
+
+        This property is part of the set of temporal primitives P173 – P176, P182 – P185;
+
+        This property corresponds to a disjunction (logical OR) of the following Allen temporal relations
+        [Allen, 1983]: {before}
+
+        This property is transitive;
+
+    Properties:
+        -
+    Examples:
+        - Gisle taking office as Bishop of Linköping 1139 AD (E7) ends before the start of The Guta saga
+          composition (E65)
+    In First Order Logic:
+        P183(x,y) ⊃ E2(x)
+        P183(x,y) ⊃ E2(y)
+        P183(x,y) ⊃ P182(x,y)
+
+    """
+
+    p183_ends_before_the_start_of: Optional[str] = Field(
+        default=None,
+        description='P183 ends before the start of (starts after the end of)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P184EndsBeforeOrWithTheEndOf(PropertyMixin):
+    """'P184 ends before or with the end of (ends with or after the end of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P184
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P174 starts before the end of (ends after the start of): E2 Temporal Entity
+    SuperProperty Of:
+        E2 Temporal Entity. P185 ends before the end of (ends after the end of): E2 Temporal Entity
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property specifies that the temporal extent of the domain instance A of E2 Temporal Entity ends before
+        or simultaneously with the end of the temporal extent of the range instance B of E2 Temporal Entity;
+
+        In other words, if A = [Astart, Aend] and B = [Bstart, Bend], we mean Aend ≤ Bend is true;
+
+        This property is part of the set of temporal primitives P173 – P176, P182 – P185;
+
+        This property corresponds to a disjunction (logical OR) of the following Allen temporal relations
+        [Allen, 1983]: {before, meets, overlaps, finished by, start, equals, during, finishes}
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        P184(x,y) ⊃ E2(x)
+        P184(x,y) ⊃ E2(y)
+        P184(x,y) ⊃ P174(x,y)
+
+    """
+
+    p184_ends_before_or_with_the_end_of: Optional[str] = Field(
+        default=None,
+        description='P184 ends before or with the end of (ends with or after the end of)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P185EndsBeforeTheEndOf(PropertyMixin):
+    """'P185 ends before the end of (ends after the end of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P185
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P184 ends before or with the end of (ends with or after the end of): E2 Temporal Entity
+    SuperProperty Of:
+        E2 Temporal Entity. P182 ends before or with the start of (starts after or with
+        the end of): E2 Temporal Entity
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property specifies that the temporal extent of the domain instance A of E2 Temporal Entity ends
+        definitely before the end of the temporal extent of the range instance B of E2 Temporal Entity;
+
+        In other words, if A = [Astart, Aend] and B = [Bstart, Bend], we mean Aend < Bend is true;
+
+        This property is part of the set of temporal primitives P173 – P176, P182 – P185;
+
+        This property corresponds to a disjunction (logical OR) of the following Allen temporal relations
+        [Allen, 1983]: {before, meets, overlaps, starts, during}
+
+        This property is transitive;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        P185(x,y) ⊃ E2(x)
+        P185(x,y) ⊃ E2(y)
+        P185(x,y) ⊃ P184(x,y)
+
+    """
+
+    p185_ends_before_the_end_of: Optional[str] = Field(
+        default=None,
+        description='P185 ends before the end of (ends after the end of)'
+    )
 
 
 # ******************************************************************************************************************* #
