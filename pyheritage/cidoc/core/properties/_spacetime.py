@@ -24,6 +24,9 @@ P133 is spatiotemporally separated E92 -> E92
 P157 is at rest relative to        E53 -> E18
 P160 has temporal projection       E92 -> E52
 P161 has spatial projection        E92 -> E53
+P164 during                        E93 -> E52
+P166 was a presence of             E93 -> E92
+P167 at                            E93 -> E53
 P168 place is defined by           E53 -> E94
 P169 defines spacetime volume      E95 -> E92
 P170 defines time                  E61 -> E52
@@ -55,10 +58,10 @@ if TYPE_CHECKING:
 __all__ = ('P79BeginningIsQualifiedBy', 'P80EndIsQualifiedBy', 'P81OngoingThroughout', 'P82AtSomeTimeWithin',
            'P86FallsWithin', 'P89FallsWithin', 'P90HasValue', 'P91HasUnit', 'P121OverlapsWith', 'P122BordersWith',
            'P132SpatiotemporallyOverlaps', 'P133IsSpatiotemporallySeparated', 'P157IsAtRestRelativeTo',
-           'P160HasTemporalProjection', 'P161HasSpatialProjection', 'P168PlaceIsDefinedBy',
-           'P169DefinesSpacetimeVolume', 'P170DefinesTime', 'P171AtSomePlaceWithin', 'P172Contains',
-           'P180HasCurrency', 'P181HasAmount', 'P189Approximates', 'P191HadDuration', 'P195WasAPresenceOf',
-           'P197CoveredPartsOf', )
+           'P160HasTemporalProjection', 'P161HasSpatialProjection', 'P164During', 'P166WasAPresenceOf', 'P167At',
+           'P168PlaceIsDefinedBy', 'P169DefinesSpacetimeVolume', 'P170DefinesTime', 'P171AtSomePlaceWithin',
+           'P172Contains', 'P180HasCurrency', 'P181HasAmount', 'P189Approximates', 'P191HadDuration',
+           'P195WasAPresenceOf', 'P197CoveredPartsOf', )
 
 
 class P79BeginningIsQualifiedBy(PropertyMixin):
@@ -704,6 +707,127 @@ class P161HasSpatialProjection(PropertyMixin):
         default=None,
         description='P161 has spatial projection (is spatial projection of)'
     )
+
+
+# ******************************************************************************************************************* #
+
+
+class P164During(PropertyMixin):
+    """'P164 during (was time-span of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#164
+
+    Domain:
+        E93 Presence
+    Range:
+        E52 Time-Span
+    SubProperty Of:
+        E92 Spacetime Volume. P160 has temporal projection (is temporal projection of): E52 Time-Span
+    SuperProperty Of:
+        -
+    Quantification:
+        (1,1 :0,n)
+
+    Scope Note:
+        This property relates an instance of E93 Presence with the chosen instance of E52 Time-Span that defines
+        the time-slice of the spacetime volume that this instance of E93 Presence is related to by the property
+        P166 was a presence of (had presence);
+
+    Properties:
+        -
+    Examples:
+        - 2016-02-09 (E52) was time-span of the last day of the 2016 Carnival in Cologne (E93)
+        - Johann JoachimWinckelmann’s whereabouts in December 1755 (E93) during December 1755 (E52)
+        - Johann Joachim Winkelmann’s whereabouts from November 19 1755 until April 9 1768 (E93) during
+          November 19 1755 until April 9 1768 (E52)
+    In First Order Logic:
+        P164 (x,y) ⊃ E93(x)
+        P164 (x,y) ⊃ E52(y)
+        P164 (x,y) ⊃ P160(x,y)
+
+    """
+
+    p164_during: Optional[str] = Field(default=None, description='P164 during (was time-span of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P166WasAPresenceOf(PropertyMixin):
+    """'P166 was a presence of (had presence)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#166
+
+    Domain:
+        E93 Presence
+    Range:
+        E92 Spacetime Volume
+    SubProperty Of:
+        E92 Spacetime Volume. P10 falls within (contains): E92 Spacetime Volume
+    SuperProperty Of:
+        -
+    Quantification:
+        (1,1 : 0,n)
+
+    Scope Note:
+        This property associates an instance of E93 Presence with the instance of E92 Spacetime Volume of which it
+        represents a temporal restriction (i.e.: a time-slice). Instantiating this property constitutes a necessary
+        part of the identity of the respective instance of E93 Presence;
+
+    Properties:
+        -
+    Examples:
+        - The Roman Empire on 19 August AD 14 (E93) was a presence of The Roman Empire (E4)
+    In First Order Logic:
+        P166(x,y) ⊃ E93(x),
+        P166(x,y) ⊃ E92(y),
+        P166(x,y) ⊃ P10(x,y)
+
+    """
+
+    p166_was_a_presence_of: Optional[str] = Field(default=None, description='P166 was a presence of (had presence)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P167At(PropertyMixin):
+    """'P167 at (was place of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#167
+
+    Domain:
+        E93 Presence
+    Range:
+        E53 Place
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        (1,n ;0,n)
+
+    Scope Note:
+        This property associates an instance of E93 Presence with an instance of E53 Place that geometrically
+        includes the spatial projection of the respective instance of E93 Presence. Besides others, this property
+        may be used to state in which space an object has been for some known time, such as a room of a castle or in
+        a drawer. It may also be used to describe a confinement of the spatial extent of some realm during a known
+        time-span. It is a shortcut of the more fully developed path from E93 Presence through P161 has spatial
+        projection, E53 Place, P89 falls within (contains) to E53 Place;
+
+    Properties:
+        -
+    Examples:
+        - Johann Joachim Winkelmann’s whereabouts in December 1755 (E93) at Rome (E53)
+        - Johann Joachim Winkelmann’s whereabouts from November 19 1755 until April 9 1768 (E93) at Italy (E53)
+    In First Order Logic:
+        P167(x,y) ⊃ E93(x)
+        P167(x,y) ⊃ E53(y)
+        P167(x,y) ⊃ (∃z)[ E53(z) ∧ P161(x,z) ∧ P89(z,y)]
+
+    """
+
+    p167_at: Optional[str] = Field(default=None, description='P167 at (was place of)')
 
 
 # ******************************************************************************************************************* #

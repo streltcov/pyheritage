@@ -27,6 +27,7 @@ P62  depicts                        E24 -> E1
 P65  shows visual item              E24 -> E36
 P101 had as general use             E70 -> E55
 P103 was intended for               E71 -> E55
+P109 has current or former curator  E78 -> E39
 P128 carries                        E18 -> E90
 P130 shows features of              E70 -> E70
 P156 occupies                       E18 -> E53
@@ -47,7 +48,8 @@ __all__ = ('P43HasDimension', 'P44HasCondition', 'P45ConsistsOf', 'P46IsComposed
            'P50HasCurrentKeeper', 'P51HasCurrentOrFormerOwner', 'P52HasCurrentOwner', 'P53HasFormerOrCurrentLocation',
            'P54HasCurrentPermanentLocation', 'P55HasCurrentLocation', 'P56BearsFeature', 'P57HasNumberOfParts',
            'P59HasSection', 'P62Depicts', 'P65ShowsVisualItem', 'P101HadAGeneralUse', 'P103WasIntendedFor',
-           'P128Carries', 'P130ShowsFeaturesOf', 'P156Occupies', 'P196Defines', 'PxxxHoldsOrSupports', )
+           'P109HasCurrentOrFormerCurator', 'P128Carries', 'P130ShowsFeaturesOf', 'P156Occupies', 'P196Defines',
+           'PxxxHoldsOrSupports', )
 
 
 class P43HasDimension(PropertyMixin):
@@ -834,6 +836,51 @@ class P101HadAGeneralUse(PropertyMixin):
     """
 
     p101_had_a_general_use: Optional[str] = Field(default=None, description='P101 had as general use (was use of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P109HasCurrentOrFormerCurator(PropertyMixin):
+    """'P109 has current or former curator (is current or former curator of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P109
+
+    Domain:
+        E78 Curated Holding
+    Range:
+        E39 Actor
+    SubProperty Of:
+        E18 Physical Thing. P49 has former or current keeper (is former or current keeper of): E39 Actor
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance of E39 Actor who assumed or have assumed overall curatorial
+        responsibility for an instance of E78 Curated Holding;
+
+        It does not allow a history of curation to be recorded. This would require use of an event initiating
+        a curator being responsible for a collection;
+
+    Properties:
+        -
+    Examples:
+        - the Robert Opie Collection (E78) has current or former curator Robert Opie (E39)
+        - the Mikael Heggelund Foslie’s coralline red algae Herbarium (E78) has current or former curator
+          Mikael Heggelund Foslie
+    In First Order Logic:
+        P109(x,y) ⊃ E78(x)
+        P109(x,y) ⊃ E39(y)
+        P109(x,y) ⊃ P49(x,y)
+
+    """
+
+    p109_has_current_or_former_curator: Optional[str] = Field(
+        default=None,
+        description='P109 has current or former curator (is current or former curator of)'
+    )
 
 
 # ******************************************************************************************************************* #
