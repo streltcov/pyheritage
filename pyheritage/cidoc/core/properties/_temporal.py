@@ -57,7 +57,10 @@ P112 diminished                     E80 -> E24
 P113 removed                        E80 -> E18
 P123 resulted in                    E81 -> E77
 P124 transformed                    E81 -> E77
+P125 influenced                     E7  -> E1
+P126 employed                       E7  -> E55
 P134 continued                      E7  -> E7
+P135 created type                   E65 -> E55
 P136 was based on                   E13 -> E1
 P140 assigned attribute to          E13 -> E1
 P141 assigned                       E13 -> E1
@@ -68,6 +71,11 @@ P145 separated                      E86 -> E39
 P146 separated from                 E86 -> E74
 P147 curated                        E87 -> E78
 P151 was formed from                E66 -> E74
+P173 starts before or with end of   E2  -> E2
+P174 starts before or with start    E2  -> E2
+P175 starts after or with start     E2  -> E2
+P176 starts after or with end       E2  -> E2
+P177 assigned property type         E13 -> E55
 P179 had sales price                E96 -> E97
 P186 produced thing of product type E12 -> E99
 
@@ -93,10 +101,12 @@ __all__ = ('P4HasTimeSpan', 'P5ConsistsOf', 'P7TookPlaceAt', 'P8TookPlaceOnOrWit
            'P39Measured', 'P40ObservedDimension', 'P41Classified', 'P42Assigned', 'P92BroughtIntoExistence',
            'P93TookOutOfExistence', 'P94HasCreated', 'P95HasFormed', 'P96ByMother', 'P97FromFather',
            'P98BroughtIntoLife', 'P99Dissolved', 'P100WasDeathOf', 'P108HasProduced', 'P110Augmented', 'P111Added',
-           'P112Diminished', 'P113Removed', 'P123ResultedIn', 'P124Transformed', 'P134Continued', 'P136WasBasedOn',
-           'P140AssignedAttributeTo', 'P141Assigned', 'P142UsedConstituent', 'P143Joined', 'P144JoinedWith',
-           'P145Separated', 'P146SeparatedFrom', 'P147Curated', 'P151WasFormedFrom', 'P179HadSalesPrice',
-           'P186ProducedThingOfProductType', )
+           'P112Diminished', 'P113Removed', 'P123ResultedIn', 'P124Transformed', 'P125UsedObjectOfType',
+           'P126Employed', 'P134Continued', 'P136WasBasedOn', 'P140AssignedAttributeTo', 'P141Assigned',
+           'P142UsedConstituent', 'P143Joined', 'P144JoinedWith', 'P145Separated', 'P146SeparatedFrom', 'P147Curated',
+           'P151WasFormedFrom', 'P173StartsBeforeOrWithTheEndOf', 'P174StartsBeforeTheEndOf',
+           'P175StartsBeforeOrWithTheStartOf', 'P176StartsBeforeTheStartOf', 'P177AssignedPropertyType',
+           'P179HadSalesPrice', 'P186ProducedThingOfProductType', )
 
 
 class P4HasTimeSpan(PropertyMixin):
@@ -2334,6 +2344,87 @@ class P124Transformed(PropertyMixin):
 # ******************************************************************************************************************* #
 
 
+class P125UsedObjectOfType(PropertyMixin):
+    """'P125 used object of type (was type of object used in)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P125
+
+    Domain:
+        E7 Activity
+    Range:
+        E55 Type
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        E7 Activity. P32 used general technique (was technique of): E55 Type
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E7 Activity to an instance of E55 Type,which defines used in
+        an instance of E7 Activity, when the specific instance is either unknown or not of interest, such as
+        use of "a hammer";
+
+    Properties:
+        -
+    Examples:
+        - at the Battle of Agincourt (E7), the English archers used object of type long bow (E55)
+    In First Order Logic:
+        P125(x,y) ⊃ E7(x)
+        P125(x,y) ⊃ E55(y)
+        P125(x,y) iff (∃z)[E70(z) ∧ P16(x,z) ∧ P2(z,y)]
+
+    """
+
+    p125_used_object_of_type: Optional[str] = Field(
+        default=None,
+        description='P125 used object of type (was type of object used in)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P126Employed(PropertyMixin):
+    """'P126 employed (was employed in)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P126
+
+    Domain:
+        E11 Modification
+    Range:
+        E57 Material
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies the instance of E57 Material employed in aninstanc of E11 Modification;
+
+        The instance of E57 Material used during the instance of E11 Modification does not necessarily become
+        incorporated into the instance of E24 Physical Human-Made Thing that forms the subject of the instance
+        of E11 Modification;
+
+    Properties:
+        -
+    Examples:
+        - the repairing of the Queen Mary (E11) employed Steel (E57)
+        - distilled water (E57) was employed in the restoration of the Sistine Chapel (E11)
+    In First Order Logic:
+        P126(x,y) ⊃ E11(x)
+        P126(x,y) ⊃ E57(y)
+
+    """
+
+    p126_employed: Optional[str] = Field(default=None, description='P126 employed (was employed in)')
+
+
+# ******************************************************************************************************************* #
+
+
 class P134Continued(PropertyMixin):
     """'P134 continued (was continued by)' CRM property;
 
@@ -2374,6 +2465,44 @@ class P134Continued(PropertyMixin):
     """
 
     p134_continued: Optional[str] = Field(default=None, description='P134 continued (was continued by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P135CreatedType(PropertyMixin):
+    """'P135 created type (was created by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P134
+
+    Domain:
+        E83 Type Creation
+    Range:
+        E55 Type
+    SubProperty Of:
+        E65 Creation. P94 has created (was created by): E28 Conceptual Object
+    SuperProperty Of:
+        -
+    Quantification:
+        one to many, necessary (1,n:0,1)
+
+    Scope Note:
+        This property identifies the instance of E55 Type, which is created in an instance of E83Type Creation
+        activity;
+
+    Properties:
+        -
+    Examples:
+        - The description of a new ribbon worm species by Bürger (E83) created type
+          ‘Lineus coxinus (Bürger, 1892)’ (E55)
+    In First Order Logic:
+        P135(x,y) ⊃ E83(x)
+        P135(x,y) ⊃ E55(y)
+        P135(x,y) ⊃ P94(x,y)
+
+    """
+
+    p135_created_type: Optional[str] = Field(default=None, description='P135 created type (was created by)')
 
 
 # ******************************************************************************************************************* #
@@ -2818,6 +2947,254 @@ class P151WasFormedFrom(PropertyMixin):
     """
 
     p151_was_formed_from: Optional[str] = Field(default=None, description='P151 was formed from (participated in)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P173StartsBeforeOrWithTheEndOf(PropertyMixin):
+    """'P173 starts before or with the end of (ends after or with the start of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P173
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        E2 Temporal Entity. P174 starts before the end of (ends after the start of): E2 Temporal Entity
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property specifies that the temporal extent of the domain instance A of E2 Temporal Entity starts before
+        or simultaneously with the end of the temporal extent of the range instance B of E2 Temporal Entity;
+
+        In other words, if A = [Astart, Aend] and B = [Bstart, Bend], we mean Astart ≤ Bend is true;
+
+        This property is part of the set of temporal primitives P173 – P176, P182 – P185;
+
+        This property corresponds to the disjunction (logical OR) of the following Allen temporal relations
+        [Allen, 1983]: {before, meets, met-by, overlaps, starts, started-by, contains, finishes, finished-by, equals,
+        during, overlapped by}
+
+    Properties:
+        -
+    Examples:
+        - The legendary run from Marathon to Athens 490BC (E7) starts before or with the end of The Battle of
+          Marathon 490BC (E7)
+    In First Order Logic:
+        P173(x,y) ⊃ E2(x)
+        P173(x,y) ⊃ E2(y)
+
+    """
+
+    p173_starts_before_or_with_the_end_of: Optional[str] = Field(
+        default=None,
+        description='P173 starts before or with the end of (ends after or with the start of)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P174StartsBeforeTheEndOf(PropertyMixin):
+    """'P174 starts before the end of (ends after the start of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P174
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P173 starts before or with the end of (ends after or with
+        the start of): E2 Temporal Entity
+    SuperProperty Of:
+        E7 Activity. P134 continued (was continued by): E7 Activity
+        E2 Temporal Entity. P175 starts before or with the start of (starts after or with
+        the start of): E2 Temporal Entity
+        E2 Temporal Entity. P184 ends before or with the end of (ends with or after the end of): E2 Temporal Entity
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property specifies that the temporal extent of the domain instance A of E2 Temporal Entity starts
+        definitely before the end of the temporal extent of the range instance B of E2 Temporal Entity;
+
+        In other words, if A = [Astart, Aend] and B = [Bstart, Bend], we mean Astart < Bend is true;
+
+        This property is part of the set of temporal primitives P173 – P176, P182 – P185.
+
+        This property corresponds to a disjunction (logical OR) of the following Allen temporal relations
+        [Allen, 1983] :{before, meets, overlaps, starts, started-by, contains, finishes, finished-by, equals, during,
+        overlapped by}
+
+        Typically, this property is a consequence of a known influence of some event on another event or activity,
+        such as a novel written by someone being continued by someone else, or the knowledge of a defeat on a distant
+        battlefield causing people to end their ongoing activities. This property is not transitive;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        P174(x,y) ⊃ E2(x)
+        P174(x,y) ⊃ E2(y)
+        P174(x,y) ⊃ P173(x,y)
+
+    """
+
+    p174_starts_before_the_end_of: Optional[str] = Field(
+        default=None,
+        description='P174 starts before the end of (ends after the start of)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P175StartsBeforeOrWithTheStartOf(PropertyMixin):
+    """'P175 starts before or with the start of (starts after or with the start of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P175
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P174 starts before the end of (ends after the start of): E2 Temporal Entity
+    SuperProperty Of:
+        E2 Temporal Entity. P176 starts before the start of (starts after the start of): E2 Temporal Entity
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property specifies that the temporal extent of the domain instance A of E2 Temporal Entity starts before
+        or simultaneously with the start of the temporal extent of the range instance B of E2 Temporal Entity;
+
+        In other words, if A = [Astart, Aend] and B = [Bstart, Bend], we mean Astart ≤ Bstart is true;
+
+        This property is part of the set of temporal primitives P173 – P176, P182 – P185;
+
+        This property corresponds to a disjunction (logical OR) of the following Allen temporal relations
+        [Allen, 1983]: {before, meets, overlaps, starts, started-by, contains, finished-by, equals}
+
+        In a model with fuzzy borders, this property will not be transitive;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        P175(x,y) ⊃ E2(x)
+        P175(x,y) ⊃ E2(y)
+        P175(x,y) ⊃ P174(x,y)
+
+    """
+
+    p175_starts_before_or_with_the_start_of: Optional[str] = Field(
+        default=None,
+        description='P175 starts before or with the start of (starts after or with the start of)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P176StartsBeforeTheStartOf(PropertyMixin):
+    """'P176 starts before the start of (starts after the start of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P176
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P175 starts before or with the start of (starts after or with the start
+        of): E2 Temporal Entity
+    SuperProperty Of:
+        E2 Temporal Entity. P182 ends before or with the start of (starts after or with
+        the end of): E2 Temporal Entity
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property specifies that the temporal extent of the domain instance A of E2 Temporal Entity starts
+        definitely before the start of the temporal extent of the range instance B of E2 Temporal Entity;
+
+        In other words, if A = [Astart, Aend] and B = [Bstart, Bend], we mean Astart < Bstart is true;
+
+        This property is part of the set of temporal primitives P173 – P176, P182 – P185;
+
+        This property corresponds to a disjunction (logical OR) of the following Allen temporal relations
+        [Allen, 1983]: {before, meets, overlaps, contains, finished-by}. This property is transitive;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        P176(x,y) ⊃ E2(x)
+        P176(x,y) ⊃ E2(y)
+        P176(x,y) ⊃ P175(x,y)
+
+    """
+
+    p176_starts_before_the_start_of: Optional[str] = Field(
+        default=None,
+        description='P176 starts before the start of (starts after the start of)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P177AssignedPropertyType(PropertyMixin):
+    """'P177 assigned property type' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P177
+
+    Domain:
+        E13 Attribute Assignment
+    Range:
+        E55 Type
+    SubProperty Of:
+        E1 CRM Entity. P2 has type (is type of): E55 Type
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E13 Attribute Assignment with the type of property or relation that
+        this assignment maintains to hold between the item to which it assigns an attribute and the attribute itself.
+        Note that the properties defined by the CIDOC CRM also constitute instances of E55 Type themselves. The
+        direction of the assigned property type is understood to be from the attributed item (the range of property
+        P140 assigned attribute to) to the attribute item (the range of the property P141 assigned). More than one
+        property type may be assigned to hold between two items;
+
+        A comprehensive explanation about refining CIDOC CRM concepts by E55 Type is given in the section “About
+        Types” in the section on “Specific Modelling Constructs” of this document;
+
+    Properties:
+        -
+    Examples:
+        - February 1997 Current Ownership Assessment of Martin Doerr’s silver cup (E13) assigned property type
+          P52 has former or current owner (is former or current keeper of) (E55)
+        - 01 June 1997 Identifier Assignment of the silver cup donated by Martin Doerr (E15) assigned property type
+          P48 has preferred identifier (is preferred identifier of) (E55)
+    In First Order Logic:
+        P177(x,y) ⊃ E13(x)
+        P177(x,y) ⊃ E55(y)
+
+    """
+
+    p177_assigned_property_type: Optional[str] = Field(default=None, description='P177 assigned property type')
 
 
 # ******************************************************************************************************************* #
