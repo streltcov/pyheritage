@@ -90,7 +90,9 @@ __all__ = ('P4HasTimeSpan', 'P5ConsistsOf', 'P7TookPlaceAt', 'P8TookPlaceOnOrWit
            'P24TransferredTitleOf', 'P25Moved', 'P26MovedTo', 'P27MovedFrom', 'P28CustodySurrenderedBy',
            'P29CustodyReceivedBy', 'P30TransferredCustodyOf', 'P31HasModified', 'P32UsedGeneralTechnique',
            'P33UsedSpecificTechnique', 'P34Concerned', 'P35Identified', 'P37Assigned', 'P38Deassigned',
-           'P39Measured', 'P40ObservedDimension', )
+           'P39Measured', 'P40ObservedDimension', 'P41Classified', 'P42Assigned', 'P92BroughtIntoExistence',
+           'P93TookOutOfExistence', 'P94HasCreated', 'P95HasFormed', 'P96ByMother', 'P97FromFather',
+           'P98BroughtIntoLife', 'P99Dissolved', 'P100WasDeathOf', 'P108HasProduced', 'P110Augmented', )
 
 
 class P4HasTimeSpan(PropertyMixin):
@@ -1571,3 +1573,554 @@ class P40ObservedDimension(PropertyMixin):
 
     p40_observed_dimension: Optional[str] = Field(default=None, description='P40 observed dimension'
                                                                             ' (was observed in)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P41Classified(PropertyMixin):
+    """'P41 classified (was classified by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P41
+
+    Domain:
+        E17 Type Assignment
+    Range:
+        E1 CRM Entity
+    SubProperty Of:
+        E13 Attribute Assignment. P140 assigned attribute to (was attributed by): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property records the item to which a type was assigned in an E17 Type Assignment activity;
+
+        Any instance of a CIDOC CRM entity may be assigned a type through type assignment. Type assignment events
+        allow a more detailed path from ‘E1 CRM Entity’ through ‘P41i was classified by’, ‘E17 Type Assignment’,
+        ‘P42 assigned’, to ‘E55 Type’ for assigning types to objects compared to the shortcut offered
+        by P2 has type (is type of);
+
+    Properties:
+        -
+    Examples:
+        - 31 August 1997 classification of silver cup 232 (E17) classified silver cup 232 (E22)
+    In First Order Logic:
+        P41(x,y) ⊃ E17(x)
+        P41(x,y) ⊃ E1(y)
+        P41(x,y) ⊃ P140(x,y)
+
+    """
+
+    P41_classified: Optional[str] = Field(default=None, description='P41 classified (was classified by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P42Assigned(PropertyMixin):
+    """'P42 assigned (was assigned by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P42
+
+    Domain:
+        E17 Type Assignment
+    Range:
+        E55 Type
+    SubProperty Of:
+        E13 Attribute Assignment. P141 assigned (was assigned by): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property records the type that was assigned to an entity by an E17 Type Assignment activity;
+
+        Type assignment events allow a more detailed path from ‘E1 CRM Entity’ through ‘P41i was classified by’,
+        ‘E17 Type Assignment’, ‘P42 assigned’, to ‘E55 Type’ for assigning types to objects compared to the shortcut
+        offered by P2 has type (is type of);
+
+        For example, a fragment of an antique vessel could be assigned the type “attic red figured belly handled
+        amphora” by expert A. The same fragment could be assigned the type “shoulder handled amphora” by expert B;
+
+        A Type may be intellectually constructed independent from assigning an instance of it;
+
+    Properties:
+        -
+    Examples:
+        - 31 August 1997 classification of silver cup 232 (E17) assigned goblet (E55)
+    In First Order Logic:
+        P42(x,y) ⊃ E17(x)
+        P42(x,y)⊃ E55(y)
+        P42(x,y) ⊃ P141(x,y)
+
+    """
+
+    p42_assigned: Optional[str] = Field(default=None, description='P42 assigned (was assigned by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P92BroughtIntoExistence(PropertyMixin):
+    """'P92 brought into existence (was brought into existence by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P92
+
+    Domain:
+        E63 Beginning of Existence
+    Range:
+        E77 Persistent Item
+    SubProperty Of:
+        E5 Event. P12 occurred in the presence of (was present at): E77 Persistent Item
+    SuperProperty Of:
+        E65 Creation. P94 has created (was created by): E28 Conceptual Object
+        E66 Formation. P95 has formed (was formed by): E74 Group
+        E67 Birth. P98 brought into life (was born): E21 Person
+        E12 Production. P108 has produced (was produced by): E24 Physical Human-Made Thing
+        E81 Transformation. P123 resulted in (resulted from): E18 Physical Thing
+    Quantification:
+        one to many, necessary, dependent (1,n:1,1)
+
+    Scope Note:
+        This property links an instance of E63 Beginning of Existence to the instance of E77 Persistent Item brought
+        into existence by it;
+
+        It allows a “start” to be attached to any instance of E77 Persistent Item being documented, i.e. as instances
+        of E70 Thing, E72 Legal Object, E39 Actor, E41 Appellation and E55 Type;
+
+    Properties:
+        -
+    Examples:
+        - the birth of Mozart (E67) brought into existence Mozart (E21)
+    In First Order Logic:
+        P92(x,y) ⊃ E63(x)
+        P92(x,y) ⊃ E77(y)
+        P92(x,y) ⊃ P12(x,y)
+
+    """
+
+    p92_brought_into_existence: Optional[str] = Field(
+        default=None,
+        description='P92 brought into existence (was brought into existence by)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P93TookOutOfExistence(PropertyMixin):
+    """'P93 took out of existence (was taken out of existence by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P93
+
+    Domain:
+        E64 End of Existence
+    Range:
+        E77 Persistent Item
+    SubProperty Of:
+        E5 Event. P12 occurred in the presence of (was present at): E77 Persistent Item
+    SuperProperty Of:
+        E6 Destruction. P13 destroyed (was destroyed by): E18 Physical Thing
+        E68 Dissolution. P99 dissolved (was dissolved by): E74 Group
+        E69 Death. P100 was death of (died in): E21 Person
+        E81 Transformation. P124 transformed (was transformed by): E18 Physical Thing
+    Quantification:
+        one to many, necessary (1,n:0,1)
+
+    Scope Note:
+        This property links an instance of E64 End of Existence to the instance E77 Persistent Item taken out of
+        existence by it;
+
+        In the case of immaterial things, the instance of E64 End of Existence is considered to take place with
+        the destruction of the last physical carrier;
+
+        This allows an “end” to be attached to any instance of E77 Persistent Item being documented i.e. instances
+        of E70 Thing, E72 Legal Object, E39 Actor, E41 Appellation and E55 Type. For many instances
+        of E77 Persistent Item we know the maximum life-span and can infer, that they must have ended to exist. We
+        assume in that case an instance of E64 End of Existence, which may be as unnoticeable as forgetting the secret
+        knowledge by the last representative of some indigenous nation;
+
+    Properties:
+        -
+    Examples:
+        - the death of Mozart (E69) took out of existence Mozart (E21)
+    In First Order Logic:
+        P93 (x,y) ⊃ E64(x)
+        P93 (x,y) ⊃ E77(y)
+        P93(x,y) ⊃ P12(x,y)
+
+    """
+
+    p93_took_out_of_existence: Optional[str] = Field(
+        default=None,
+        description='P93 took out of existence (was taken out of existence by)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P94HasCreated(PropertyMixin):
+    """'P94 has created (was created by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P94
+
+    Domain:
+        E65 Creation
+    Range:
+        E28 Conceptual Object
+    SubProperty Of:
+        E63 Beginning of Existence. P92 brought into existence (was brought into existence by): E77 Persistent Item
+    SuperProperty Of:
+        E83 Type Creation. P135 created type (was created by): E55 Type
+    Quantification:
+        one to many, necessary, dependent (1,n:1,1)
+
+    Scope Note:
+        This property links an instance of E65 Creation to the instance of E28 Conceptual Object created by it;
+
+        It represents the act of conceiving the intellectual content of the instance of E28 Conceptual Object. It does
+        not represent the act of creating the first physical carrier of the instanced of E28 Conceptual Object. As
+        an example, this is the composition of a poem, not its commitment to paper;
+
+    Properties:
+        -
+    Examples:
+        - the composition of “The Four Friends” by A. A. Milne (E65) has created “The Four Friends”
+          by A. A. Milne (E28)
+    In First Order Logic:
+        P94(x,y) ⊃ E65(x)
+        P94(x,y) ⊃ E28(y)
+        P94(x,y) ⊃ P92(x,y)
+
+    """
+
+    p94_has_created: Optional[str] = Field(default=None, description='P94 has created (was created by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P95HasFormed(PropertyMixin):
+    """'P95 has formed (was formed by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P95
+
+    Domain:
+        E66 Formation
+    Range:
+        E74 Group
+    SubProperty Of:
+        E63 Beginning of Existence. P92 brought into existence (was brought into existence by): E77 Persistent Item
+    SuperProperty Of:
+        -
+    Quantification:
+        one to many, necessary, dependent (1,n:1,1)
+
+    Scope Note:
+        This property associates the instance of E66 Formation with the instance of E74 Group that it founded;
+
+    Properties:
+        -
+    Examples:
+        - the formation of the CIDOC CRM SIG at the August 2000 CIDOC Board meeting (E66) has formed the CIDOC CRM
+          Special Interest Group (E74)
+    In First Order Logic:
+        P95(x,y) ⊃ E66(x)
+        P95(x,y) ⊃ E74(y)
+        P95(x,y) ⊃ P92(x,y)
+
+    """
+
+    p95_has_formed: Optional[str] = Field(default=None, description='P95 has formed (was formed by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P96ByMother(PropertyMixin):
+    """'P96 by mother (gave birth)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P96
+
+    Domain:
+        E67 Birth
+    Range:
+        E21 Person
+    SubProperty Of:
+        E5 Event. P11 had participant (participated in): E39 Actor
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property links an instance ofE67 Birth to an instance of E21 Person in the role of birth-giving mother;
+
+        Note that biological fathers are not necessarily participants in the Birth (see P97 from father
+        (was father for)). The instance of P21 Person being born is linked to the instance of E67 Birth with the
+        property P98 brought into life (was born). This is not intended for use with general natural history material,
+        only people. There is no explicit method for modelling conception and gestation except by using extensions.
+        This is a sub-property of P11 had participant (participated in);
+
+    Properties:
+        -
+    Examples:
+        - the birth of Queen Elizabeth II (E67) by mother Queen Mother (E21)
+    In First Order Logic:
+        P96(x,y) ⊃ E67(x)
+        P96(x,y) ⊃ E21(y)
+        P96(x,y) ⊃ P11(x,y)
+
+    """
+
+    p96_by_mother: Optional[str] = Field(default=None, description='P96 by mother (gave birth)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P97FromFather(PropertyMixin):
+    """'P97 from father (was father for)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P97
+
+    Domain:
+        E67 Birth
+    Range:
+        E21 Person
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property links an instance of E67 Birth to an instance of E21 Person in the role of biological father;
+
+        Note that biological fathers are not seen as necessary participants in the birth, whereas birth-giving mothers
+        are (see P96 by mother (gave birth)). The Person being born is linked to the Birth with the property
+        P98 brought into life (was born);
+
+        This is not intended for use with general natural history material, only people. There is no explicit method
+        for modelling conception and gestation except by using extensions;
+
+        An instance of E67 Birth is normally (but not always) associated with one biological father;
+
+    Properties:
+        -
+    Examples:
+        - King George VI (E21) was father for the birth of Queen Elizabeth II (E67)
+    In First Order Logic:
+        P97(x,y) ⊃ E67(x)
+        P97(x,y) ⊃ E21(y)
+
+    """
+
+    p97_from_father: Optional[str] = Field(default=None, description='P97 from father (was father for)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P98BroughtIntoLife(PropertyMixin):
+    """'P98 brought into life (was born)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P98
+
+    Domain:
+        E67 Birth
+    Range:
+        E21 Person
+    SubProperty Of:
+        E63 Beginning of Existence. P92 brought into existence (was brought into existence by): E77 Persistent Item
+    SuperProperty Of:
+        -
+    Quantification:
+        one to many, dependent (0,n:1,1)
+
+    Scope Note:
+        This property links an instance of E67 Birth event to an instance of E21 Person in the role of offspring;
+
+        Twins, triplets etc. are brought into life by the same instance of E67 Birth. This is not intended for use
+        with general Natural History material, only people. There is no explicit method for modelling conception and
+        gestation except by using extensions;
+
+    Properties:
+        -
+    Examples:
+        - the Birth of Queen Elizabeth II (E67) brought into life Queen Elizabeth II (E21)
+    In First Order Logic:
+        P98(x,y) ⊃ E67(x)
+        P98(x,y) ⊃ E21(y)
+        P98(x,y) ⊃ P92(x,y)
+
+    """
+
+    p98_brought_into_life: Optional[str] = Field(default=None, description='P98 brought into life (was born)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P99Dissolved(PropertyMixin):
+    """'P99 dissolved (was dissolved by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P99
+
+    Domain:
+        E68 Dissolution
+    Range:
+        E74 Group
+    SubProperty Of:
+        E5 Event. P11 had participant (participated in): E39 Actor
+        E64 End of Existence. P93 took out of existence (was taken out of existence by): E77 Persistent Item
+    SuperProperty Of:
+        -
+    Quantification:
+        one to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property associates the instance of E68 Dissolution with the instance of E74 Group that it disbanded;
+
+    Properties:
+        -
+    Examples:
+        - the end of The Hole in the Wall Gang (E68) dissolved The Hole in the Wall Gang (E74)
+    In First Order Logic:
+        P99(x,y) ⊃ E68(x)
+        P99(x,y) ⊃ E74(y)
+        P99(x,y) ⊃ P11(x,y)
+        P99(x,y) ⊃ P93(x,y)
+
+    """
+
+    p99_dissolved: Optional[str] = Field(default=None, description='P99 dissolved (was dissolved by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P100WasDeathOf(PropertyMixin):
+    """'P100 was death of (died in)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P100
+
+    Domain:
+        E69 Death
+    Range:
+        E21 Person
+    SubProperty Of:
+        E64 End of Existence. P93 took out of existence (was taken out of existence by): E77 Persistent Item
+    SuperProperty Of:
+        -
+    Quantification:
+        one to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property links an E69 instance of E69Death event to the instance of E21 Person that died;
+
+        An instance of E69Death may involve multiple people, for example in the case of a battle or disaster;
+
+        This is not intended for use with general Natural History material, only people;
+
+    Properties:
+        -
+    Examples:
+        - Mozart’s death (E69) was death of Mozart (E21)
+    In First Order Logic:
+        P100(x,y) ⊃ E69(x)
+        P100(x,y) ⊃ E21(y)
+        P100(x,y) ⊃ P93(x,y)
+
+    """
+
+    p100_was_death_of: Optional[str] = Field(default=None, description='P100 was death of (died in)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P108HasProduced(PropertyMixin):
+    """'P108 has produced (was produced by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P108
+
+    Domain:
+        E12 Production
+    Range:
+        E24 Physical Human-Made Thing
+    SubProperty Of:
+        E11 Modification. P31 has modified (was modified by): E18 Physical Thing
+        E63 Beginning of Existence. P92 brought into existence (was brought into existence by): E77 Persistent Item
+    SuperProperty Of:
+        -
+    Quantification:
+        one to many, necessary, dependent (1,n:1,1)
+
+    Scope Note:
+        This property identifies the instance of E24 Physical Human-Made Thing that came into existence as a result
+        of the instance of E12 Production;
+
+        The identity of an instance of E24 Physical Human-Made Thing is not defined by its matter, but by its
+        existence as a subject of documentation. An E12 Production can result in the creation of multiple instances
+        of E24 Physical Human-Made Thing;
+
+    Properties:
+        -
+    Examples:
+        - The building of Rome (E12) has produced Τhe Colosseum (E22)
+    In First Order Logic:
+        P108(x,y) ⊃ E12(x)
+        P108(x,y) ⊃ E24(y)
+        P108(x,y) ⊃ P31(x,y)
+        P108(x,y) ⊃ P92(x,y)
+
+    """
+
+    p108_has_produced: Optional[str] = Field(default=None, description='P108 has produced (was produced by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P110Augmented(PropertyMixin):
+    """'P110 augmented (was augmented by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P110
+
+    Domain:
+        E79 Part Addition
+    Range:
+        E24 Physical Human-Made Thing
+    SubProperty Of:
+        E11 Modification. P31 has modified (was modified by): E18 Physical Thing
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance of E24 Physical Human-Made Thing that is added to (augmented) in
+        an instance of E79 Part Addition;
+
+        Although an instance of E79 Part Addition event normally concerns only one instance of
+        E24 Physical Human-Made Thing, it is possible to imagine circumstances under which more than one item might
+        be added to (augmented). For example, the artist Jackson Pollock trailing paint onto multiple canvasses;
+
+    Properties:
+        -
+    Examples:
+        - the final nail-insertion Event (E79) augmented Coffin of George VI (E24)
+    In First Order Logic:
+        P110(x,y) ⊃ E79(x)
+        P110(x,y) ⊃ E24(y)
+        P110(x,y) ⊃ P31(x,y)
+
+    """
+
+    p110_augmented: Optional[str] = Field(default=None, description='P110 augmented (was augmented by)')
