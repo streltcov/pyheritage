@@ -92,7 +92,11 @@ __all__ = ('P4HasTimeSpan', 'P5ConsistsOf', 'P7TookPlaceAt', 'P8TookPlaceOnOrWit
            'P33UsedSpecificTechnique', 'P34Concerned', 'P35Identified', 'P37Assigned', 'P38Deassigned',
            'P39Measured', 'P40ObservedDimension', 'P41Classified', 'P42Assigned', 'P92BroughtIntoExistence',
            'P93TookOutOfExistence', 'P94HasCreated', 'P95HasFormed', 'P96ByMother', 'P97FromFather',
-           'P98BroughtIntoLife', 'P99Dissolved', 'P100WasDeathOf', 'P108HasProduced', 'P110Augmented', )
+           'P98BroughtIntoLife', 'P99Dissolved', 'P100WasDeathOf', 'P108HasProduced', 'P110Augmented', 'P111Added',
+           'P112Diminished', 'P113Removed', 'P123ResultedIn', 'P124Transformed', 'P134Continued', 'P136WasBasedOn',
+           'P140AssignedAttributeTo', 'P141Assigned', 'P142UsedConstituent', 'P143Joined', 'P144JoinedWith',
+           'P145Separated', 'P146SeparatedFrom', 'P147Curated', 'P151WasFormedFrom', 'P179HadSalesPrice',
+           'P186ProducedThingOfProductType', )
 
 
 class P4HasTimeSpan(PropertyMixin):
@@ -2124,3 +2128,774 @@ class P110Augmented(PropertyMixin):
     """
 
     p110_augmented: Optional[str] = Field(default=None, description='P110 augmented (was augmented by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P111Added(PropertyMixin):
+    """'P111 added (was added by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P111
+
+    Domain:
+        E79 Part Addition
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        E5 Event. P12 occurred in the presence of (was present at): E77 Persistent Item
+        E7 Activity. P16 used specific object (was used for): E70 Thing
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance of E18 Physical Thing that is added during an instance of
+        E79 Part Addition activity;
+
+    Properties:
+        -
+    Examples:
+        - the insertion of the final nail (E79) added the last nail in George VI’s coffin (E18)
+    In First Order Logic:
+        P111(x,y) ⊃ E79(x)
+        P111(x,y) ⊃ E18(y)
+        P111(x,y) ⊃ P12(x,y)
+        P111(x,y) ⊃ P16(x,y)
+
+    """
+
+    p111_added: Optional[str] = Field(default=None, description='P111 added (was added by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P112Diminished(PropertyMixin):
+    """'P112 diminished (was diminished by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P112
+
+    Domain:
+        E80 Part Removal
+    Range:
+        E24 Physical Human-Made Thing
+    SubProperty Of:
+        E11 Modification. P31 has modified (was modified by): E18 Physical Thing
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance E24 Physical Human-Made Thing that was diminished by an instance of
+        E80 Part Removal;
+
+        Although an instance of E80 Part removal activity normally concerns only one instance of
+        E24 Physical Human-Made Thing, it is possible to imagine circumstances under which more than one item might be
+        diminished by a single instance of E80 Part Removal activity;
+
+    Properties:
+        -
+    Examples:
+        - the coffin of Tut-Ankh-Amun (E22) was diminished by The opening of the coffin of Tut-Ankh-Amun (E80)
+    In First Order Logic:
+        P112(x,y) ⊃ E80(x)
+        P112(x,y) ⊃ E24(y)
+        P112(x,y) ⊃ P31(x,y)
+
+    """
+
+    p112_diminished: Optional[str] = Field(default=None, description='P112 diminished (was diminished by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P113Removed(PropertyMixin):
+    """'P113 removed (was removed by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P113
+
+    Domain:
+        E80 Part Removal
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        E5 Event. P12 occurred in the presence of (was present at): E77 Persistent Item
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance of E18 Physical Thing that is removed during an instance of
+        E80 Part Removal activity;
+
+    Properties:
+        -
+    Examples:
+        - the opening of the coffin of Tut-Ankh-Amun (E80) removed The mummy of Tut-Ankh-Amun (E20,E22)
+    In First Order Logic:
+        P113(x,y) ⊃ E80(x)
+        P113(x,y) ⊃ E18(y)
+        P113(x,y) ⊃ P12(x,y)
+
+    """
+
+    p113_removed: Optional[str] = Field(default=None, description='P113 removed (was removed by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P123ResultedIn(PropertyMixin):
+    """'P123 resulted in (resulted from)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P123
+
+    Domain:
+        E81 Transformation
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        E63 Beginning of Existence. P92 brought into existence (was brought into existence by): E77 Persistent Item
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance or instances of E18 Physical Thing that are the result of an instance
+        of E81 Transformation. New items replace the transformed item or items, which cease to exist as units of
+        documentation. The physical continuity between the old and the new is expressed by the links to the common
+        instance of E81 Transformation
+
+    Properties:
+        -
+    Examples:
+        - the transformation of the Venetian Loggia in Heraklion into a city hall (E81) resulted in the City Hall
+          of Heraklion (E22)
+        - the death and mummification of Tut-Ankh-Amun (E81) resulted in the Mummy of Tut-Ankh-Amun (E22 and E20)
+    In First Order Logic:
+        P123(x,y) ⊃ E81(x)
+        P123(x,y) ⊃ E18(y)
+        P123(x,y) ⊃ P92(x,y)
+
+    """
+
+    p123_resulted_in: Optional[str] = Field(default=None, description='P123 resulted in (resulted from)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P124Transformed(PropertyMixin):
+    """'P124 transformed (was transformed by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P124
+
+    Domain:
+        E81 Transformation
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        E64 End of Existence. P93 took out of existence (was taken out of existence by): E77 Persistent Item
+    SuperProperty Of:
+        -
+    Quantification:
+        one to many, necessary (1,n:0,1)
+
+    Scope Note:
+        This property identifies the instance or instances E18 Physical Thing that have ceased to exist due to
+        an instance of E81 Transformation;
+
+        The item that has ceased to exist and was replaced by the result of the Transformation. The continuity
+        between both items, the new and the old, is expressed by the links to the common instance of
+        E81 Transformation;
+
+    Properties:
+        -
+    Examples:
+        - the transformation of the Venetian Loggia in Heraklion into a city hall (E81) transformed
+          the Venetian Loggia in Heraklion (E22)
+        - the death and mummification of Tut-Ankh-Amun (E81) transformed the ruling Pharao Tut-Ankh-Amun (E21)
+    In First Order Logic:
+        P124(x,y) ⊃ E81(x)
+        P124(x,y) ⊃ E18(y)
+        P124(x,y) ⊃ P93(x,y)
+
+    """
+
+    p124_transformed: Optional[str] = Field(default=None, description='P124 transformed (was transformed by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P134Continued(PropertyMixin):
+    """'P134 continued (was continued by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P134
+
+    Domain:
+        E7 Activity
+    Range:
+        E7 Activity
+    SubProperty Of:
+        E7 Activity. P15 was influenced by (influenced): E1 CRM Entity
+        E2 Temporal Entity. P174 starts before the end of (ends after the start of): E2 Temporal Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates two instances of E7 Activity, where the domain is considered as an intentional
+        continuation of the range. A continuation of an activity may happen when the continued activity is still
+        ongoing or after the continued activity has completely ended. The continuing activity may have started
+        already before it decided to continue the other one. Continuation implies a coherence of intentions and
+        outcomes of the involved activities;
+
+        This property is not transitive;
+
+    Properties:
+        -
+    Examples:
+        - the construction of the Kölner Dom (Cologne Cathedral) (E7), abandoned in the 15th century, was continued by
+          construction in the 19th century adapting the initial plans so as to preserve the intended appearance (E7)
+    In First Order Logic:
+        P134(x,y) ⊃ E7(x)
+        P134(x,y)⊃ E7(y)
+        P134(x,y) ⊃ P15(x,y)
+        P134(x,y) ⊃ P174(x,y)
+
+    """
+
+    p134_continued: Optional[str] = Field(default=None, description='P134 continued (was continued by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P136WasBasedOn(PropertyMixin):
+    """'P136 was based on (supported type creation)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P136
+
+    Domain:
+        E83 Type Creation
+    Range:
+        E1 CRM Entity
+    SubProperty Of:
+        E7 Activity. P15 was influenced by (influenced): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies one or more instances of E1 CRM Entity that were used as evidence to declare a new
+        instance of E55 Type;
+
+        The examination of these items is often the only objective way to understand the precise characteristics of
+        a new type. Such items should be deposited in a museum or similar institution for that reason. The taxonomic
+        role renders the specific relationship of each item to the type, such as "holotype" or "original element";
+
+    Properties:
+        P136.1 in the taxonomic role: E55 Type
+    Examples:
+        - the taxon creation of the plant species ‘Serratula glauca Linné, 1753.’ (E83) was based on Object
+          BM000576251 of the Clayton Herbarium (E20) in the taxonomic role original element (E55)
+    In First Order Logic:
+        P136(x,y) ⊃ E83(x)
+        P136(x,y) ⊃ E1(y)
+        P136(x,y,z) ⊃ [P136(x,y) ∧ E55(z)]
+        P136(x,y) ⊃ P15(x,y)
+
+    """
+
+    p136_was_based_on: Optional[str] = Field(default=None, description='P136 was based on (supported type creation)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P140AssignedAttributeTo(PropertyMixin):
+    """'P140 assigned attribute to (was attributed by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P140
+
+    Domain:
+        E13 Attribute Assignment
+    Range:
+        E1 CRM Entity
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        E14 Condition Assessment. P34 concerned (was assessed by): E18 Physical Thing
+        E16 Measurement. P39 measured (was measured by): E1 CRM Entity
+        E17 Type Assignment. P41 classified (was classified by): E1 CRM Entity
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E13 Attribute Assignment with the instance of E1 CRM Entity about
+        which it made an attribution. The instance of E1 CRM Entity plays the role of the domain of the attribution;
+
+        The kind of attribution made should be documented using P177 assigned property type;
+
+    Properties:
+        -
+    Examples:
+        - February 1997 Current Ownership Assessment of Martin Doerr’s silver cup (E13) assigned attribute to Martin
+          Doerr’s silver cup (E19)
+        - 01 June 1997 Identifier Assignment of the silver cup donated by Martin Doerr (E15) assigned attribute to
+          silver cup 232 (E19)
+    In First Order Logic:
+        P140(x,y) ⊃ E13(x)
+        P140(x,y) ⊃ E1(y)
+
+    """
+
+    p140_assigned_attribute_to: Optional[str] = Field(
+        default=None,
+        description='P140 assigned attribute to (was attributed by)'
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class P141Assigned(PropertyMixin):
+    """'P141 assigned (was assigned by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P141
+
+    Domain:
+        E13 Attribute Assignment
+    Range:
+        E1 CRM Entity
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        E14 Condition Assessment. P35 has identified (was identified by): E3 Condition State
+        E15 Identifier Assignment. P37 assigned (was assigned by): E42 Identifier
+        E15 Identifier Assignment. P38 deassigned (was deassigned by): E42 Identifier
+        E16 Measurement. P40 observed dimension (was observed in): E54 Dimension
+        E17 Type Assignment. P42 assigned (was assigned by): E55 Type
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E13 Attribute Assignment with the instance of E1 CRM Entity used
+        in the attribution. The instance of E1 CRM Entity here plays the role of the range of the attribution;
+
+        The kind of attribution made should be documented using p177 assigned property type;
+
+    Properties:
+        -
+    Examples:
+        - February 1997 Current Ownership Assessment of Martin Doerr’s silver cup (E13) assigned Martin Doerr (E21)
+        - 01 June 1997 Identifier Assignment of the silver cup donated by Martin Doerr (E15) assigned object
+          identifier 232
+    In First Order Logic:
+        P141(x,y) ⊃ E13(x)
+        P141(x,y) ⊃ E1(y)
+
+    """
+
+    p141_assigned: Optional[str] = Field(default=None, description='P141 assigned (was assigned by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P142UsedConstituent(PropertyMixin):
+    """'P142 used constituent (was used in)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P142
+
+    Domain:
+        E15 Identifier Assignment
+    Range:
+        E90 Symbolic Object
+    SubProperty Of:
+        E7 Activity. P16 used specific object (was used for): E70 Thing
+    SuperProperty Of:
+        -
+    Quantification:
+        (0:n,0:n)
+
+    Scope Note:
+        This property associates an instance of E15 Identifier Assignment with the instance of E90 Symbolic Object
+        used as constituent of an instance of E42 Identifier in this act of assignment;
+
+    Properties:
+        -
+    Examples:
+        - On June 1, 2001 assigning the personal name identifier “Guillaume, de Machaut, ca. 1300-1377” (E15) used
+          constituent “ca. 1300-1377” (E41)
+        - Assigning a uniform title to the anonymous textual work known as ‘The Adoration of the Shepherds’(E15) used
+          constituent ‘Coventry’ (E41)
+        - Assigning a uniform title to Pina Bausch’s choreographic work entitled ‘Rite of spring’ (E15) used
+          constituent ‘(Choreographic Work: Bausch)’(E90)
+        - Assigning a uniform title to the motion picture directed in 1933 by Merian C. Cooper and
+          Ernest B. Schoedsack and entitled ‘King Kong’ (E15) used constituent ‘1933’ (E41)
+        - Assigning the corporate name identifier ‘Univerza v Ljubljani. Oddelek za bibliotekarstvo’
+          to The Department for library science of the University of Ljubljana (E15) used constituent
+          ‘Univerza v Ljubljani’ (E42)
+    In First Order Logic:
+        P142(x,y) ⊃ E15(x)
+        P142(x,y) ⊃ E90(y)
+        P142(x,y) ⊃ P16(x,y)
+
+    """
+
+    p142_used_constituent: Optional[str] = Field(default=None, description='P142 used constituent (was used in)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P143Joined(PropertyMixin):
+    """'P143 joined (was joined by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P143
+
+    Domain:
+        E85 Joining
+    Range:
+        E39 Actor
+    SubProperty Of:
+        E5 Event. P11 had participant (participated in): E39 Actor
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance of E39 Actor that becomes member of an instance of E74 Group in an
+        instance of E85 Joining;
+
+        Joining events allow for describing people becoming members of a group with the more detailed path E74 Group,
+        P144i gained member by, E85 Joining, P143 joined , E39 Actor, compared to the shortcut offered by P107 has
+        current or former member (is current or former member of);
+
+    Properties:
+        -
+    Examples:
+        - The election of Sir Isaac Newton as Member of Parliament to the Convention Parliament of 1689 (E85) joined
+          Sir Isaac Newton (E21)
+        - The inauguration of Mikhail Sergeyevich Gorbachev as leader of the Union of Soviet Socialist Republics
+          (USSR) in 1985 (E85) joined Mikhail Sergeyevich Gorbachev (E21)
+        - The implementation of the membership treaty January 1. 1973 between EU and Denmark (E85) joined
+          Denmark (E74)
+    In First Order Logic:
+        P143(x,y) ⊃ E85(x)
+        P143(x,y) ⊃ E39(y)
+        P143(x,y) ⊃ P11(x,y)
+
+    """
+
+    p143_joined: Optional[str] = Field(default=None, description='P143 joined (was joined by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P144JoinedWith(PropertyMixin):
+    """'P144 joined with (gained member by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P144
+
+    Domain:
+        E85 Joining
+    Range:
+        E74 Group
+    SubProperty Of:
+        E5 Event. P11 had participant (participated in): E39 Actor
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance of E74 Group of which an instance of E39 Actor becomes a member through
+        an instance of E85 Joining;
+
+        Although a Joining activity normally concerns only one instance of E74 Group, it is possible to imagine
+        circumstances under which becoming member of one Group implies becoming member of another Group as well;
+
+        Joining events allow for describing people becoming members of a group with a more detailed path from
+        E74 Group through, P144i gained member by, E85 Joining, P143 joined , E39 Actor, compared to the shortcut
+        offered by P107 has current or former member (is current or former member of);
+
+        The property P144.1 kind of member can be used to specify the type of membership or the role the member has
+        in the group;
+
+    Properties:
+        P144.1 kind of member: E55 Type
+    Examples:
+        - The election of Sir Isaac Newton as Member of Parliament to the Convention Parliament of 1689 (E85) joined
+          with the Convention Parliament (E74)
+        - The inauguration of Mikhail Sergeyevich Gorbachev as Leader of the Union of Soviet Socialist Republics
+          (USSR) in 1985 (E85) joined with the office of Leader of the Union of Soviet Socialist Republics (USSR)
+          (E74) with P144.1 kind of member President (E55)
+        - The implementation of the membership treaty January 1. 1973 between EU and Denmark (E85) joined with
+          EU (E74)
+    In First Order Logic:
+        P144(x,y) ⊃ E85(x)
+        P144(x,y)⊃ E74(y)
+        P144(x,y,z) ⊃ [P144(x,y) ∧ E55(z)]
+        P144(x,y) ⊃ P11(x,y)
+
+    """
+
+    p144_joined_with: Optional[str] = Field(default=None, description='P144 joined with (gained member by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P145Separated(PropertyMixin):
+    """'P145 separated (left by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P145
+
+    Domain:
+        E86 Leaving
+    Range:
+        E39 Actor
+    SubProperty Of:
+        E5 Event. P11 had participant (participated in): E39 Actor
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance of E39 Actor that leaves an instance of E74 Group through an instance
+        of E86 Leaving;
+
+    Properties:
+        -
+    Examples:
+        - The end of Sir Isaac Newton’s duty as Member of Parliament for the University of Cambridge to the Convention
+          Parliament in 1702 separated Sir Isaac Newton
+        - George Washington’s leaving office in 1797 separated George Washington
+        - The implementation of the treaty regulating the termination of Greenland membership in EU between EU,
+          Denmark and Greenland February 1. 1985 (E86) separated Greenland (E74)
+    In First Order Logic:
+        P145(x,y) ⊃ E86(x)
+        P145(x,y) ⊃ E39(y)
+        P145(x,y) ⊃ P11(x,y)
+
+    """
+
+    p145_separated: Optional[str] = Field(default=None, description='P145 separated (left by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P146SeparatedFrom(PropertyMixin):
+    """'P146 separated from (lost member by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P146
+
+    Domain:
+        E86 Leaving
+    Range:
+        E74 Group
+    SubProperty Of:
+        E5 Event. P11 had participant (participated in): E39 Actor
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property identifies the instance of E74 Group an instance of E39 Actor leaves through an instance of
+        E86 Leaving;
+
+        Although a Leaving activity normally concerns only one instance of E74 Group, it is possible to imagine
+        circumstances under which leaving one E74 Group implies leaving another E74 Group as well;
+
+    Properties:
+        -
+    Examples:
+        - The end of Sir Isaac Newton’s duty as Member of Parliament for the University of Cambridge to the Convention
+          Parliament in 1702 separated from the Convention Parliament
+        - George Washington’s leaving office in 1797 separated from the office of President of the United States
+        - The implementation of the treaty regulating the termination of Greenland membership in EU between EU,
+          Denmark and Greenland February 1. 1985 separated from EU (E74)
+    In First Order Logic:
+        P146(x,y) ⊃ E86(x)
+        P146(x,y) ⊃ E74(y)
+        P146(x,y) ⊃ P11(x,y)
+
+    """
+
+    p146_separated_from: Optional[str] = Field(default=None, description='P146 separated from (lost member by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P147Curated(PropertyMixin):
+    """'P147 curated (was curated by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P147
+
+    Domain:
+        E87 Curation Activity
+    Range:
+        E78 Curated Holding
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E87 Curation Activity with the instance of E78 Curated Holdingwith
+        that is subject of that curation activity following some implicit or explicit curation plan;
+
+    Properties:
+        -
+    Examples:
+        - The activities (E87) by the Benaki Museum curated the acquisition of dolls and games of urban and folk
+          manufacture dating from the 17th to the 20th century, from England, France and Germany for the “Toys, Games
+          and Childhood Collection (E78) of the Museum
+        - The activities (E87) of the Historical Museum of Crete, Heraklion, Crete, curated the development of the
+          permanent Numismatic Collection (E78)
+        - The activities (E87) by Mikael Heggelund Foslie curated the Mikael Heggelund Foslie’s coralline red algae
+          Herbarium
+    In First Order Logic:
+        P147(x,y) ⊃ E87(x)
+        P147(x,y) ⊃ E78(y)
+
+    """
+
+    p147_curated: Optional[str] = Field(default=None, description='P147 curated (was curated by)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P151WasFormedFrom(PropertyMixin):
+    """'P151 was formed from (participated in)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P151
+
+    Domain:
+        E66 Formation
+    Range:
+        E74 Group
+    SubProperty Of:
+        E5 Event. P11 had participant (participated in): E39 Actor
+    SuperProperty Of:
+        -
+    Quantification:
+        (0,n:0:n)
+
+    Scope Note:
+        This property associates an instance of E66 Formation with an instance of E74 Group from which the new group
+        was formed preserving a sense of continuity such as in mission, membership or tradition;
+
+    Properties:
+        -
+    Examples:
+        - The formation of the House of Bourbon-Conti in 1581 (E66) was formed from House of Condé (E74)
+    In First Order Logic:
+        P151(x,y) ⊃ E66(x)
+        P151(x,y) ⊃ E74(y)
+        P151(x,y) ⊃ P11(x,y)
+
+    """
+
+    p151_was_formed_from: Optional[str] = Field(default=None, description='P151 was formed from (participated in)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P179HadSalesPrice(PropertyMixin):
+    """'P179 had sales price (was sales price of)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P179
+
+    Domain:
+        E96 Purchase
+    Range:
+        E97 Monetary Amount
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        (1,n; 0,n)
+
+    Scope Note:
+        This property establishes the relationship between an instance of E96 Purchase and the instance of
+        E97 Monetary Amount that forms the compensation for the transaction. The monetary amount agreed upon may
+        change in the course of the purchase activity;
+
+    Properties:
+        -
+    Examples:
+        - the sale of Vincent van Gogh’s “Vase with Fifteen Sunflowers” on 1987/03/30 (E96) had sales price Christies’
+          hammer price for “Vase with Fifteen Sunflowers” (E97).
+        - the purchase of 10 okka of nails by the captain A. Syrmas on 18/9/1895 (E96) had sales price 20 piastre
+          (grosi) (E97)
+    In First Order Logic:
+        P179(x,y) ⊃ E96(x)
+        P179(x,y) ⊃ E97(y)
+
+    """
+
+    p179_had_sales_price: Optional[str] = Field(default=None, description='P179 had sales price (was sales price of)')
+
+
+# ******************************************************************************************************************* #
+
+
+class P186ProducedThingOfProductType(PropertyMixin):
+    """'P186 produced thing of product type (is produced by)' CRM property;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#P186
+
+    Domain:
+        E12 Production
+    Range:
+        E99 Product Type
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E12 Production with the instance of E99 Production Type, that is, the
+        type of the things it produces;
+
+    Properties:
+        -
+    Examples:
+        - The production activity of the Volkswagen factory during 1949-1953 (E12) produced thing of product type
+          Volkswagen Type 11 (Beetle) (E99);
+    In First Order Logic:
+        P186(x,y) ⊃ E12(x)
+        P186(x,y) ⊃ E99(y)
+        P186(x,y) ⊃ (∃z)[E24(z) ∧ P108(x,z) ∧ P2(z,y)]
+
+    """
+
+    p186_produced_thing_of_product_type: Optional[str] = Field(
+        default=None,
+        description='P186 produced thing of product type (is produced by)'
+    )
