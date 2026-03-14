@@ -17,13 +17,20 @@ E1 CRM Entity
 from abc import ABC
 
 from pyheritage.cidoc.core.base import CRMEntityBase
-from pyheritage.cidoc.core.properties import P1IsIdentifiedBy, P2HasType, P3HasNote
+from pyheritage.cidoc.core.properties import (
+    P1IsIdentifiedBy,
+    P2HasType,
+    P3HasNote,
+    P48HasPreferredIdentifier,
+    P137Exemplifies,
+)
 
 
 __all__ = ('E1CRMEntity', )
 
 
-class E1CRMEntity(P1IsIdentifiedBy, P2HasType, P3HasNote, CRMEntityBase, ABC):
+class E1CRMEntity(P1IsIdentifiedBy, P2HasType, P3HasNote, P48HasPreferredIdentifier, P137Exemplifies, CRMEntityBase,
+                  ABC):
     """'E1 CRM Entity' model - basic CRM Entity class;
 
     All other CIDOC CRM models should extend this class;
