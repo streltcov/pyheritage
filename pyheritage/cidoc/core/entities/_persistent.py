@@ -15,7 +15,6 @@ E26 Physical Feature
 E27 Site
 E41 Appellation
 E42 Identifier
-E54 Dimension
 E70 Thing
 E71 Human-Made Thing
 E72 Legal Object
@@ -30,6 +29,39 @@ E97 Monetary Amount
 from pyheritage.cidoc.core.base import entity_register
 from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
 from pyheritage.cidoc.core.entities._spacetime import E54Dimension
+from pyheritage.cidoc.core.properties import (
+    P43HasDimension,
+    P44HasCondition,
+    P45ConsistsOf,
+    P46IsComposedOf,
+    P49HasFormerOrCurrentKeeper,
+    P50HasCurrentKeeper,
+    P51HasCurrentOrFormerOwner,
+    P52HasCurrentOwner,
+    P53HasFormerOrCurrentLocation,
+    P54HasCurrentPermanentLocation,
+    P55HasCurrentLocation,
+    P56BearsFeature,
+    P57HasNumberOfParts,
+    P59HasSection,
+    P62Depicts,
+    P65ShowsVisualItem,
+    P101HadAGeneralUse,
+    P102HasTitle,
+    P103WasIntendedFor,
+    P104IsSubjectTo,
+    P105RightHeldBy,
+    P106IsComposedOf,
+    P128Carries,
+    P130ShowsFeaturesOf,
+    P139HasAlternativeForm,
+    P156Occupies,
+    P180HasCurrency,
+    P181HasAmount,
+    P190HasSymbolicContent,
+    P196Defines,
+    PxxxHoldsOrSupports,
+)
 
 
 __all__ = ('E18PhysicalThing', 'E19PhysicalObject', 'E20BiologicalObject', 'E22HumanMadeObject',
@@ -100,7 +132,7 @@ class E77PersistentItem(E1CRMEntity):
 
 
 @entity_register(label='E70 Thing')
-class E70Thing(E77PersistentItem):
+class E70Thing(P43HasDimension, P101HadAGeneralUse, P130ShowsFeaturesOf, E77PersistentItem):
     """'E70 Thing' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E70
@@ -140,7 +172,7 @@ class E70Thing(E77PersistentItem):
 
 
 @entity_register(label='E71 Human-Made Thing')
-class E71HumanMadeThing(E70Thing):
+class E71HumanMadeThing(P102HasTitle, P103WasIntendedFor, E70Thing):
     """'E71 Human-Made Thing' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E71
@@ -175,7 +207,7 @@ class E71HumanMadeThing(E70Thing):
 
 
 @entity_register(label='E72 Legal Object')
-class E72LegalObject(E70Thing):
+class E72LegalObject(P104IsSubjectTo, P105RightHeldBy, E70Thing):
     """'E72 Legal Object' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E72
@@ -210,7 +242,10 @@ class E72LegalObject(E70Thing):
 
 
 @entity_register(label='E18 Physical Thing')
-class E18PhysicalThing(E72LegalObject):
+class E18PhysicalThing(P44HasCondition, P45ConsistsOf, P46IsComposedOf, P49HasFormerOrCurrentKeeper,
+                       P50HasCurrentKeeper, P51HasCurrentOrFormerOwner, P52HasCurrentOwner,
+                       P53HasFormerOrCurrentLocation, P59HasSection, P128Carries, P156Occupies, P196Defines,
+                       PxxxHoldsOrSupports, E72LegalObject):
     """'E18 Physical Thing' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E18
@@ -267,7 +302,8 @@ class E18PhysicalThing(E72LegalObject):
 
 
 @entity_register(label='E19 Physical Object')
-class E19PhysicalObject(E18PhysicalThing):
+class E19PhysicalObject(P54HasCurrentPermanentLocation, P55HasCurrentLocation, P56BearsFeature, P57HasNumberOfParts,
+                        E18PhysicalThing):
     """'E19 Physical Object' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E19
@@ -344,7 +380,7 @@ class E20BiologicalObject(E19PhysicalObject):
 
 
 @entity_register(label='E24 Physical Human-Made Object')
-class E24PhysicalHumanMadeObject(E18PhysicalThing, E71HumanMadeThing):
+class E24PhysicalHumanMadeObject(P62Depicts, P65ShowsVisualItem, E18PhysicalThing, E71HumanMadeThing):
     """'E24 Physical Human-Made Object' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E24
@@ -597,7 +633,7 @@ class E78CuratedHolding(E24PhysicalHumanMadeObject):
 
 
 @entity_register(label="E90 Symbolic Object")
-class E90SymbolicObject(E1CRMEntity):
+class E90SymbolicObject(P106IsComposedOf, P190HasSymbolicContent, E1CRMEntity):
     """E90 Symbolic Object entity model;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E90
@@ -647,7 +683,7 @@ class E90SymbolicObject(E1CRMEntity):
 
 
 @entity_register(label="E41 Appellation")
-class E41Appellation(E90SymbolicObject):
+class E41Appellation(P139HasAlternativeForm, E90SymbolicObject):
     """E41 Appellation entity model;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E41
@@ -759,7 +795,7 @@ class E42Identifier(E41Appellation):
 
 
 @entity_register(label="E97 Monetary Amount")
-class E97MonetaryAmount(E54Dimension):
+class E97MonetaryAmount(P180HasCurrency, P181HasAmount, E54Dimension):
     """'E97 Monetary Amount' CRM entity model;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E97
