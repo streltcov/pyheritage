@@ -27,6 +27,10 @@ from pyheritage.cidoc.core.entities._persistent import (
     E97MonetaryAmount,
 )
 from pyheritage.cidoc.core.entities._primitives import (
+    CoercedNumber,
+    CoercedSpace,
+    CoercedString,
+    CoercedTime,
     E59PrimitiveValue,
     E60Number,
     E61TimePrimitive,
@@ -57,6 +61,10 @@ __builtin_namespace__ = {
 
 
 __namespace__ = {
+    'CoercedNumber': CoercedNumber,
+    'CoercedSpace': CoercedSpace,
+    'CoercedString': CoercedString,
+    'CoercedTime': CoercedTime,
     'E1CRMEntity': E1CRMEntity,
     'E2TemporalEntity': E2TemporalEntity,
     'E3ConditionState': E3ConditionState,
