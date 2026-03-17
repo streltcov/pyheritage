@@ -8,20 +8,41 @@ Entities
 E18 Physical Thing
 E19 Physical Object
 E20 Biological Object
+E21 Person
 E22 Human-Made Object
 E24 Physical Human Made Object
 E25 Human-Made Feature
 E26 Physical Feature
 E27 Site
+E28 Conceptual Object
+E29 Design or Procedure
+E30 Right
+E31 Document
+E32 Authority Document
+E33 Linguistic Object
+E34 Inscription
+E35 Title
+E36 Visual Item
+E37 Mark
+E39 Actor
 E41 Appellation
 E42 Identifier
+E55 Type
+E56 Language
+E57 Material
+E58 Measurement Unit
 E70 Thing
 E71 Human-Made Thing
 E72 Legal Object
+E73 Information Object
+E74 Group
 E77 Persistent Item
 E78 Curated Holding
+E89 Propositional Object
 E90 Symbolic Object
 E97 Monetary Amount
+E98 Currency
+E99 Product Type
 
 """
 
@@ -65,9 +86,11 @@ from pyheritage.cidoc.core.properties import (
 
 
 __all__ = ('E18PhysicalThing', 'E19PhysicalObject', 'E20BiologicalObject', 'E22HumanMadeObject',
-           'E24PhysicalHumanMadeObject', 'E25HumanMadeFeature', 'E26PhysicalFeature', 'E27Site', 'E41Appellation',
-           'E42Identifier', 'E54Dimension', 'E70Thing', 'E71HumanMadeThing', 'E72LegalObject', 'E77PersistentItem',
-           'E78CuratedHolding', 'E90SymbolicObject', 'E97MonetaryAmount', )
+           'E24PhysicalHumanMadeObject', 'E25HumanMadeFeature', 'E26PhysicalFeature', 'E27Site',
+           'E28ConceptualObject', 'E29DesignOrProcedure', 'E30Right', 'E31Document', 'E39Actor', 'E41Appellation',
+           'E42Identifier', 'E54Dimension', 'E70Thing', 'E71HumanMadeThing', 'E72LegalObject', 'E73InformationObject',
+           'E74Group', 'E77PersistentItem', 'E78CuratedHolding', 'E89PropositionalObject', 'E90SymbolicObject',
+           'E97MonetaryAmount', )
 
 
 @entity_register(label='E77 Persistent Item')
@@ -590,6 +613,93 @@ class E27Site(E26PhysicalFeature):
 # ******************************************************************************************************************* #
 
 
+class E28ConceptualObject(E71HumanMadeThing):
+    """'E28 Conceptual Object' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E28
+
+    SubClass Of:
+        E71 Human-Made Thing
+    SuperClass Of:
+        E55 Type
+        E89 Propositional Object
+        E90 Symbolic Object
+    Scope Note:
+        This class comprises non-material products of our minds and other human produced data that have become objects
+        of a discourse about their identity, circumstances of creation or historical implication. The production of
+        such information may have been supported by the use of technical devices such as cameras or computers;
+
+        Characteristically, instances of this class are created, invented or thought by someone, and then may be
+        documented or communicated between persons. Instances of E28 Conceptual Object have the ability to exist
+        on more than one particular carrier at the same time, such as paper, electronic signals, marks, audio media,
+        paintings, photos, human memories, etc.;
+
+        They cannot be destroyed. They exist as long as they can be found on at least one carrier or in at least one
+        human memory. Their existence ends when the last carrier and the last memory are lost;
+
+    Examples:
+        - Beethoven’s “Ode an die Freude” (Ode to Joy) (E73) (Kershaw, 1999)
+        - the definition of “ontology” in the Oxford English Dictionary (E73)
+        - the knowledge about the victory at Marathon carried by the famous runner (E89)
+        - [explanation note: In the following examples we illustrate the distinction between a propositional object,
+          its names and its encoded forms. The Maxwell equations are a good example, because they belong to the
+          fundamental laws of physics and their mathematical content yields identical, unambiguous results regardless
+          formulation and encoding]
+        - ‘Maxwell equations’ [preferred subject access point from LCSH] (E41)
+        - http://lccn.loc.gov/sh85082387 [5], as of 19 November 2012]
+        - **explanation: This is only the name for the Maxwell equations as standardized by the Library of Congress
+          and NOT the equations themselves.
+        - ‘Equations, Maxwell’ [variant subject access point, from the same source] (E41)
+        - **explanation: This is another name for the equation standardized by the Library of Congress and not the
+          equations themselves
+        - Maxwell's equations (E89)
+        - ** explanation: This is the propositional content of the equations proper, independent of any particular
+          notation or mathematical formalism.
+        - The encoding of Maxwells equations as in https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Maxwell
+          [6]'s Equations.svg/500px-Maxwell'sEquations.svg.png (E73)
+        - ** explanation: This is one possible symbolic encoding of the propositional content of the equations.
+    In First Order Logic:
+        E28(x) ⊃ E71(x)
+    Properties:
+        -
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E39Actor(E77PersistentItem):
+    """'E39 Actor' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E39
+
+    SubClass Of:
+        E77 Persistent Item
+    SuperClass Of:
+        E21 Person
+        E74 Group
+    Scope Note:
+        This class comprises people, either individually or in groups, who have the potential to perform intentional
+        actions of kinds for which someone may be held responsible;
+
+    Examples:
+        - London and Continental Railways (E40)
+        - the Governor of the Bank of England in 1975 (E21)
+        - Sir Ian McKellan (E21) (Gibson, 1986)
+    In First Order Logic:
+        E39(x) ⊃ E77(x)
+    Properties:
+        P74 has current or former residence (is current or former residence of): E53 Place
+        P75 possesses (is possessed by): E30 Right
+        P76 has contact point (provides access to): E41 Appellation
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
 @entity_register(label='E78 Curated Holding')
 class E78CuratedHolding(E24PhysicalHumanMadeObject):
     """'E78 Curated Holding' CRM entity;
@@ -630,6 +740,8 @@ class E78CuratedHolding(E24PhysicalHumanMadeObject):
         P109 has current or former curator (is current or former curator of): E39 Actor
 
     """
+
+# ******************************************************************************************************************* #
 
 
 @entity_register(label="E90 Symbolic Object")
@@ -680,6 +792,9 @@ class E90SymbolicObject(P106IsComposedOf, P190HasSymbolicContent, E1CRMEntity):
         - P190 has symbolic content: E62 String
 
     """
+
+
+# ******************************************************************************************************************* #
 
 
 @entity_register(label="E41 Appellation")
@@ -787,6 +902,247 @@ class E42Identifier(E41Appellation):
         - E42(x) ⊃ E41(x)
     Properties:
         -
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E89PropositionalObject(E28ConceptualObject):
+    """'E89 Propositional Object' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E89
+
+    SubClass Of:
+        E28 Conceptual Object
+    SuperClass Of:
+        E30 Right
+        E73 Information Object
+    Scope Note:
+        This class comprises immaterial items, including but not limited to stories, plots, procedural prescriptions,
+        algorithms, laws of physics or images that are, or represent in some sense, sets of propositions about real or
+        imaginary things and that are documented as single units or serve as topic of discourse;
+
+        This class also comprises items that are “about” something in the sense of a subject. In the wider sense, this
+        class includes expressions of psychological value such as non-figural art and musical themes. However,
+        conceptual items such as types and classes are not instances of E89 Propositional Object. This should not
+        be confused with the definition of a type, which is indeed an instance of E89 Propositional Object;
+
+    Examples:
+        - Maxwell’s Equations (Huray, 2010)
+        - The ideational contents of Aristotle’s book entitled ‘Metaphysics’ as rendered in the Greek texts
+          translated in … Oxford edition…
+        - The underlying prototype of any “no-smoking” sign (E36)
+        - The common ideas of the plots of the movie "The Seven Samurai" by Akira Kurosawa and the movie
+          “The Magnificent Seven” by John Sturges
+        - The image content of the photo of the Allied Leaders at Yalta published by UPI, 1945 (E36)
+        - The character "Little Red Riding Hood" variants of which appear amongst others in Grimm brothers’
+          ‘Rotkäppchen’, other oral fairy tales and the film 'Hoodwinked'
+        - The place "Havnor" as invented by Ursula K. Le Guin for her ‘Earthsea’ book series, the related maps and
+          appearing in derivative works based on these novels
+    In First Order Logic:
+        E89(x) ⊃ E28(x)
+    Properties:
+        P67 refers to (is referred to by): E1 CRM Entity
+        P129 is about (is subject of): E1 CRM Entity
+        P148 has component (is component of): E89 Propositional Object
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E73InformationObject(E89PropositionalObject, E90SymbolicObject):
+    """'E73 Information Object' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E73
+
+    SubClass Of:
+        E89 Propositional Object
+        E90 Symbolic Object
+    SuperClass Of:
+        E29 Design or Procedure
+        E31 Document
+        E33 Linguistic Object
+        E36 Visual Item
+    Scope Note:
+        This class comprises identifiable immaterial items, such as a poems, jokes, data sets, images, texts,
+        multimedia objects, procedural prescriptions, computer program code, algorithm or mathematical formulae,
+        that have an objectively recognizable structure and are documented as single units. The encoding structure
+        known as a "named graph" also falls under this class, so that each "named graph" is an instance of
+        E73 Information Object;
+
+        An instance of E73 Information Object does not depend on a specific physical carrier, which can include human
+        memory, and it can exist on one or more carriers simultaneously;
+
+        Instances of E73 Information Object of a linguistic nature should be declared as instances of the
+        E33 Linguistic Object subclass. Instances of E73 Information Object of a documentary nature should be declared
+        as instances of the E31 Document subclass. Conceptual items such as types and classes are not instances of
+        E73 Information Object, nor are ideas without a reproducible expression;
+
+    Examples:
+        - image BM000038850.JPG from the Clayton Herbarium in London (E31)
+        - E. A. Poe's "The Raven" (Poe, 1869)
+        - the movie "The Seven Samurai" by Akira Kurosawa (Mellen, 2002)
+        - the Maxwell Equations (Huray, 2010)
+        - The Getty AAT as published as Linked Open Data, accessed 1/10/2014
+    In First Order Logic:
+        E73(x) ⊃ E89(x)
+        E73(x) ⊃ E90(x)
+    Properties:
+        P165 incorporates (is incorporated in): E90 Symbolic Object
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E74Group(E39Actor):
+    """'E74 Group' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E73
+
+    SubClass Of:
+        E39 Actor
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises any gatherings or organizations of human individuals or groups that act collectively or
+        in a similar way due to any form of unifying relationship. In the wider sense this class also comprises
+        official positions which used to be regarded in certain contexts as one actor, independent of the current
+        holder of the office, such as the president of a country. In such cases, it may happen that the group never
+        had more than one member. A joint pseudonym (i.e., a name that seems indicative of an individual but that is
+        actually used as a persona by two or more people) is a particular case of E74 Group;
+
+        A gathering of people becomes an instance of E74 Group when it exhibits organizational characteristics
+        usually typified by a set of ideas or beliefs held in common, or actions performed together. These might be
+        communication, creating some common artifact, a common purpose such as study, worship, business, sports,
+        etc. Nationality can be modelled as membership in an instance of E74 Group (cf. HumanML markup). Married
+        couples and other concepts of family are regarded as particular examples of E74 Group;
+
+    Examples:
+        - the impressionists (Wilson, 1983)
+        - the Navajo (Correll, 1972)
+        - the Greeks (Williams, 1993)
+        - the peace protestors in New York City on February 15 2003
+        - Exxon-Mobil (‘Exxon Mobil Corp’, Mergent's dividend achievers, vol. 3, no. 3, 2006, pp. 97-97)
+        - King Solomon and his wives (Thieberger, 1947)
+        - The President of the Swiss Confederation
+        - Nicolas Bourbaki (Aczel, 2007)
+        - Betty Crocker (Crocker, 2012)
+        - Ellery Queen (Wheat, 2005)
+        - Greenpeace
+        - Paveprime Ltd
+        - the National Museum of Denmark
+    In First Order Logic:
+        E74(x) ⊃ E39(x)
+    Properties:
+        P107 has current or former member (is current or former member of): E39 Actor
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E29DesignOrProcedure(E73InformationObject):
+    """'E29 Design or Procedure' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E29
+
+    SubClass Of:
+        E73 Information Object
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises documented plans for the execution of actions in order to achieve a result of a specific
+        quality, form or contents. In particular, it comprises plans for deliberate human activities that may result
+        in new instances of E71 Human-Made Thing or for shaping or guiding the execution of an instance of
+        E7 Activity;
+
+        Instances of E29 Design or Procedure can be structured in parts and sequences or depend on others;
+        This is modelled using P69 has association with (is associated with): E29 Design or Procedure
+
+        Designs or procedures can be seen as one of the following:
+        A schema for the activities it describes
+        A schema of the products that result from their application;
+        An independent intellectual product that may have never been applied, such as Leonardo da Vinci’s famous plans
+        for flying machines;
+        Because designs or procedures may never be applied or only partially executed, the CIDOC CRM models a loose
+        relationship between the plan and the respective product;
+
+    Examples:
+        - the ISO standardisation procedure
+        - the musical notation for Beethoven’s “Ode to Joy”
+        - the architectural drawings for the Kölner Dom in Cologne, Germany
+        - The drawing on the folio 860 of the Codex Atlanticus from Leonardo da Vinci, 1486-1490, kept in the
+          Biblioteca Ambrosiana in Milan
+    In First Order Logic:
+        E29(x) ⊃ E73(x)
+    Properties:
+        P68 foresees use of (use foreseen by): E57 Material
+        P69 has association with (is associated with): E29 Design or Procedure
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E30Right(E89PropositionalObject):
+    """'E30 Right' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E30
+
+    SubClass Of:
+        E89 Propositional Object
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises legal privileges concerning material and immaterial things or their derivatives;
+        These include reproduction and property rights;
+
+    Examples:
+        - copyright held by ISO on ISO/CD 21127
+        - ownership of the “Mona Lisa” by the Louvre
+    In First Order Logic:
+        E30(x) ⊃ E89(x)
+    Properties:
+        -
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E31Document(E73InformationObject):
+    """'E31 Document' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E31
+
+    SubClass Of:
+        E73 Information Object
+    SuperClass Of:
+        E32 Authority Document
+    Scope Note:
+        This class comprises identifiable immaterial items that make propositions about reality;
+
+        These propositions may be expressed in text, graphics, images, audiograms, videograms or by other similar
+        means. Documentation databases are regarded as instances of E31 Document. This class should not be confused
+        with the concept “document” in Information Technology, which is compatible with E73 Information Object;
+
+    Examples:
+        - the Encyclopaedia Britannica (E32) (Kogan, 1958)
+        - The image content of the photo of the Allied Leaders at Yalta published by UPI, 1945 (E36 )
+        - the Doomsday Book
+    In First Order Logic:
+        E31(x) ⊃ E73(x)
+    Properties:
+        P70 documents (is documented in): E1 CRM Entity
 
     """
 
