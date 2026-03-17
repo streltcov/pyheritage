@@ -87,10 +87,11 @@ from pyheritage.cidoc.core.properties import (
 
 __all__ = ('E18PhysicalThing', 'E19PhysicalObject', 'E20BiologicalObject', 'E22HumanMadeObject',
            'E24PhysicalHumanMadeObject', 'E25HumanMadeFeature', 'E26PhysicalFeature', 'E27Site',
-           'E28ConceptualObject', 'E29DesignOrProcedure', 'E30Right', 'E31Document', 'E39Actor', 'E41Appellation',
-           'E42Identifier', 'E54Dimension', 'E70Thing', 'E71HumanMadeThing', 'E72LegalObject', 'E73InformationObject',
-           'E74Group', 'E77PersistentItem', 'E78CuratedHolding', 'E89PropositionalObject', 'E90SymbolicObject',
-           'E97MonetaryAmount', )
+           'E28ConceptualObject', 'E29DesignOrProcedure', 'E30Right', 'E31Document', 'E32AuthorityDocument',
+           'E33LinguisticObject', 'E34Inscription', 'E35Title', 'E36VisualItem', 'E37Mark', 'E39Actor',
+           'E41Appellation', 'E42Identifier', 'E54Dimension', 'E70Thing', 'E71HumanMadeThing', 'E72LegalObject',
+           'E73InformationObject', 'E74Group', 'E77PersistentItem', 'E78CuratedHolding', 'E89PropositionalObject',
+           'E90SymbolicObject', 'E97MonetaryAmount', )
 
 
 @entity_register(label='E77 Persistent Item')
@@ -1143,6 +1144,228 @@ class E31Document(E73InformationObject):
         E31(x) ⊃ E73(x)
     Properties:
         P70 documents (is documented in): E1 CRM Entity
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E32AuthorityDocument(E31Document):
+    """'E32 Authority Document' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E32
+
+    SubClass Of:
+        E31 Document
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises encyclopaedia, thesauri, authority lists and other documents that define terminology or
+        conceptual systems for consistent use;
+
+    Examples:
+        - Webster's Dictionary
+        - Getty Art and Architecture Thesaurus (Getty Trust, 1990)
+        - the CIDOC Conceptual Reference Model (Gergatsoulis, M. et al., 2010)
+    In First Order Logic:
+        E32(x) ⊃ E31(x)
+    Properties:
+        P71 lists (is listed in): E1 CRM Entity
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E33LinguisticObject(E73InformationObject):
+    """'E33 Linguistic Object' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E33
+
+    SubClass Of:
+        E73 Information Object
+    SuperClass Of:
+        E34 Inscription
+        E35 Title
+    Scope Note:
+        This class comprises identifiable expressions in natural language or languages.
+
+        Instances of E33 Linguistic Object can be expressed in many ways: e.g. as written texts, recorded speech or
+        sign language. However, the CIDOC CRM treats instances of E33 Linguistic Object independently from the medium
+        or method by which they are expressed. Expressions in formal languages, such as computer code or mathematical
+        formulae, are not treated as instances of E33 Linguistic Object by the CIDOC CRM. These should be modelled as
+        instances of E73 Information Object;
+
+        The text (in a wider sense) of an instance of E33 Linguistic Object can be documented in a note by
+        P3 has note: E62 String
+
+    Examples:
+        - the text of the Ellesmere Chaucer manuscript (Hilmo, 2004)
+        - the lyrics of the song "Blue Suede Shoes" (Cooper, 2008)
+        - the text of the Jabberwocky by Lewis Carroll (Carroll, 1981)
+        - the text of "Doktoro Jekyll kaj Sinjoro Hyde" (an Esperanto translation of Dr Jekyll and Mr Hyde)
+          (Stevenson, 1909)
+    In First Order Logic:
+        E33(x) ⊃ E73(x)
+    Properties:
+        P72 has language (is language of): E56 Language
+        P73 has translation (is translation of): E33 Linguistic Object
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E35Title(E33LinguisticObject, E41Appellation):
+    """'E35 Title' CRM entity;
+
+    SubClass Of:
+        E33 Linguistic Object
+        E41 Appellation
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises textual strings that within a cultural context can be clearly identified as titles due to
+        their form. Being a subclass of E41 Appellation, E35 Title can only be used when such a string is actually
+        used as a title of a work, such as a text, an artwork, or a piece of music;
+
+        Titles are proper noun phrases or verbal phrases, and should not be confused with generic object names such as
+        “chair”, “painting” or “book” (the latter are common nouns that stand for instances of E55 Type). Titles may
+         be assigned by the creator of the work itself, or by a social group;
+
+        This class also comprises the translations of titles that are used as surrogates for the original titles in
+        different social contexts;
+
+    Examples:
+        - “The Merchant of Venice” (McCullough, 2005)
+        - “Mona Lisa” (Mohen, 2006)
+        - “La Pie or The Magpie” (Bortolatto, 1981)
+        - “Lucy in the Sky with Diamonds” (Lennon, 1967)
+    In First Order Logic:
+        E35(x) ⊃ E33(x)
+        E35(x) ⊃ E41(x)
+    Properties:
+        -
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E36VisualItem(E73InformationObject):
+    """'E36 Visual Item' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E36
+
+    SubClass Of:
+        E73 Information Object
+    SuperClass Of:
+        E37 Mark
+    Scope Note:
+        This class comprises the intellectual or conceptual aspects of recognisable marks and images;
+
+        This class does not intend to describe the idiosyncratic characteristics of an individual physical embodiment
+        of a visual item, but the underlying prototype. For example, a mark such as the ICOM logo is generally
+        considered to be the same logo when used on any number of publications. The size, orientation and colour may
+        change, but the logo remains uniquely identifiable. The same is true of images that are reproduced many times;
+        This means that visual items are independent of their physical support;
+
+        The class E36 Visual Item provides a means of identifying and linking together instances of
+        E24 Physical Human-Made Thing that carry the same visual symbols, marks or images etc. The property
+        P62 depicts (is depicted by) between E24 Physical Human-Made Thing and depicted subjects (E1 CRM Entity) is
+        a shortcut of the more fully developed path from E24 Physical Human-Made Thing through P65 shows visual item
+        (is shown by), E36 Visual Item, P138 represents (has representation) to E1CRM Entity, which in addition
+        captures the optical features of the depiction;
+
+    Examples:
+        - the visual appearance of Monet’s “La Pie”
+        - the Coca-Cola logo (E34)
+        - the Chi-Rho (E37)
+        - the communist red star (E37)
+    In First Order Logic:
+        E36(x) ⊃ E73(x)
+    Properties:
+        P138 represents (has representation): E1 CRM Entity
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E37Mark(E36VisualItem):
+    """'E37 Mark' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E37
+
+    SubClass Of:
+        E36 Visual Item
+    SuperClass Of:
+        E34 Inscription
+    Scope Note:
+        This class comprises symbols, signs, signatures or short texts applied to instances of
+        E24 Physical Human-Made Thing by arbitrary techniques in order to indicate the creator, owner, dedications,
+        purpose, etc.;
+
+        This class specifically excludes features that have no semantic significance, such as scratches or tool marks;
+        These should be documented as instances of E25 Human-Made Feature;
+
+        New proposal by MD –issue 463
+
+        This class comprises symbols, signs, signatures or texts applied to instances of E24 Physical Human-Made Thing
+        by arbitrary techniques in order to indicate the creator, owner, dedications, purpose, etc. Instances of
+        E37 Mark do not represent the actual image of a mark, but the abstract ideal, as they use to be codified in
+        reference documents that are used in cultural documentation;
+
+    Examples:
+        - Minoan double axe mark (Lowe Fri, 2011)
+        - ©
+        - ☺
+    In First Order Logic:
+        E37(x) ⊃ E36(x)
+    Properties:
+        -
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E34Inscription(E33LinguisticObject, E37Mark):
+    """'E34 Inscription' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E34
+
+    SubClass Of:
+        E33 Linguistic Object
+        E37 Mark
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises recognisable, texts attached to instances of E24 Physical Human-Made Thing;
+
+        The transcription of the text can be documented in a note by P3 has note: E62 String. The alphabet used can be
+        documented by P2 has type: E55 Type. This class does not intend to describe the idiosyncratic characteristics
+        of an individual physical embodiment of an inscription, but the underlying prototype. The physical embodiment
+        is modelled in the CIDOC CRM as instances of E24 Physical Human-Made Thing;
+
+        The relationship of a physical copy of a book to the text it contains is modelled using E18 Physical Thing;
+        P128 carries (is carried by): E33 Linguistic Object;
+
+    Examples:
+        - “keep off the grass” on a sign stuck in the lawn of the quad of Balliol College
+        - The text published in Corpus Inscriptionum Latinarum V 895
+        - Kilroy was here
+    In First Order Logic:
+        E34(x) ⊃ E33(x)
+        E34(x) ⊃ E37(x)
+    Properties:
+        -
 
     """
 
