@@ -29,11 +29,27 @@ P188 requires production tool      E99 -> E19
 """
 
 
-from typing import Any, Optional
+from __future__ import annotations
+
+from typing import Optional, TYPE_CHECKING
 
 from pydantic import Field
 
 from pyheritage.cidoc.core.base import PropertyMixin
+
+
+if TYPE_CHECKING:
+    from pyheritage.cidoc.core.entities import (
+        E1CRMEntity,
+        E29DesignOrProcedure,
+        E30Right,
+        E33LinguisticObject,
+        E39Actor,
+        E56Language,
+        E57Material,
+        E89PropositionalObject,
+        E90SymbolicObject,
+    )
 
 
 __all__ = ('P67RefersTo', 'P68ForeseesUseOf', 'P69HasAssociationWith', 'P70Documents', 'P71Lists', 'P72HasLanguage',
@@ -79,7 +95,7 @@ class P67RefersTo(PropertyMixin):
 
     """
 
-    p67_refers_to: Optional[str] = Field(default=None, description='P67 refers to (is referred to by)')
+    p67_refers_to: Optional[E1CRMEntity] = Field(default=None, description='P67 refers to (is referred to by)')
 
 
 # ******************************************************************************************************************* #
@@ -122,7 +138,10 @@ class P68ForeseesUseOf(PropertyMixin):
 
     """
 
-    p68_foresees_use_of: Optional[str] = Field(default=None, description='P68 foresees use of (use foreseen by)')
+    p68_foresees_use_of: Optional[E57Material] = Field(
+        default=None,
+        description='P68 foresees use of (use foreseen by)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -180,7 +199,7 @@ class P69HasAssociationWith(PropertyMixin):
 
     """
 
-    p69_has_association_with: Optional[str] = Field(
+    p69_has_association_with: Optional[E29DesignOrProcedure] = Field(
         default=None,
         description='P69 has association with (is associated with)',
     )
@@ -224,7 +243,7 @@ class P70Documents(PropertyMixin):
 
     """
 
-    p70_documents: Optional[str] = Field(default=None, description='P70 documents (is documented in)')
+    p70_documents: Optional[E1CRMEntity] = Field(default=None, description='P70 documents (is documented in)')
 
 
 # ******************************************************************************************************************* #
@@ -261,7 +280,7 @@ class P71Lists(PropertyMixin):
 
     """
 
-    p71_lists: Optional[str] = Field(default=None, description='P71 lists (is listed in)')
+    p71_lists: Optional[E1CRMEntity] = Field(default=None, description='P71 lists (is listed in)')
 
 
 # ******************************************************************************************************************* #
@@ -300,7 +319,7 @@ class P72HasLanguage(PropertyMixin):
 
     """
 
-    p72_has_language: Optional[Any] = Field(default=None)
+    p72_has_language: Optional[E56Language] = Field(default=None)
 
 
 # ******************************************************************************************************************* #
@@ -342,7 +361,10 @@ class P73HasTranslation(PropertyMixin):
 
     """
 
-    p73_has_translation: Optional[str] = Field(default=None, description='P73 has translation (is translation of)')
+    p73_has_translation: Optional[E33LinguisticObject] = Field(
+        default=None,
+        description='P73 has translation (is translation of)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -380,7 +402,7 @@ class P104IsSubjectTo(PropertyMixin):
 
     """
 
-    p104_is_subject_to: Optional[str] = Field(default=None, description='P104 is subject to (applies to)')
+    p104_is_subject_to: Optional[E30Right] = Field(default=None, description='P104 is subject to (applies to)')
 
 
 # ******************************************************************************************************************* #
@@ -422,7 +444,7 @@ class P105RightHeldBy(PropertyMixin):
 
     """
 
-    p105_right_held_by: Optional[str] = Field(default=None, description='P105 right held by (has right on)')
+    p105_right_held_by: Optional[E39Actor] = Field(default=None, description='P105 right held by (has right on)')
 
 
 # ******************************************************************************************************************* #
@@ -461,7 +483,10 @@ class P106IsComposedOf(PropertyMixin):
 
     """
 
-    p106_is_composed_of: Optional[str] = Field(default=None, description='P106 is composed of (forms part of)')
+    p106_is_composed_of: Optional[E90SymbolicObject] = Field(
+        default=None,
+        description='P106 is composed of (forms part of)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -501,7 +526,7 @@ class P129IsAbout(PropertyMixin):
 
     """
 
-    p129_is_about: Optional[str] = Field(default=None, description='P129 is about (is subject of)')
+    p129_is_about: Optional[E1CRMEntity] = Field(default=None, description='P129 is about (is subject of)')
 
 
 # ******************************************************************************************************************* #
@@ -553,7 +578,7 @@ class P138Represents(PropertyMixin):
 
     """
 
-    p138_represents: Optional[str] = Field(default=None, description='P138 represents (has representation)')
+    p138_represents: Optional[E1CRMEntity] = Field(default=None, description='P138 represents (has representation)')
 
 
 # ******************************************************************************************************************* #
@@ -591,7 +616,10 @@ class P148HasComponent(PropertyMixin):
 
     """
 
-    p148_has_component: Optional[str] = Field(default=None, description='P148 has component (is component of)')
+    p148_has_component: Optional[E89PropositionalObject] = Field(
+        default=None,
+        description='P148 has component (is component of)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -655,7 +683,10 @@ class P165Incorporates(PropertyMixin):
 
     """
 
-    p165_incorporates: Optional[str] = Field(default=None, description='P165 incorporates (is incorporated in)')
+    p165_incorporates: Optional[E90SymbolicObject] = Field(
+        default=None,
+        description='P165 incorporates (is incorporated in)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -695,7 +726,7 @@ class P187HasProductionPlan(PropertyMixin):
 
     """
 
-    p187_has_production_plan: Optional[str] = Field(
+    p187_has_production_plan: Optional[E29DesignOrProcedure] = Field(
         default=None,
         description='P187 has production plan (is production plan for)'
     )

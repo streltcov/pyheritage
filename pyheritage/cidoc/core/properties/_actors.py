@@ -18,11 +18,17 @@ P152 has parent                       E21 -> E21
 """
 
 
-from typing import Optional
+from __future__ import annotations
+
+from typing import Optional, TYPE_CHECKING
 
 from pydantic import Field
 
 from pyheritage.cidoc.core.base import PropertyMixin
+
+
+if TYPE_CHECKING:
+    from pyheritage.cidoc.core.entities import E21Person, E30Right, E39Actor, E41Appellation, E53Place
 
 
 __all__ = ('P74HasCurrentOrFormerResidence', 'P75Possesses', 'P76HasContactPoint', 'P107HasCurrentOrFormerMember',
@@ -61,7 +67,7 @@ class P74HasCurrentOrFormerResidence(PropertyMixin):
 
     """
 
-    p74_has_current_of_former_residence: Optional[str] = Field(
+    p74_has_current_of_former_residence: Optional[E53Place] = Field(
         default=None,
         description='P74 has current or former residence (is current or former residence of)'
     )
@@ -100,7 +106,7 @@ class P75Possesses(PropertyMixin):
 
     """
 
-    p75_possesses: Optional[str] = Field(default=None, description='P75 possesses (is possessed by)')
+    p75_possesses: Optional[E30Right] = Field(default=None, description='P75 possesses (is possessed by)')
 
 
 # ******************************************************************************************************************* #
@@ -136,7 +142,7 @@ class P76HasContactPoint(PropertyMixin):
 
     """
 
-    p76_has_contact_point: Optional[str] = Field(default=None, description='P76 has contact point'
+    p76_has_contact_point: Optional[E41Appellation] = Field(default=None, description='P76 has contact point'
                                                                            ' (provides access to)')
 
 
@@ -186,7 +192,7 @@ class P107HasCurrentOrFormerMember(PropertyMixin):
 
     """
 
-    p107_has_current_or_former_member: Optional[str] = Field(
+    p107_has_current_or_former_member: Optional[E39Actor] = Field(
         default=None,
         description='P107 has current or former member (is current or former member of)'
     )
@@ -233,4 +239,4 @@ class P152HasParent(PropertyMixin):
 
     """
 
-    p152_has_parent: Optional[str] = Field(default=None, description='P152 has parent (is parent of)')
+    p152_has_parent: Optional[E21Person] = Field(default=None, description='P152 has parent (is parent of)')
