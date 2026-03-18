@@ -48,7 +48,9 @@ from pyheritage.cidoc.core.properties import P4HasTimeSpan, P5ConsistsOf
 __all__ = ('E2TemporalEntity', 'E3ConditionState', 'E4Period', 'E5Event', 'E6Destruction', 'E7Activity',
            'E8Acquisition', 'E9Move', 'E10TransferOfCustody', 'E11Modification', 'E12Production',
            'E13AttributeAssignment', 'E14ConditionAssessment', 'E15IdentifierAssignment', 'E16Measurement',
-           'E17TypeAssignment', 'E63BeginningOfExistence', 'E64EndOfExistence', )
+           'E17TypeAssignment', 'E63BeginningOfExistence', 'E64EndOfExistence', 'E65Creation', 'E66Formation',
+           'E67Birth', 'E68Dissolution', 'E69Death', 'E79PartAddition', 'E80PartRemoval', 'E81Transformation',
+           'E83TypeCreation', 'E85Joining', 'E86Leaving', 'E87CurationActivity', 'E96Purchase', )
 
 
 class E2TemporalEntity(P4HasTimeSpan, E1CRMEntity):
@@ -886,5 +888,456 @@ class E17TypeAssignment(E13AttributeAssignment):
     Properties:
         P41 classified (was classified by): E1 CRM Entity
         P42 assigned (was assigned by): E55 Type
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E65Creation(E7Activity, E63BeginningOfExistence):
+    """'E65 Creation' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E65
+
+    SubClass Of:
+        E7 Activity
+        E63 Beginning of Existence
+    SuperClass Of:
+        E83 Type Creation
+    Scope Note:
+        This class comprises events that result in the creation of conceptual items or immaterial products, such as
+        legends, poems, texts, music, images, movies, laws, types etc.;
+
+    Examples:
+        - the framing of the U.S. Constitution (Farrand, 1913)
+        - the drafting of U.N. resolution 1441 (United Nations Security Council, 2002)
+    In First Order Logic:
+        E65(x) ⊃ E7(x)
+        E65(x) ⊃ E63(x)
+    Properties:
+        P94 has created (was created by): E28 Conceptual Object
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E66Formation(E7Activity, E63BeginningOfExistence):
+    """'E66 Formation' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E66
+
+    SubClass Of:
+        E7 Activity
+        E63 Beginning of Existence
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises events that result in the formation of a formal or informal E74 Group of people, such as
+        a club, society, association, corporation or nation;
+
+        E66 Formation does not include the arbitrary aggregation of people who do not act as a collective.
+
+        The formation of an instance of E74 Group does not require that the group is populated with members at the
+        time of formation. In order to express the joining of members at the time of formation, the respective
+        activity should be simultaneously an instance of both E66 Formation and E85 Joining;
+
+    Examples:
+        - the formation of the CIDOC CRM Special Interest Group
+        - the formation of the Soviet Union (Pipes, 1964)
+        - the conspiring of the murderers of Caesar (Irwin, 1935)
+    In First Order Logic:
+        E66(x) ⊃ E7(x)
+        E66(x) ⊃ E63(x)
+    Properties:
+        P95 has formed (was formed by): E74 Group
+        P151 was formed from (participated in): E74 Group
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E67Birth(E63BeginningOfExistence):
+    """'E67 Birth' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E67
+
+    SubClass Of:
+        E63 Beginning of Existence
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises the births of human beings. E67 Birth is a biological event focussing on the context of
+        people coming into life. (E63 Beginning of Existence comprises the coming into life of any living being);
+
+        Twins, triplets etc. are typically brought into life by the same instance of E67 Birth. The introduction of
+        E67 Birth as a documentation element allows the description of a range of family relationships in a simple
+        model. Suitable extensions may describe more details and the complexity of motherhood with the intervention
+        of modern medicine. In this model, the biological father is not seen as a necessary participant in the birth;
+
+    Examples:
+        - the birth of Alexander the Great (Stoneman, 2004)
+    In First Order Logic:
+        E67(x) ⊃ E63(x)
+    Properties:
+        P96 by mother (gave birth): E21 Person
+        P97 from father (was father for): E21 Person
+        P98 brought into life (was born): E21 Person
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E68Dissolution(E64EndOfExistence):
+    """'E68 Dissolution' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E68
+
+    SubClass Of:
+        E64 End of Existence
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises the events that result in the formal or informal termination of an instance of E74 Group;
+
+        If the dissolution was deliberate, the Dissolution event should also be instantiated as an instance of
+        E7 Activity;
+
+    Examples:
+        - the fall of the Roman Empire (Whittington, 1964)
+        - the liquidation of Enron Corporation (Atlas, 2001)
+    In First Order Logic:
+        E68(x) ⊃ E64(x)
+    Properties:
+        P99 dissolved (was dissolved by): E74 Group
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E69Death(E64EndOfExistence):
+    """'E69 Death' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E69
+
+    SubClass Of:
+        E64 End of Existence
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises the deaths of human beings.
+
+        If a person is killed, the death should be documented as an instance of both E69 Death and E7 Activity. The
+        death or perishing of other living beings should be documented as instances of E64 End of Existence;
+
+    Examples:
+        - the murder of Julius Caesar (E69,E7) (Irwin, 1935)
+        - the death of Senator Paul Wellstone (Monast, 2003)
+    In First Order Logic:
+        E69(x) ⊃ E64(x)
+    Properties:
+        P100 was death of (died in): E21 Person
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E79PartAddition(E11Modification):
+    """'E79 Part Addition' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E79
+
+    SubClass Of:
+        E11 Modification
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises activities that result in an instance of E24 Physical Human-Made Thing being increased,
+        enlarged or augmented by the addition of a part;
+
+        Typical scenarios include the attachment of an accessory, the integration of a component, the addition of an
+        element to an aggregate object, or the accessioning of an object into a curated instance of
+        E78 Curated Holding. Objects to which parts are added are, by definition, human-made, since the addition of
+        a part implies a human activity. Following the addition of parts, the resulting human-made assemblages are
+        treated objectively as single identifiable wholes, made up of constituent or component parts bound together
+        either physically (for example the engine becoming a part of the car), or by sharing a common purpose (such as
+        the 32 chess pieces that make up a chess set). This class of activities forms a basis for reasoning about the
+        history and continuity of identity of objects that are integrated into other objects over time, such as
+        precious gemstones being repeatedly incorporated into different items of jewellery, or cultural artifacts
+        being added to different museum instances of E78 Curated Holding over their lifespan;
+
+    Examples:
+        - the setting of the koh-i-noor diamond into the crown of Queen Elizabeth the Queen Mother (Dalrymple, 2017)
+        - the addition of the painting “Room in Brooklyn” by Edward Hopper to the collection of the Museum of
+          Fine Arts, Boston
+    In First Order Logic:
+        E79(x) ⊃ E11(x)
+    Properties:
+        P110 augmented (was augmented by): E24 Physical Human-Made Thing
+        P111 added (was added by): E18 Physical Thing
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E80PartRemoval(E11Modification):
+    """'E80 Part Removal' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E80
+
+    SubClass Of:
+        E11 Modification
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises the activities that result in an instance of E18 Physical Thing being decreased by the
+        removal of a part;
+
+        Typical scenarios include the detachment of an accessory, the removal of a component or part of a composite
+        object, or the deaccessioning of an object from a curated collection, an instance of E78 Curated Holding. If
+        the instance of E80 Part Removal results in the total decomposition of the original object into pieces, such
+        that the whole ceases to exist, the activity should instead be modelled as an instance of E81 Transformation,
+        i.e. a simultaneous destruction and production. In cases where the part removed has no discernible identity
+        prior to its removal but does have an identity subsequent to its removal, the activity should be modelled as
+        both an instance of E80 Part Removal and E12 Production. This class of activities forms a basis for reasoning
+        about the history, and continuity of identity over time, of objects that are removed from other objects, such
+        as precious gemstones being extracted from different items of jewelry, or cultural artifacts being
+        deaccessioned from different museum collections over their lifespan;
+
+    Examples:
+        - the removal of the engine from my car
+        - the disposal of object number 1976:234 from the collection
+    In First Order Logic:
+        E80(x) ⊃ E11(x)
+    Properties:
+        P112 diminished (was diminished by): E24 Physical Human-Made Thing
+        P113 removed (was removed by): E18 Physical Thing
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E81Transformation(E63BeginningOfExistence, E64EndOfExistence):
+    """'E81 Transformation' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E81
+
+    SubClass Of:
+        E63 Beginning of Existence
+        E64 End of Existence
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises the events that result in the simultaneous destruction of one or more than one instance
+        of E18 Physical Thing and the creation of one or more than one instance of E18 Physical Thing that preserves
+        recognizable substance and structure from the first one(s) but has fundamentally different nature or identity;
+
+        Although the old and the new instances of E18 Physical Thing are treated as discrete entities having separate,
+        unique identities, they are causally connected through an instance of E81 Transformation. The creation of the
+        new instances of E18 Physical Thing directly causes the destruction of the old instances of E18 Physical Thing
+        using or preserving some relevant substance and structure. Instances of E81 Transformation are therefore
+        distinct from re-classifications (documented as instances of E17 Type Assignment) or modifications (documented
+        as instances of E11 Modification) of objects that do not fundamentally change their nature or identity.
+        Characteristic cases of instances of E81 Transformation are reconstructions and repurposing of historical
+        buildings or ruins, fires leaving buildings in ruins, taxidermy of specimens in natural history;
+
+    Examples:
+        - the death and mummification of Tut-Ankh-Amun (transformation of Tut-Ankh-Amun from a living person
+          to a mummy) (E69,E81,E7)
+    In First Order Logic:
+        E81(x) ⊃ E63(x)
+        E81(x) ⊃ E64(x)
+    Properties:
+        P123 resulted in (resulted from): E18 Physical Thing
+        P124 transformed (was transformed by): E18 Physical Thing
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E83TypeCreation(E65Creation):
+    """'E83 Type Creation' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E83
+
+    SubClass Of:
+        E65 Creation
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises activities formally defining new types of items.
+
+        It is typically a rigorous scholarly or scientific process that ensures a type is exhaustively described and
+        appropriately named. In some cases, particularly in archaeology and the life sciences, E83 Type Creation
+        requires the identification of an exemplary specimen and the publication of the type definition in an
+        appropriate scholarly forum. The activity modelled as an instance of E83 Type Creation is central to
+        research in the life sciences, where a type would be referred to as a “taxon,” the type description as
+        a “protologue,” and the exemplary specimens as “original element” or “holotype”;
+
+    Examples:
+        - creation of the taxon 'Penicillium brefeldianum (B. O. Dodge', 1933)
+        - addition of class E85 Joining to the CIDOC CRM
+    In First Order Logic:
+        E83(x) ⊃ E65(x)
+    Properties:
+        P135 created type (was created by): E55 Type
+        P136 was based on (supported type creation): E1 CRM Entity
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E85Joining(E7Activity):
+    """'E85 Joining' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E85
+
+    SubClass Of:
+        E7 Activity
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises the activities that result in an instance of E39 Actor becoming a member of an instance
+        of E74 Group. This class does not imply initiative by either party. It may be the initiative of a third party;
+
+        Typical scenarios include becoming a member of a social organisation, becoming employee of a company,
+        marriage, the adoption of a child by a family and the inauguration of somebody into an official position;
+
+    Examples:
+        - The election of Sir Isaac Newton as Member of Parliament for the University of Cambridge to the Convention
+          Parliament of 1689 (Gleick,2003)
+        - The inauguration of Mikhail Sergeyevich Gorbachev as leader of the Union of Soviet Socialist Republics
+          (USSR) in 1985 (Butson, 1986)
+        - The implementation of the membership treaty between EU and Denmark January 1. 1993
+    In First Order Logic:
+        E85(x) ⊃ E7(x)
+    Properties:
+        P143 joined (was joined by): E39 Actor
+        P144 joined with (gained member by): E74 Group
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E86Leaving(E7Activity):
+    """'E86 Leaving' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E86
+
+    SubClass Of:
+        E7 Activity
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises the activities that result in an instance of E39 Actor to be disassociated from an
+        instance of E74 Group. This class does not imply initiative by either party. It may be the initiative of
+        a third party;
+
+        Typical scenarios include the termination of membership in a social organisation, ending the employment at
+        a company, divorce, and the end of tenure of somebody in an official position;
+
+    Examples:
+        - The end of Sir Isaac Newton’s duty as Member of Parliament for the University of Cambridge to the
+          Convention Parliament in 1702 (Gleick, 2003)
+        - George Washington’s leaving office in 1797 (Jones, 1979)
+        - The implementation of the treaty regulating the termination of Greenland’s membership in EU between EU,
+          Denmark and Greenland February 1. 1985
+    In First Order Logic:
+        E86(x) ⊃ E7(x)
+    Properties:
+        P145 separated (left by): E39 Actor
+        P146 separated from (lost member by): E74 Group
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E87CurationActivity(E7Activity):
+    """'E87 Curation Activity' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E87
+
+    SubClass Of:
+        E7 Activity
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises the activities that result in the continuity of management and the preservation and
+        evolution of instances of E78 Curated Holding, following an implicit or explicit curation plan;
+
+        It specializes the notion of activity into the curation of a collection and allows the history of curation
+        to be recorded;
+
+        Items are accumulated and organized following criteria like subject, chronological period, material type,
+        style of art etc. and can be added or removed from an instance of E78 Curated Holding for a specific purpose
+        and/or audience. The initial aggregation of items of a collection is regarded as an instance of
+        E12 Production Event while the activity of evolving, preserving and promoting a collection is regarded as an
+        instance of E87 Curation Activity;
+
+    Examples:
+        - The curation of Mikael Heggelund Foslie’s coralline red algae Herbarium 1876 – 1909 (when Foslie died),
+          now at Museum of Natural History and Archaeology, Norway
+    In First Order Logic:
+        E87(x) ⊃ E7(x)
+    Properties:
+        P147 curated (was curated by): E78 Curated Holding
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E96Purchase(E8Acquisition):
+    """'E96 Purchase' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E96
+
+    SubClass Of:
+        E8 Acquisition
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises transfers of legal ownership from one or more instances of E39 Actor to one or more
+        different instances of E39 Actor, where the transferring party is completely compensated by the payment of
+        a monetary amount. In more detail, a purchase agreement establishes a fixed monetary obligation at its
+        initialization on the receiving party, to the giving party. An instance of E96 Purchase begins with the
+        contract or equivalent agreement and ends with the fulfilment of all contractual obligations. In the case
+        that the activity is abandoned before both parties have fulfilled these obligations, the activity is not
+        regarded as an instance of E96 Purchase;
+
+        This class is a very specific case of the much more complex social business practices of exchange of goods
+        and the creation and satisfaction of related social obligations. Purchase activities which define individual
+        sales prices per object can be modelled by instantiating E96 Purchase for each object individually and as
+        part of an overall instance of E96 Purchase transaction;
+
+    Examples:
+        - the purchase of 10 okka of nails by the captain A. Syrmas on 18/9/1895 in Thessaloniki
+    In First Order Logic:
+        E96(x) ⊃ E8(x)
+    Properties:
+        P179 had sales price (was sales price of): E97 Monetary Amount
 
     """
