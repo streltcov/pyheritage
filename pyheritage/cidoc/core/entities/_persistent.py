@@ -67,18 +67,39 @@ from pyheritage.cidoc.core.properties import (
     P59HasSection,
     P62Depicts,
     P65ShowsVisualItem,
+    P67RefersTo,
+    P68ForeseesUseOf,
+    P69HasAssociationWith,
+    P70Documents,
+    P71Lists,
+    P72HasLanguage,
+    P73HasTranslation,
+    P74HasCurrentOrFormerResidence,
+    P75Possesses,
+    P76HasContactPoint,
     P101HadAGeneralUse,
     P102HasTitle,
     P103WasIntendedFor,
     P104IsSubjectTo,
     P105RightHeldBy,
     P106IsComposedOf,
+    P107HasCurrentOrFormerMember,
+    P109HasCurrentOrFormerCurator,
+    P127HasBroaderTerm,
     P128Carries,
+    P129IsAbout,
     P130ShowsFeaturesOf,
+    P138Represents,
     P139HasAlternativeForm,
+    P148HasComponent,
+    P150DefinesTypicalPartsOf,
+    P152HasParent,
     P156Occupies,
+    P165Incorporates,
     P180HasCurrency,
     P181HasAmount,
+    P187HasProductionPlan,
+    P188RequiresProductionTool,
     P190HasSymbolicContent,
     P196Defines,
     PxxxHoldsOrSupports,
@@ -671,7 +692,7 @@ class E28ConceptualObject(E71HumanMadeThing):
 # ******************************************************************************************************************* #
 
 
-class E39Actor(E77PersistentItem):
+class E39Actor(P74HasCurrentOrFormerResidence, P75Possesses, P76HasContactPoint, E77PersistentItem):
     """'E39 Actor' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E39
@@ -702,7 +723,7 @@ class E39Actor(E77PersistentItem):
 # ******************************************************************************************************************* #
 
 
-class E21Person(E20BiologicalObject, E39Actor):
+class E21Person(P152HasParent, E20BiologicalObject, E39Actor):
     """'E21 Person' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E21
@@ -741,7 +762,7 @@ class E21Person(E20BiologicalObject, E39Actor):
 
 
 @entity_register(label='E78 Curated Holding')
-class E78CuratedHolding(E24PhysicalHumanMadeObject):
+class E78CuratedHolding(P109HasCurrentOrFormerCurator, E24PhysicalHumanMadeObject):
     """'E78 Curated Holding' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E78
@@ -952,7 +973,7 @@ class E42Identifier(E41Appellation):
 # ******************************************************************************************************************* #
 
 
-class E55Type(E28ConceptualObject):
+class E55Type(P127HasBroaderTerm, P150DefinesTypicalPartsOf, E28ConceptualObject):
     """'E55 Type' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E55
@@ -1110,7 +1131,7 @@ class E58MeasurementUnit(E55Type):
 # ******************************************************************************************************************* #
 
 
-class E89PropositionalObject(E28ConceptualObject):
+class E89PropositionalObject(P67RefersTo, P129IsAbout, P148HasComponent, E28ConceptualObject):
     """'E89 Propositional Object' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E89
@@ -1155,7 +1176,7 @@ class E89PropositionalObject(E28ConceptualObject):
 # ******************************************************************************************************************* #
 
 
-class E73InformationObject(E89PropositionalObject, E90SymbolicObject):
+class E73InformationObject(P165Incorporates, E89PropositionalObject, E90SymbolicObject):
     """'E73 Information Object' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E73
@@ -1201,7 +1222,7 @@ class E73InformationObject(E89PropositionalObject, E90SymbolicObject):
 # ******************************************************************************************************************* #
 
 
-class E74Group(E39Actor):
+class E74Group(P107HasCurrentOrFormerMember, E39Actor):
     """'E74 Group' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E73
@@ -1249,7 +1270,7 @@ class E74Group(E39Actor):
 # ******************************************************************************************************************* #
 
 
-class E29DesignOrProcedure(E73InformationObject):
+class E29DesignOrProcedure(P68ForeseesUseOf, P69HasAssociationWith, E73InformationObject):
     """'E29 Design or Procedure' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E29
@@ -1320,7 +1341,7 @@ class E30Right(E89PropositionalObject):
 # ******************************************************************************************************************* #
 
 
-class E31Document(E73InformationObject):
+class E31Document(P70Documents, E73InformationObject):
     """'E31 Document' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E31
@@ -1351,7 +1372,7 @@ class E31Document(E73InformationObject):
 # ******************************************************************************************************************* #
 
 
-class E32AuthorityDocument(E31Document):
+class E32AuthorityDocument(P71Lists, E31Document):
     """'E32 Authority Document' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E32
@@ -1379,7 +1400,7 @@ class E32AuthorityDocument(E31Document):
 # ******************************************************************************************************************* #
 
 
-class E33LinguisticObject(E73InformationObject):
+class E33LinguisticObject(P72HasLanguage, P73HasTranslation, E73InformationObject):
     """'E33 Linguistic Object' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E33
@@ -1456,7 +1477,7 @@ class E35Title(E33LinguisticObject, E41Appellation):
 # ******************************************************************************************************************* #
 
 
-class E36VisualItem(E73InformationObject):
+class E36VisualItem(P138Represents, E73InformationObject):
     """'E36 Visual Item' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E36
@@ -1642,7 +1663,7 @@ class E98Currency(E58MeasurementUnit, E55Type):
 # ******************************************************************************************************************* #
 
 
-class E99ProductType(E55Type):
+class E99ProductType(P187HasProductionPlan, P188RequiresProductionTool, E55Type):
     """'E99 Product Type' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E99
