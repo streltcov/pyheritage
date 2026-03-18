@@ -85,13 +85,14 @@ from pyheritage.cidoc.core.properties import (
 )
 
 
-__all__ = ('E18PhysicalThing', 'E19PhysicalObject', 'E20BiologicalObject', 'E22HumanMadeObject',
+__all__ = ('E18PhysicalThing', 'E19PhysicalObject', 'E20BiologicalObject', 'E21Person', 'E22HumanMadeObject',
            'E24PhysicalHumanMadeObject', 'E25HumanMadeFeature', 'E26PhysicalFeature', 'E27Site',
            'E28ConceptualObject', 'E29DesignOrProcedure', 'E30Right', 'E31Document', 'E32AuthorityDocument',
            'E33LinguisticObject', 'E34Inscription', 'E35Title', 'E36VisualItem', 'E37Mark', 'E39Actor',
-           'E41Appellation', 'E42Identifier', 'E54Dimension', 'E70Thing', 'E71HumanMadeThing', 'E72LegalObject',
-           'E73InformationObject', 'E74Group', 'E77PersistentItem', 'E78CuratedHolding', 'E89PropositionalObject',
-           'E90SymbolicObject', 'E97MonetaryAmount', )
+           'E41Appellation', 'E42Identifier', 'E55Type', 'E56Language', 'E57Material', 'E58MeasurementUnit',
+           'E70Thing', 'E71HumanMadeThing', 'E72LegalObject', 'E73InformationObject', 'E74Group', 'E77PersistentItem',
+           'E78CuratedHolding', 'E89PropositionalObject', 'E90SymbolicObject', 'E97MonetaryAmount', 'E98Currency',
+           'E99ProductType', )
 
 
 @entity_register(label='E77 Persistent Item')
@@ -701,6 +702,44 @@ class E39Actor(E77PersistentItem):
 # ******************************************************************************************************************* #
 
 
+class E21Person(E20BiologicalObject, E39Actor):
+    """'E21 Person' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E21
+
+    SubClass Of:
+        E20 Biological Object
+        E39 Actor
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises real persons who live or are assumed to have lived;
+
+        Legendary figures that may have existed, such as Ulysses and King Arthur, fall into this class if the
+        documentation refers to them as historical figures. In cases where doubt exists as to whether several persons
+        are in fact identical, multiple instances can be created and linked to indicate their relationship. The CIDOC
+        CRM does not propose a specific form to support reasoning about possible identity;
+
+        In a bibliographic context, a name presented following the conventions usually employed for personal names
+        will be assumed to correspond to an actual real person (an instance of E21 Person), unless evidence is
+        available to indicate that this is not the case. The fact that a persona may erroneously be classified as
+        an instance of E21 Person does not imply that the concept comprises personae;
+
+    Examples:
+        - Tut-Ankh-Amun (Edwards, 1979)
+        - Nelson Mandela (Brown, 2006)
+    In First Order Logic:
+        E21(x) ⊃ E20(x)
+        E21(x) ⊃ E39(x)
+    Properties:
+        P152 has parent (is parent of): E21 Person
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
 @entity_register(label='E78 Curated Holding')
 class E78CuratedHolding(E24PhysicalHumanMadeObject):
     """'E78 Curated Holding' CRM entity;
@@ -866,6 +905,9 @@ class E41Appellation(P139HasAlternativeForm, E90SymbolicObject):
     """
 
 
+# ******************************************************************************************************************* #
+
+
 @entity_register(label="E42 Identifier")
 class E42Identifier(E41Appellation):
     """E42 Identifier entity model;
@@ -901,6 +943,164 @@ class E42Identifier(E41Appellation):
         - “Rue David Dufour 5, CH-1211, Genève”
     In First Order Logic:
         - E42(x) ⊃ E41(x)
+    Properties:
+        -
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E55Type(E28ConceptualObject):
+    """'E55 Type' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E55
+
+    SubClass Of:
+        E28 Conceptual Object
+    SuperClass Of:
+        E56 Language
+        E57 Material
+        E58 Measurement Unit
+        E98 Currency
+        E99 Product Type
+    Scope Note:
+        This class comprises concepts denoted by terms from thesauri and controlled vocabularies used to characterize
+        and classify instances of CIDOC CRM classes. Instances of E55 Type represent concepts in contrast to instances
+        of E41 Appellation which are used to name instances of CIDOC CRM classes;
+
+        E55 Type is the CIDOC CRM’s interface to domain specific ontologies and thesauri. These can be represented
+        in the CIDOC CRM as subclasses of E55 Type, forming hierarchies of terms, i.e. instances of E55 Type linked
+        via P127 has broader term (has narrower term): E55Type. Such hierarchies may be extended with additional
+        properties;
+
+    Examples:
+        - weight, length, depth [types of E54]
+        - portrait, sketch, animation [types of E36]
+        - French, English, German [E56]
+        - excellent, good, poor [types of E3]
+        - Ford Model T, chop stick [types of E22]
+        - cave, doline, scratch [types of E26]
+        - poem, short story [types of E33]
+        - wedding, earthquake, skirmish [types of E5]
+    In First Order Logic:
+        E55(x) ⊃ E28(x)
+    Properties:
+        P127 has broader term (has narrower term): E55 Type
+        P150 defines typical parts of (defines typical wholes for): E55 Type
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E56Language(E55Type):
+    """'E56 Language' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E56
+
+    SubClass Of:
+        E55 Type
+    SuperClass Of:
+        -
+    Scope Note:
+        This class is a specialization of E55 Type and comprises the natural languages in the sense of concepts;
+
+        This type is used categorically in the model without reference to instances of it, i.e. the Model does not
+        foresee the description of instances of instances of E56 Language, e.g.: “instances of Mandarin Chinese”;
+
+        It is recommended that internationally or nationally agreed codes and terminology are used to denote instances
+        of E56 Language, such as those defined in ISO 639-1:2002 and later versions;
+
+    Examples:
+        - el [Greek] (Palmer, 1980)
+        - en [English] (Wilson, 1983)
+        - eo [Esperanto] (Nuessel, 2000)
+        - es [Spanish] (Pineda, 1993)
+        - fr [French] (Rickard, 1974)
+    In First Order Logic:
+        E56(x) ⊃ E55(x)
+    Properties:
+        -
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E57Material(E55Type):
+    """'E57 Material' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E57
+
+    SubClass Of:
+        E55 Type
+    SuperClass Of:
+        -
+    Scope Note:
+        This class is a specialization of E55 Type and comprises the concepts of materials;
+
+        Instances of E57 Material may denote properties of matter before its use, during its use, and as incorporated
+        in an object, such as ultramarine powder, tempera paste, reinforced concrete. Discrete pieces of raw-materials
+        kept in museums, such as bricks, sheets of fabric, pieces of metal, should be modelled individually in the
+        same way as other objects. Discrete used or processed pieces, such as the stones from Nefer Titi's temple,
+        should be modelled as parts (cf. P46 is composed of (forms part of): E18 Physical Thing);
+
+        This type is used categorically in the model without reference to instances of it, i.e. the Model does not
+        foresee the description of instances of instances of E57 Material, e.g.: “instances of gold”;
+
+        It is recommended that internationally or nationally agreed codes and terminology are used;
+
+    Examples:
+        - Brick (Gurcke, 1987)
+        - Gold (Watson, 1990)
+        - Aluminium (Norman, 1986)
+        - Polycarbonate (Mhaske, 2011)
+        - Resin (Barton, 1992)
+    In First Order Logic:
+        E57(x) ⊃ E55(x)
+    Properties:
+        -
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E58MeasurementUnit(E55Type):
+    """'E58 Measurement Unit' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E58
+
+    SubClass Of:
+        E55 Type
+    SuperClass Of:
+        E98 Currency
+    Scope Note:
+        This class is a specialization of E55 Type and comprises the types of measurement units: feet, inches,
+        centimetres, litres, lumens, etc.;
+
+        This type is used categorically in the model without reference to instances of it, i.e. the Model does not
+        foresee the description of instances of instances of E58 Measurement Unit, e.g.: “instances of cm”;
+
+        Système International (SI) units or internationally recognized non-SI terms should be used whenever possible,
+        such as those defined by ISO80000:2009. Archaic Measurement Units used in historical records should
+        be preserved;
+
+    Examples:
+        - cm [centimetre]
+        - km [kilometre]
+        - m [meter]
+        - m/s [meters per second] (Hau, 1999)
+        - A [Ampere]
+        - GRD [Greek Drachme] (Daniel, 2014) (E98)
+        - C [degrees centigrade] (Beckman, 1998)
+    In First Order Logic:
+        E58(x) ⊃ E55(x)
     Properties:
         -
 
@@ -1398,5 +1598,85 @@ class E97MonetaryAmount(P180HasCurrency, P181HasAmount, E54Dimension):
     Properties:
         - P180 has currency (was currency of): E98 Currency
         - P181 has amount: E60 Number
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E98Currency(E58MeasurementUnit, E55Type):
+    """'E98 Currency' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E98
+
+    SubClass Of:
+        E55 Type
+        E58 Measurement Unit
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises the units in which a monetary system, supported by an administrative authority or other
+        community, quantifies and arithmetically compares all monetary amounts declared in the unit. The unit of
+        a monetary system must describe a nominal value which is kept constant by its administrative authority and
+        an associated banking system if it exists, and not by market value. For instance, one may pay with grams of
+        gold, but the respective monetary amount would have been agreed as the gold price in US dollars on the day of
+        the payment. Under this definition, British Pounds, U.S. Dollars, and European Euros are examples of currency,
+        but “grams of gold” is not. One monetary system has one and only one currency. Instances of this class must
+        not be confused with coin denominations, such as “Dime” or “Sestertius”. Non-monetary exchange of value in
+        terms of quantities of a particular type of goods, such as cows, do not constitute a currency;
+
+    Examples:
+        - “As” (Roman mid republic)
+        - “Euro”, (Temperton, 1997)
+        - “US Dollar” (Rose, 1978)
+    In First Order Logic:
+        E98(x) ⊃ E55(x)
+        E98(x) ⊃ E58(x)
+    Properties:
+        -
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+class E99ProductType(E55Type):
+    """'E99 Product Type' CRM entity;
+
+    https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E99
+
+    SubClass Of:
+        E55 Type
+    SuperClass Of:
+        -
+    Scope Note:
+        Scope note: This classes comprises types that stand as the models for instances of E22 Human-Made Object that
+        are produced as the result of production activities using plans exact enough to result in one or more series
+        of uniform, functionally and aesthetically identical and interchangeable items. The product type is the
+        intended ideal form of the manufacture process. It is typical of instances of E22 that conform to an
+        instance of E99 Product Type that its component parts are interchangeable with component parts of other
+        instances of E22 made after the model of the same instance of E99. Frequently, the uniform production
+        according to a given instance of E99 Product Type is achieved by creating individual tools, such as moulds
+        or print plates that are themselves carriers of the design of the product type. Modern tools may use the
+        flexibility of electronically controlled devices to achieve such uniformity. The product type itself, i.e.,
+        the potentially unlimited series of aesthetically equivalent items, may be the target of artistic design,
+        rather than the individual object. In extreme cases, only one instance of a product type may have been
+        produced, such as in a "print on demand" process which was only triggered once. However, this should not be
+        confused with industrial prototypes, such as car prototypes, which are produced prior to the production line
+        being set up, or test the production line itself;
+
+    Examples:
+        - : Volkswagen Type 11 (Beetle)
+        - Dragendorff 54 samian vessel
+        - 1937 Edward VIII brass threepenny bit
+        - Qin Crossbow trigger un-notched Part B (Bg2u)
+        - Nokia Cityman 1320 (The first Nokia mobile phone)
+    In First Order Logic:
+        E99(x) ⊃ E55(x)
+    Properties:
+        P187 has production plan (is production plan for): E29 Design or Procedure
+        P188 requires production tool (is production tool for): E19 Physical Object
 
     """
