@@ -63,7 +63,7 @@ from pyheritage.cidoc.core.entities._primitives import (
     E95SpaceTimePrimitive,
 )
 from pyheritage.cidoc.core.entities._spacetime import (
-    E52TimeeSpan,
+    E52TimeSpan,
     E53Place,
     E54Dimension,
     E92SpaceTimeVolume,
@@ -104,14 +104,15 @@ from pyheritage.cidoc.core.entities._temporal import (
 )
 
 
-__all__ = ('E1CRMEntity', 'E2TemporalEntity', 'E3ConditionState', 'E4Period', 'E5Event', 'E6Destruction',
-           'E7Activity', 'E8Acquisition', 'E9Move', 'E10TransferOfCustody', 'E11Modification', 'E12Production',
-           'E13AttributeAssignment', 'E14ConditionAssessment', 'E15IdentifierAssignment', 'E16Measurement',
-           'E17TypeAssignment', 'E18PhysicalThing', 'E19PhysicalObject', 'E20BiologicalObject', 'E21Person',
-           'E22HumanMadeObject', 'E24PhysicalHumanMadeObject', 'E25HumanMadeFeature', 'E26PhysicalFeature', 'E27Site',
+__all__ = ('CoercedNumber', 'CoercedSpace', 'CoercedString', 'CoercedTime', 'E1CRMEntity', 'E2TemporalEntity',
+           'E3ConditionState', 'E4Period', 'E5Event', 'E6Destruction', 'E7Activity', 'E8Acquisition', 'E9Move',
+           'E10TransferOfCustody', 'E11Modification', 'E12Production', 'E13AttributeAssignment',
+           'E14ConditionAssessment', 'E15IdentifierAssignment', 'E16Measurement', 'E17TypeAssignment',
+           'E18PhysicalThing', 'E19PhysicalObject', 'E20BiologicalObject', 'E21Person', 'E22HumanMadeObject',
+           'E24PhysicalHumanMadeObject', 'E25HumanMadeFeature', 'E26PhysicalFeature', 'E27Site',
            'E28ConceptualObject', 'E29DesignOrProcedure', 'E30Right', 'E31Document', 'E32AuthorityDocument',
            'E33LinguisticObject', 'E34Inscription', 'E35Title', 'E36VisualItem', 'E37Mark', 'E39Actor',
-           'E41Appellation', 'E42Identifier', 'E52TimeeSpan', 'E53Place', 'E54Dimension', 'E55Type', 'E56Language',
+           'E41Appellation', 'E42Identifier', 'E52TimeSpan', 'E53Place', 'E54Dimension', 'E55Type', 'E56Language',
            'E57Material', 'E58MeasurementUnit', 'E59PrimitiveValue', 'E60Number', 'E61TimePrimitive', 'E62String',
            'E63BeginningOfExistence', 'E64EndOfExistence', 'E65Creation', 'E66Formation', 'E67Birth',
            'E68Dissolution', 'E69Death', 'E70Thing', 'E71HumanMadeThing', 'E72LegalObject', 'E73InformationObject',
@@ -170,7 +171,7 @@ __namespace__ = {
     'E39Actor': E39Actor,
     'E41Appellation': E41Appellation,
     'E42Identifier': E42Identifier,
-    'E52TimeSpan': E52TimeeSpan,
+    'E52TimeSpan': E52TimeSpan,
     'E53Place': E53Place,
     'E54Dimension': E54Dimension,
     'E55Type': E55Type,
@@ -204,7 +205,7 @@ __namespace__ = {
     'E87CurationActivity': E87CurationActivity,
     'E89PropositionalObject': E89PropositionalObject,
     'E90SymbolicObject': E90SymbolicObject,
-    'E92SpacePrimitive': E92SpaceTimeVolume,
+    'E92SpaceTimeVolume': E92SpaceTimeVolume,
     'E93Presence': E93Presence,
     'E94TimePrimitive': E94SpacePrimitive,
     'E95SpaceTimePrimitive': E95SpaceTimePrimitive,
@@ -257,7 +258,7 @@ E37Mark.model_rebuild(_types_namespace=__namespace__)
 E39Actor.model_rebuild(_types_namespace=__namespace__)
 E41Appellation.model_rebuild(_types_namespace=__namespace__)
 E42Identifier.model_rebuild(_types_namespace=__namespace__)
-E52TimeeSpan.model_rebuild(_types_namespace=__namespace__)
+E52TimeSpan.model_rebuild(_types_namespace=__namespace__)
 E53Place.model_rebuild(_types_namespace=__namespace__)
 E54Dimension.model_rebuild(_types_namespace=__namespace__)
 E55Type.model_rebuild(_types_namespace=__namespace__)
