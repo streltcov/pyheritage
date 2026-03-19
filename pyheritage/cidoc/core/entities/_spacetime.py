@@ -18,7 +18,7 @@ from pyheritage.cidoc.core.base import entity_register
 from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
 
 
-__all__ = ('E52TimeeSpan', 'E53Place', 'E54Dimension', 'E92SpaceTimeVolume', 'E93Presence', )
+__all__ = ('E52TimeSpan', 'E53Place', 'E54Dimension', 'E92SpaceTimeVolume', 'E93Presence', )
 
 
 @entity_register(label='E92 Spacetime Volume')
@@ -109,7 +109,7 @@ class E93Presence(E92SpaceTimeVolume):
 
 
 @entity_register(label='E52 Time-Span')
-class E52TimeeSpan(E1CRMEntity):
+class E52TimeSpan(E1CRMEntity):
     """'P52 Time-Span' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E52
