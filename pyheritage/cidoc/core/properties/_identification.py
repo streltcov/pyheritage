@@ -25,7 +25,7 @@ P190 has symbolic content          E90 -> E62
 
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 
 from pydantic import Field
 
@@ -33,7 +33,7 @@ from pyheritage.cidoc.core.base import PropertyMixin
 
 
 if TYPE_CHECKING:
-    from pyheritage.cidoc.core.entities._primitives import CoercedString
+    from pyheritage.cidoc.core.entities import CoercedString, E35Title, E41Appellation, E42Identifier, E55Type
 
 
 __all__ = ('P1IsIdentifiedBy', 'P2HasType', 'P3HasNote', 'P48HasPreferredIdentifier', 'P102HasTitle',
@@ -83,8 +83,8 @@ class P1IsIdentifiedBy(PropertyMixin):
 
     """
 
-    p1_is_identified_by: Optional[str] = Field(default=None, description='P1 is identified by'
-                                                                                      ' (identifies)')
+    p1_is_identified_by: Optional[E41Appellation] = Field(default=None, description='P1 is identified by'
+                                                                                    ' (identifies)')
 
 
 # ******************************************************************************************************************* #
@@ -129,7 +129,7 @@ class P2HasType(PropertyMixin):
 
     """
 
-    p2_has_type: list[Any] = Field(default_factory=list, description='P2 has type (is type of)')
+    p2_has_type: list[E55Type] = Field(default_factory=list, description='P2 has type (is type of)')
 
 
 # ******************************************************************************************************************* #
@@ -178,7 +178,7 @@ class P3HasNote(PropertyMixin):
 
     """
 
-    p3_has_note: Optional[str] = Field(default=None, description='P3 has note')
+    p3_has_note: Optional[CoercedString] = Field(default=None, description='P3 has note')
 
 
 # ******************************************************************************************************************* #
@@ -224,7 +224,7 @@ class P48HasPreferredIdentifier(PropertyMixin):
 
     """
 
-    p48_has_preferred_identifier: Optional[str] = Field(
+    p48_has_preferred_identifier: Optional[E42Identifier] = Field(
         default=None,
         description='P48 has preferred identifier (is preferred identifier of)'
     )
@@ -271,7 +271,7 @@ class P102HasTitle(PropertyMixin):
 
     """
 
-    p102_has_title: Optional[str] = Field(default=None, description='P102 has title (is title of)')
+    p102_has_title: Optional[E35Title] = Field(default=None, description='P102 has title (is title of)')
 
 
 # ******************************************************************************************************************* #
@@ -311,7 +311,7 @@ class P127HasBroaderTerm(PropertyMixin):
 
     """
 
-    p127_has_broader_term: Optional[str] = Field(
+    p127_has_broader_term: Optional[E55Type] = Field(
         default=None,
         description='P127 has broader term (has narrower term)'
     )
@@ -358,7 +358,7 @@ class P137Exemplifies(PropertyMixin):
 
     """
 
-    p137_exemplifies: Optional[str] = Field(default=None, description='P137 exemplifies (is exemplified by)')
+    p137_exemplifies: Optional[E55Type] = Field(default=None, description='P137 exemplifies (is exemplified by)')
 
 
 # ******************************************************************************************************************* #
@@ -407,7 +407,10 @@ class P139HasAlternativeForm(PropertyMixin):
 
     """
 
-    p139_has_alternative_form: Optional[str] = Field(default=None, description='P139 has alternative form')
+    p139_has_alternative_form: Optional[E41Appellation] = Field(
+        default=None,
+        description='P139 has alternative form'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -447,7 +450,7 @@ class P150DefinesTypicalPartsOf(PropertyMixin):
 
     """
 
-    p150_defines_typical_parts_of: Optional[str] = Field(
+    p150_defines_typical_parts_of: Optional[E55Type] = Field(
         default=None,
         description='P150 defines typical parts of (defines typical wholes for)'
     )

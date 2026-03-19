@@ -37,11 +37,32 @@ Pxxx holds or supports              E18 -> E18
 """
 
 
-from typing import Optional
+from __future__ import annotations
+
+from typing import Optional, TYPE_CHECKING
 
 from pydantic import Field
 
 from pyheritage.cidoc.core.base import PropertyMixin
+
+
+if TYPE_CHECKING:
+    from pyheritage.cidoc.core.entities import (
+        CoercedNumber,
+        E1CRMEntity,
+        E3ConditionState,
+        E18PhysicalThing,
+        E26PhysicalFeature,
+        E36VisualItem,
+        E39Actor,
+        E53Place,
+        E54Dimension,
+        E55Type,
+        E57Material,
+        E70Thing,
+        E90SymbolicObject,
+        E92SpaceTimeVolume,
+    )
 
 
 __all__ = ('P43HasDimension', 'P44HasCondition', 'P45ConsistsOf', 'P46IsComposedOf', 'P49HasFormerOrCurrentKeeper',
@@ -88,7 +109,7 @@ class P43HasDimension(PropertyMixin):
 
     """
 
-    p43_has_dimension: Optional[str] = Field(default=None, description='P43 has dimension (is dimension of)')
+    p43_has_dimension: Optional[E54Dimension] = Field(default=None, description='P43 has dimension (is dimension of)')
 
 
 # ******************************************************************************************************************* #
@@ -130,7 +151,10 @@ class P44HasCondition(PropertyMixin):
 
     """
 
-    p44_has_condition: Optional[str] = Field(default=None, description='P44 has condition (is condition of)')
+    p44_has_condition: Optional[E3ConditionState] = Field(
+        default=None,
+        description='P44 has condition (is condition of)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -172,7 +196,7 @@ class P45ConsistsOf(PropertyMixin):
 
     """
 
-    p45_consists_of: Optional[str] = Field(default=None, description='P45 consists of (is incorporated in)')
+    p45_consists_of: Optional[E57Material] = Field(default=None, description='P45 consists of (is incorporated in)')
 
 
 # ******************************************************************************************************************* #
@@ -230,7 +254,10 @@ class P46IsComposedOf(PropertyMixin):
 
     """
 
-    p46_is_composed_of: Optional[str] = Field(default=None, description='P46 is composed of (forms part of)')
+    p46_is_composed_of: Optional[E18PhysicalThing] = Field(
+        default=None,
+        description='P46 is composed of (forms part of)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -279,7 +306,7 @@ class P49HasFormerOrCurrentKeeper(PropertyMixin):
 
     """
 
-    p49_has_former_or_current_keeper: Optional[str] = Field(
+    p49_has_former_or_current_keeper: Optional[E39Actor] = Field(
         default=None,
         description='P49 has former or current keeper (is former or current keeper of)'
     )
@@ -323,7 +350,7 @@ class P50HasCurrentKeeper(PropertyMixin):
 
     """
 
-    p50_has_current_keeper: Optional[str] = Field(
+    p50_has_current_keeper: Optional[E39Actor] = Field(
         default=None,
         description='P50 has current keeper (is current keeper of)'
     )
@@ -368,7 +395,7 @@ class P51HasCurrentOrFormerOwner(PropertyMixin):
 
     """
 
-    p51_has_current_or_former_owner: Optional[str] = Field(
+    p51_has_current_or_former_owner: Optional[E39Actor] = Field(
         default=None,
         description='P51 has former or current owner (is former or current owner of)'
     )
@@ -415,7 +442,7 @@ class P52HasCurrentOwner(PropertyMixin):
 
     """
 
-    p52_has_current_owner: Optional[str] = Field(
+    p52_has_current_owner: Optional[E39Actor] = Field(
         default=None,
         description='P52 has current owner (is current owner of)'
     )
@@ -465,7 +492,7 @@ class P53HasFormerOrCurrentLocation(PropertyMixin):
 
     """
 
-    p53_has_former_or_current_location: Optional[str] = Field(
+    p53_has_former_or_current_location: Optional[E53Place] = Field(
         default=None,
         description='P53 has former or current location (is former or current location of)'
     )
@@ -510,7 +537,7 @@ class P54HasCurrentPermanentLocation(PropertyMixin):
 
     """
 
-    p54_has_current_permanent_location: Optional[str] = Field(
+    p54_has_current_permanent_location: Optional[E53Place] = Field(
         default=None,
         description='P54 has current permanent location (is current permanent location of)'
     )
@@ -559,7 +586,7 @@ class P55HasCurrentLocation(PropertyMixin):
 
     """
 
-    p55_has_current_location: Optional[str] = Field(
+    p55_has_current_location: Optional[E53Place] = Field(
         default=None,
         description='P55 has current location (currently holds)'
     )
@@ -611,7 +638,10 @@ class P56BearsFeature(PropertyMixin):
 
     """
 
-    p56_bears_feature: Optional[str] = Field(default=None, description='P56 bears feature (is found on)')
+    p56_bears_feature: Optional[E26PhysicalFeature] = Field(
+        default=None,
+        description='P56 bears feature (is found on)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -655,7 +685,7 @@ class P57HasNumberOfParts(PropertyMixin):
 
     """
 
-    p57_has_number_of_parts: Optional[str] = Field(default=None, description='P57 has number of parts')
+    p57_has_number_of_parts: Optional[CoercedNumber] = Field(default=None, description='P57 has number of parts')
 
 
 # ******************************************************************************************************************* #
@@ -694,7 +724,7 @@ class P59HasSection(PropertyMixin):
 
     """
 
-    p59_has_section: Optional[str] = Field(default=None, description='P59 has section (is located on or within)')
+    p59_has_section: Optional[E53Place] = Field(default=None, description='P59 has section (is located on or within)')
 
 
 # ******************************************************************************************************************* #
@@ -742,7 +772,7 @@ class P62Depicts(PropertyMixin):
 
     """
 
-    p62_depicts: Optional[str] = Field(default=None, description='P62 depicts (is depicted by)')
+    p62_depicts: Optional[E1CRMEntity] = Field(default=None, description='P62 depicts (is depicted by)')
 
 
 # ******************************************************************************************************************* #
@@ -795,7 +825,10 @@ class P65ShowsVisualItem(PropertyMixin):
 
     """
 
-    p65_shows_visual_item: Optional[str] = Field(default=None, description='P65 shows visual item (is shown by)')
+    p65_shows_visual_item: Optional[E36VisualItem] = Field(
+        default=None,
+        description='P65 shows visual item (is shown by)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -835,7 +868,10 @@ class P101HadAGeneralUse(PropertyMixin):
 
     """
 
-    p101_had_a_general_use: Optional[str] = Field(default=None, description='P101 had as general use (was use of)')
+    p101_had_a_general_use: Optional[E55Type] = Field(
+        default=None,
+        description='P101 had as general use (was use of)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -877,7 +913,7 @@ class P109HasCurrentOrFormerCurator(PropertyMixin):
 
     """
 
-    p109_has_current_or_former_curator: Optional[str] = Field(
+    p109_has_current_or_former_curator: Optional[E39Actor] = Field(
         default=None,
         description='P109 has current or former curator (is current or former curator of)'
     )
@@ -920,7 +956,10 @@ class P103WasIntendedFor(PropertyMixin):
 
     """
 
-    p103_was_intended_for: Optional[str] = Field(default=None, description='P103 was intended for (was intention of)')
+    p103_was_intended_for: Optional[E55Type] = Field(
+        default=None,
+        description='P103 was intended for (was intention of)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -964,7 +1003,7 @@ class P128Carries(PropertyMixin):
 
     """
 
-    p128_carries: Optional[str] = Field(default=None, description='P128 carries (is carried by)')
+    p128_carries: Optional[E90SymbolicObject] = Field(default=None, description='P128 carries (is carried by)')
 
 
 # ******************************************************************************************************************* #
@@ -1023,7 +1062,7 @@ class P130ShowsFeaturesOf(PropertyMixin):
 
     """
 
-    p130_shows_features_of: Optional[str] = Field(
+    p130_shows_features_of: Optional[E70Thing] = Field(
         default=None,
         description='P130 shows features of (features are also found on)'
     )
@@ -1091,7 +1130,7 @@ class P156Occupies(PropertyMixin):
 
     """
 
-    p156_occupies: Optional[str] = Field(default=None, description='P156 occupies (is occupied by)')
+    p156_occupies: Optional[E53Place] = Field(default=None, description='P156 occupies (is occupied by)')
 
 
 # ******************************************************************************************************************* #
@@ -1142,7 +1181,7 @@ class P196Defines(PropertyMixin):
 
     """
 
-    p196_defines: Optional[str] = Field(default=None, description='P196 defines (is defined by)')
+    p196_defines: Optional[E92SpaceTimeVolume] = Field(default=None, description='P196 defines (is defined by)')
 
 
 # ******************************************************************************************************************* #
@@ -1193,4 +1232,4 @@ class PxxxHoldsOrSupports(PropertyMixin):
 
     """
 
-    p198_holds_or_supports: Optional[str] = Field(default=None, description='Pxxx holds or supports')
+    p198_holds_or_supports: Optional[E18PhysicalThing] = Field(default=None, description='Pxxx holds or supports')
