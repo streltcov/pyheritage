@@ -63,9 +63,43 @@ class E59PrimitiveValue(E1CRMEntity):
     """'E59 Primitive Value' CRM entity model;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E59
-    Contains no values and serves only as a base class for other primitive value models;
 
-    Attributes:
+    SubClass Of:
+        E1 CRM Entity
+    SuperClass Of:
+        E60 Number
+        E61 Time Primitive
+        E62 String
+        E94 Space Primitive
+        E95 Spacetime Primitive
+    Scope Note:
+        This class comprises values of primitive data types of programming languages or database management systems
+        and data types composed of such values used as documentation elements, as well as their mathematical
+        abstractions;
+
+        They are not considered as elements of the universe of discourse this model aims at defining and analysing.
+        Rather, they play the role of a symbolic interface between the scope of this model and the world of
+        mathematical and computational manipulations and the symbolic objects they define and handle;
+
+        In particular they comprise lexical forms encoded as "strings" or series of characters and symbols based
+        on encoding schemes (characterised by being a limited subset of the respective mathematical abstractions)
+        such as UNICODE and values of datatypes that can be encoded in a lexical form, including quantitative
+        specifications of time-spans and geometry. They have in common that instances of E59 Primitive Value define
+        themselves by virtue of their encoded value, regardless the nature of their mathematical abstractions;
+
+        Therefore they must not be represented in an implementation by a universal identifier associated with
+        a content model of different identity. In a concrete application, it is recommended that the primitive
+        value system from a chosen implementation platform and/or data definition language be used to substitute
+        for this class and its subclasses;
+
+    Examples:
+        - ABCDEFG (E62)
+        - 3.14 (E60)
+        - 0
+        - 1921-01-01 (E61)
+    In First Order Logic:
+        E59(x) ⊃ E1(x)
+    Properties:
         -
 
     """
@@ -79,10 +113,30 @@ class E60Number(E59PrimitiveValue):
     """'E60 Number' CRM entity model;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E60
-    Extends E59PrimitiveValue and contains a single numeric field;
 
-    Attributes:
-        value (str): numeric (int or float) value, default to 0;
+    SubClass Of:
+        E59 Primitive Value
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises any encoding of computable (algebraic) values such as integers, real numbers, complex
+        numbers, vectors, tensors etc., including intervals of these values to express limited precision;
+
+        Numbers are fundamentally distinct from numerically expressed identifiers in continua, which are instances of
+        E41 Appellation, such as Gregorian dates or spatial coordinates, even though their encoding may be similar.
+        Instances of E60 Number can be combined with each other in algebraic operations to yield other instances of
+        E60 Number, e.g., 1+1=2. Identifiers in continua may be combined with numbers expressing distances to yield
+        new identifiers, e.g., 1924-01-31 + 2 days = 1924-02-02. Cf. E54 Dimension;
+
+    Examples:
+        - 5
+        - 3+2i
+        - 1.5e-04
+        - (0.5, - 0.7,88)
+    In First Order Logic:
+        E60(x) ⊃ E59(x)
+    Properties:
+        -
 
     """
 
@@ -93,13 +147,23 @@ class E60Number(E59PrimitiveValue):
     @classmethod
     @field_validator("value")
     def must_be_finite(cls, value: float | int) -> float | int:
-        """Validation method for 'value' field;
-
-        """
+        """Validation method for 'value' field;"""
         if isinstance(value, float) and not math.isfinite(value):
             raise ValueError(f"E60 Number must be finite, got {value}")
 
         return value
+
+    # ------------------------------ #
+
+    def __int__(self) -> int:
+        """Converts value to integer type;"""
+        return int(self.value)
+
+    # ------------------------------ #
+
+    def __float__(self) -> float:
+        """Converts value to float type;"""
+        return float(self.value)
 
     # ------------------------------ #
 
@@ -115,7 +179,43 @@ class E61TimePrimitive(E59PrimitiveValue):
     """'E61 Primitive Value' CRM entity model;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E61
-    Extends E59PrimitiveValue and contains a single numeric field (defaults to 0);
+
+    SubClass Of:
+        E41 Appellation
+        E59 Primitive Value
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises instances of E59 Primitive Value for time that should be implemented with appropriate
+        validation, precision and references to temporal coordinate systems to express time in some context relevant
+        to cultural and scientific documentation;
+
+        Instantiating different instances of E61 Time Primitive relative to the same instance of E52 Time Span allows
+        for the expression of multiple opinions/approximations of the same phenomenon. When representing different
+        opinions/approximations of the E52 Time Span of some E2 Temporal Entity, multiple instances of
+        E61 Time Primitive should be instantiated relative to one E52 Time Span. Only one E52 Time Span should be
+        instantiated since there is only one real phenomenal time extent of any given temporal entity;
+
+        The instances of E61 Time Primitive are not considered as elements of the universe of discourse that the
+        CIDOC CRM aims at defining and analysing. Rather, they play the role of a symbolic interface between the
+        scope of this model and the world of mathematical and computational manipulations and the symbolic objects
+        they define and handle;
+
+        Therefore they must not be represented in an implementation by a universal identifier associated with
+        a content model of different identity. In a concrete application, it is recommended that the primitive
+        value system from a chosen implementation platform and/or data definition language be used to substitute
+        for this class;
+
+    Examples:
+        1994 – 1997
+        13 May 1768
+        2000/01/01 00:00:59.7
+        85th century BC
+    In First Order Logic:
+        E61(x) ⊃ E41(x)
+        E61(x) ⊃ E59(x)
+    Properties:
+        P170 defines time (time is defined by): E52 Time-Span
 
     """
 
@@ -615,14 +715,28 @@ class E62String(E59PrimitiveValue):
     """'E62 String' CRM entity model;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E62
-    Subclass of E59PrimitiveValue;
-    Contains a single field - string value - a sequence of characters with optional language label;
 
-    Language label allows to contain multilanguage values;
+    SubClass Of:
+        E59 Primitive Value
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises coherent sequences of binary-encoded symbols. They correspond to the content of an
+        instance of E90 Symbolic object. Instances of E62 String represent only the symbol sequence itself. They
+        may or may not contain a language code;
 
-    Attributes:
-        value (str)
-        language (str): optional language label;
+        In contrast, instances of other subclasses of E59 Primitive value represent entities in mathematical spaces
+        other than that of symbol sequences, by using binary-encoded symbols, such as date expressions or numbers
+        in decimal encoding. For instance, different syntactic forms of a date expression may represent the same date
+        but consist of different strings;
+
+    Examples:
+        - the Quick Brown Fox Jumps Over the Lazy Dog
+        - 6F 6E 54 79 70 31 0D 9E
+    In First Order Logic:
+        E62(x) ⊃ E59(x)
+    Properties:
+        -
 
     """
 
@@ -669,12 +783,44 @@ class E94SpacePrimitive(E59PrimitiveValue):
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E94
 
-    Spatial primitive - a machine-readable definition of a location or area;
-    Supports two input formats - WKT and GeoJSON;
+    SubClass Of:
+        E41 Appellation
+        E59 Primitive Value
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises instances of E59 Primitive Value for space that should be implemented with appropriate
+        validation, precision and references to spatial coordinate systems to express geometries on or relative to
+        Earth, or on any other stable constellations of matter, relevant to cultural and scientific documentation;
 
-    Attributes:
-        value (str): geometry;
-        srs (str): optional EPSG code for spatial reference system;
+        An instance of E94 Space Primitive defines an instance of E53 Place in the sense of a declarative place as
+        elaborated in CRMgeo (Doerr and Hiebel 2013), which means that the identity of the place is derived from its
+        geometric definition. Such a declarative place may allow for the approximation of instances of E53 Place
+        defined by the actual extent of some phenomenon, such as a settlement or a riverbed, or other forms of
+        identification rather than by an instance of E94 Space Primitive. Note that using an instance of
+        E94 Space Primitive for approximating the actual extent of some place always defines a (declarative) instance
+        of E53 Place in its own right;
+
+        Definitions of instances of E53 Place using different spatial reference systems are always definitions of
+        different instances of E53 Place;
+
+        Instances of E94 Space Primitive provide the ability to link CIDOC CRM encoded data to the kinds of geometries
+        used in maps or Geoinformation systems. They may be used for visualization of the instances of E53 Place they
+        define, in their geographic context and for computing topological relations between places based on these
+        geometries. E94 Space Primitive is not further elaborated upon within this model. It is considered good
+        practice to maintain compatibility with OGC standards;
+
+    Examples:
+        - Coordinate Information in GML like <gml:Point gml:id="p21"
+          srsName="http://www.opengis.net/def/crs/EPSG/0/4326"> <gml:coordinates>45.67, 88.56</gml:coordinates>
+          </gml:Point>
+        - Coordinate Information in lat, long 48,2 13,3
+        - Well Known Text like POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))
+    In First Order Logic:
+        E94(x) ⊃ E41(x)
+        E94(x) ⊃ E59(x)
+    Properties:
+        -
 
     """
 
@@ -1070,9 +1216,55 @@ class E95SpaceTimePrimitive(E59PrimitiveValue):
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E95
 
-    Attributes:
-        spatial (E94SpacePrimitive): spatial component (E94SpacePrimitive entity model);
-        temporal (E61TimePrimitive): temporl component (E61TimePrimitive entity model);
+    SubClass Of:
+        E41 Appellation
+        E59 Primitive Value
+    SuperClass Of:
+        -
+    Scope Note:
+        This class comprises instances of E59 Primitive Value for spacetime volumes that should be implemented with
+        appropriate validation, precision and reference systems to express geometries being limited and varying over
+        time on or relative to Earth, or any other stable constellations of matter, relevant to cultural and
+        scientific documentation. An instance of E95 Spacetime Primitive may consist of one expression including
+        temporal and spatial information such as in GML or a different form of expressing spacetime in an integrated
+        way such as a formula containing all 4 dimensions;
+
+        An instance of E95 Spacetime Primitive defines an instance of E92 Spacetime Volume in the sense of
+        a declarative spacetime volume as defined in CRMgeo (Doerr & Hiebel 2013), which means that the identity of
+        the instance of E92 Spacetime Volume is derived from its geometric and temporal definition. This declarative
+        spacetime volume allows for the application of all E92 Spacetime Volume properties to relate phenomenal
+        spacetime volumes of periods and physical things to propositions about their spatial and temporal extents;
+
+        Instances of E92 Spacetime Volume defined by P169 that use different spatiotemporal referring systems are
+        always regarded as different instances of the E92 Spacetime Volume;
+
+        It is possible for a spacetime volume to be defined by phenomena causal to it, such as an expanding and
+        declining realm, a settlement structure or a battle, or other forms of identification rather than by an
+        instance of E95 Spacetime Primitive. Any spatiotemporal approximation of such a phenomenon by an instance
+        of E95 Spacetime Primitive constitutes an instance of E92 Spacetime Volume in its own right;
+
+        E95 Spacetime Primitive is not further elaborated upon within this model. Compatibility with OGC standards
+        are recommended;
+
+    Examples:
+        - Spatial and temporal information in KML for the maximum extent of the Byzantine Empire
+            <Placemark>
+                <name> Byzantine Empire </name>
+                <styleUrl>#style_1</styleUrl>
+                <TimeSpan>
+                    <begin>330</begin>
+                    <end>1453</end>
+                </TimeSpan>
+                <Polygon><altitudeMode>clampToGround</altitudeMode><outerBoundaryIs><LinearRing>
+                    <coordinates>18.452787460,40.85553626,0 17.2223187,40.589098,........0 17.2223,39.783
+                    </coordinates>
+                </Polygon>
+            </Placemark>
+    In First Order Logic:
+        E95(x) ⊃ E41(x)
+        E95(x) ⊃ E59(x)
+    Properties:
+        P169 defines spacetime volume (spacetime volume is defined by): E92 Spacetime Volume
 
     """
 
