@@ -388,6 +388,10 @@ class E61TimePrimitive(E59PrimitiveValue):
         if isinstance(other, E61TimePrimitive):
             return self.sort_key == other.sort_key
 
+        if isinstance(other, str):
+            other = E61TimePrimitive(value=other)
+            return self.sort_key == other.sort_key
+
         return NotImplemented
 
     # ------------------------------ #
@@ -401,6 +405,10 @@ class E61TimePrimitive(E59PrimitiveValue):
 
         """
         if isinstance(other, E61TimePrimitive):
+            return self.sort_key < other.sort_key
+
+        if isinstance(other, str):
+            other = E61TimePrimitive(value=other)
             return self.sort_key < other.sort_key
 
         return NotImplemented
@@ -418,6 +426,10 @@ class E61TimePrimitive(E59PrimitiveValue):
         if isinstance(other, E61TimePrimitive):
             return self == other or self < other
 
+        if isinstance(other, str):
+            other = E61TimePrimitive(value=other)
+            return self == other or self < other
+
         return NotImplemented
 
     # ------------------------------ #
@@ -433,6 +445,10 @@ class E61TimePrimitive(E59PrimitiveValue):
         if isinstance(other, E61TimePrimitive):
             return self.sort_key > other.sort_key
 
+        if isinstance(other, str):
+            other = E61TimePrimitive(value=other)
+            return self.sort_key > other.sort_key
+
         return NotImplemented
 
     # ------------------------------ #
@@ -446,6 +462,10 @@ class E61TimePrimitive(E59PrimitiveValue):
 
         """
         if isinstance(other, E61TimePrimitive):
+            return self == other or self > other
+
+        if isinstance(other, str):
+            other = E61TimePrimitive(value=other)
             return self == other or self > other
 
         return NotImplemented
