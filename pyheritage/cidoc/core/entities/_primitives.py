@@ -728,7 +728,7 @@ class E94SpacePrimitive(E59PrimitiveValue):
                 ) from e
 
         raise ValueError(
-            f"Spatial value must be WKT or GeoJSON. "
+            f"Spatial value must be WKT or GeoJSON"
             f"Got: {value_stripped[:80]}..."
         )
 
@@ -894,6 +894,135 @@ class E94SpacePrimitive(E59PrimitiveValue):
             return self._geometry.bounds
 
         return None
+
+    # ------------------------------ #
+
+    @classmethod
+    def from_lat_lon(cls, latitude: float, longitude: float, altitude: float = None,
+                     srs: str = "EPSG:4326") -> E94SpacePrimitive:
+        """Factory method - creates E94 Space Primitive from lat/lon;
+
+        Args:
+            latitude (float): point latitude;
+            longitude (float): point longitude;
+            altitude (float): point altitude (optional);
+            srs (str): EPSG code for spatial reference system;
+
+        Returns:
+            E94SpacePrimitive object;
+
+        """
+        value = f"POINT({longitude} {latitude})" if not altitude else f"POINT({longitude} {latitude} {altitude})"
+
+        return cls(value=value, srs=srs)
+
+    # ------------------------------ #
+
+    @classmethod
+    def from_bbox(cls, min_lon: float, min_lat: float, max_lon: float, max_lat: float,
+                  srs: str = "EPSG:4326") -> E94SpacePrimitive:
+        """Factory method - creates E94 Space Primitive from bounding box;
+
+        Args:
+            min_lon (float): minimal bounding box longitude;
+            min_lat (float): minimal bounding box latitude;
+            max_lon (float): maximal bounding box longitude;
+            max_lat (float): maximal bounding box latitude;
+            srs (str): EPSG code for spatial reference system;
+
+        Returns:
+            E94SpacePrimitive object;
+
+        """
+        wkt = (f"POLYGON(({min_lon} {min_lat}, {max_lon} {min_lat}, "
+               f"{max_lon} {max_lat}, {min_lon} {max_lat}, "
+               f"{min_lon} {min_lat}))")
+
+        return cls(value=wkt, srs=srs)
+
+    # ------------------------------ #
+
+    @classmethod
+    def from_geojson(cls, geojson: dict, srs: str = "EPSG:4326") -> E94SpacePrimitive:
+        """Factory method - creates E94 Space Primitive entity from GeoJSON;
+
+        Args:
+            geojson (dict): GeoJSON;
+            srs (str): EPSG code for spatial reference system;
+
+        Returns:
+            E94SpacePrimitive object;
+
+        """
+        return cls(value=json.dumps(geojson, ensure_ascii=False), srs=srs)
+
+    # ------------------------------ #
+
+    @classmethod
+    def from_polygon(cls,
+                     exterior: list[tuple[float, float]],
+                     holes: Optional[list[list[tuple[float, float]]]] = None,
+                     srs: str = "EPSG:4326") -> E94SpacePrimitive:
+        """Creates E94 Space Primitive from polygon (list of coordinates);
+
+        Args:
+            exterior (list): the outer ring [(lon, lat), ...]; must be closed (first point = last point);
+            holes (list): internal rings (holes), (optional);
+            srs (str): EPSG code for spatial reference system;
+
+        Examples:
+            E94_Space_Primitive.from_polygon([
+                (30.4, 31.3), (30.5, 31.3),
+                (30.5, 31.4), (30.4, 31.4),
+                (30.4, 31.3),
+            ])
+
+        """
+        polygon = geometry.Polygon(exterior, holes or [])
+
+        return cls(value=polygon.wkt, srs=srs)
+
+    # ------------------------------ #
+
+    @classmethod
+    def from_linestring(cls, coordinates: list[tuple[float, float]], srs: str = "EPSG:4326") -> E94SpacePrimitive:
+        """Creates E94 Space Primitive from linestring;
+
+        Args:
+            coordinates: [(lon, lat), ...] — must contain at least 2 points;
+            srs (str): EPSG code for spatial reference system;
+
+        Examples:
+            # Mona Lisa way: Florence -> Амбуаз -> Paris
+            E94SpacePrimitive.from_linestring([
+                (11.26, 43.77),  # Florence
+                (0.98, 47.41),   # Amboise
+                (2.34, 48.86),   # Paris
+            ])
+
+        Returns:
+            E94SpacePrimitive object;
+
+        """
+        line = geometry.LineString(coordinates)
+
+        return cls(value=line.wkt, srs=srs)
+
+    # ------------------------------ #
+
+    @classmethod
+    def from_geometry(cls, geom: geometry, srs: str = "EPSG:4326") -> E94SpacePrimitive:
+        """Creates E94 Space Primitive from pygeoif object (or Shapely via __geo_interface__);
+
+        Args:
+            geom: any object with .wkt attribute or implementing __geo_interface__;
+            srs (str): EPSG code for spatial reference system;
+
+        Returns:
+            E94SpacePrimitive object;
+
+        """
+        return cls(value=geom.wkt, srs=srs)
 
     # ------------------------------ #
 
