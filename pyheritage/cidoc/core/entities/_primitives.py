@@ -138,11 +138,11 @@ class E61TimePrimitive(E59PrimitiveValue):
 
         try:
             parse_edtf(value)
-        except EDTFParseException:
+        except EDTFParseException as e:
             raise ValueError(
-                f"Invalid EDTF value: '{value}'. "
+                f"Invalid EDTF value: '{value}'"
                 f"See https://www.loc.gov/standards/datetime/"
-            )
+            ) from e
         return value
 
     # ------------------------------ #
@@ -153,7 +153,7 @@ class E61TimePrimitive(E59PrimitiveValue):
         """
         if self.value:
             try:
-                object.__setattr__(self, '_parsed', parse_edtf(self.value))
+                object.__setattr__(self, '_parsed', parse_edtf(self.value.upper()))
             except EDTFParseException as e:
                 raise ValueError(
                     f"Invalid EDTF value: {self.value}",
