@@ -35,7 +35,7 @@ from pygeoif import from_wkt, geometry, shape
 
 from pyheritage.cidoc.core.base import entity_register
 from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
-from pyheritage.cidoc.core.enums import TimePrecision
+from pyheritage.cidoc.core.enums import SpatialFormat, TimePrecision
 
 
 __all__ = ('E59PrimitiveValue', 'E60Number', 'E61TimePrimitive', 'E62String', 'E94SpacePrimitive',
@@ -45,6 +45,12 @@ __all__ = ('E59PrimitiveValue', 'E60Number', 'E61TimePrimitive', 'E62String', 'E
 _WKT_PREFIX = re.compile(
     r"^\s*(POINT|LINESTRING|POLYGON|MULTIPOINT|MULTILINESTRING|"
     r"MULTIPOLYGON|GEOMETRYCOLLECTION)\s*[\(Z]",
+    re.IGNORECASE,
+)
+
+_WKT_TYPES = re.compile(
+    r"^\s*(POINT|LINESTRING|POLYGON|MULTIPOINT|MULTILINESTRING|"
+    r"MULTIPOLYGON|GEOMETRYCOLLECTION)\s*\(",
     re.IGNORECASE,
 )
 
@@ -768,6 +774,36 @@ class E94SpacePrimitive(E59PrimitiveValue):
     # ------------------------------ #
 
     @property
+    def is_empty(self) -> bool:
+        """Whether geometry is empty;"""
+        if self._geometry is None:
+            return True
+
+        return not (bool(self.value and self.value.strip()))
+
+    # ------------------------------ #
+
+    @property
+    def format(self) -> SpatialFormat:
+        """Defines spatial format: 'WKT', 'GeopJSON' or 'Unknown';
+
+        """
+        if not self.value:
+            return SpatialFormat.UNKNOWN
+
+        value = self.value.strip()
+
+        if _WKT_TYPES.match(value):
+            return SpatialFormat.WKT
+
+        if value.startswith("{"):
+            return SpatialFormat.GEOJSON
+
+        return SpatialFormat.UNKNOWN
+
+    # ------------------------------ #
+
+    @property
     def geometry_type(self) -> Optional[str]:
         """Type of geometry: Point, LineString, Polygon, etc;
 
@@ -796,6 +832,33 @@ class E94SpacePrimitive(E59PrimitiveValue):
             return tuple(self._geometry.coords[0])
 
         return None
+
+    # ------------------------------ #
+
+    @property
+    def longitude(self) -> Optional[float]:
+        """Longitude for a Point geometry;"""
+        coordinates = self.coordinates
+
+        return coordinates[0] if coordinates else None
+
+    # ------------------------------ #
+
+    @property
+    def latitude(self) -> Optional[float]:
+        """Latitude for a Point geometry;"""
+        coordinates = self.coordinates
+
+        return coordinates[1] if coordinates else None
+
+    # ------------------------------ #
+
+    @property
+    def altitude(self) -> Optional[float]:
+        """Altitude for a Point geometry (if altitude is set);"""
+        coordinates = self.coordinates
+
+        return coordinates[1] if coordinates else None
 
     # ------------------------------ #
 
