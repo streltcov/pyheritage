@@ -825,7 +825,7 @@ class E94SpacePrimitive(E59PrimitiveValue):
     """
 
     value: str = Field(default='')
-    srs: str = Field(default='ESPG:4326', description='Spatial Reference System (EPSG Code)')
+    srs: str = Field(default='EPSG:4326', description='Spatial Reference System (EPSG Code)')
     _geometry: Optional[Any] = PrivateAttr(default=None)
 
     # ------------------------------ #
