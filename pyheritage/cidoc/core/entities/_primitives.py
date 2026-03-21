@@ -145,14 +145,22 @@ class E60Number(E59PrimitiveValue):
 
     # ------------------------------ #
 
-    @classmethod
     @field_validator("value")
+    @classmethod
     def must_be_finite(cls, value: float | int) -> float | int:
         """Validation method for 'value' field;"""
         if isinstance(value, float) and not math.isfinite(value):
             raise ValueError(f"E60 Number must be finite, got {value}")
 
         return value
+
+    # ------------------------------ #
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, E60Number):
+            return self.value == other.value
+
+        return NotImplemented
 
     # ------------------------------ #
 
