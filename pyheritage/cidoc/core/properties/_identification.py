@@ -25,7 +25,7 @@ P190 has symbolic content          E90 -> E62
 
 from __future__ import annotations
 
-from typing import Optional, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING
 
 from pydantic import Field
 
@@ -83,8 +83,10 @@ class P1IsIdentifiedBy(PropertyMixin):
 
     """
 
-    p1_is_identified_by: Optional[E41Appellation] = Field(default=None, description='P1 is identified by'
-                                                                                    ' (identifies)')
+    p1_is_identified_by: Optional[List[E41Appellation]] = Field(
+        default=None,
+        description='P1 is identified by (identifies)'
+    )
 
 
 # ******************************************************************************************************************* #

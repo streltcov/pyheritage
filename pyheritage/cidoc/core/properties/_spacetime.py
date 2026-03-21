@@ -44,7 +44,7 @@ P197 covered parts of              E93 -> E53
 
 from __future__ import annotations
 
-from typing import Optional, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING
 
 from pydantic import Field
 
@@ -190,7 +190,7 @@ class P81OngoingThroughout(PropertyMixin):
 
     """
 
-    p81_ongoing_throughout: Optional[CoercedTime] = Field(default=None, description='P81 ongoing throughout')
+    p81_ongoing_throughout: CoercedTime = Field(default=None, description='P81 ongoing throughout')
 
 
 # ******************************************************************************************************************* #
@@ -228,7 +228,7 @@ class P82AtSomeTimeWithin(PropertyMixin):
 
     """
 
-    p82_at_some_time_within: Optional[CoercedTime] = Field(default=None, description='P82 at some time within')
+    p82_at_some_time_within: CoercedTime = Field(default=None, description='P82 at some time within')
 
 
 # ******************************************************************************************************************* #
@@ -268,7 +268,7 @@ class P86FallsWithin(PropertyMixin):
 
     """
 
-    p86_falls_within: Optional[E52TimeSpan] = Field(default=None, description='P86 falls within')
+    p86_falls_within: Optional[List[E52TimeSpan]] = Field(default=None, description='P86 falls within')
 
 
 # ******************************************************************************************************************* #
@@ -310,7 +310,7 @@ class P89FallsWithin(PropertyMixin):
 
     """
 
-    p89_falls_within: Optional[E53Place] = Field(default=None, description='P89 falls within (contains)')
+    p89_falls_within: Optional[List[E53Place]] = Field(default=None, description='P89 falls within (contains)')
 
 
 # ******************************************************************************************************************* #
@@ -345,7 +345,7 @@ class P90HasValue(PropertyMixin):
 
     """
 
-    p90_has_value: Optional[CoercedNumber] = Field(default=None, description='P90 has value')
+    p90_has_value: CoercedNumber = Field(default=None, description='P90 has value')
 
 
 # ******************************************************************************************************************* #
@@ -380,7 +380,7 @@ class P91HasUnit(PropertyMixin):
 
     """
 
-    p91_has_unit: Optional[E58MeasurementUnit] = Field(default=None, description='P91 has unit')
+    p91_has_unit: E58MeasurementUnit = Field(default=None, description='P91 has unit')
 
 
 # ******************************************************************************************************************* #
@@ -422,7 +422,7 @@ class P121OverlapsWith(PropertyMixin):
 
     """
 
-    p121_overlaps_with: Optional[E53Place] = Field(default=None, description='P121 overlaps with')
+    p121_overlaps_with: Optional[List[E53Place]] = Field(default=None, description='P121 overlaps with')
 
 
 # ******************************************************************************************************************* #
@@ -463,7 +463,7 @@ class P122BordersWith(PropertyMixin):
 
     """
 
-    p122_borders_with: Optional[E53Place] = Field(default=None, description='P122 borders with')
+    p122_borders_with: Optional[List[E53Place]] = Field(default=None, description='P122 borders with')
 
 
 # ******************************************************************************************************************* #
@@ -510,7 +510,7 @@ class P132SpatiotemporallyOverlaps(PropertyMixin):
 
     """
 
-    p132_spatiotemporally_overlaps: Optional[E92SpaceTimeVolume] = Field(
+    p132_spatiotemporally_overlaps: Optional[List[E92SpaceTimeVolume]] = Field(
         default=None,
         description='P132 spatiotemporally overlaps with'
     )
@@ -565,7 +565,7 @@ class P133IsSpatiotemporallySeparated(PropertyMixin):
 
     """
 
-    p133_is_spatiotemporally_separated: Optional[E92SpaceTimeVolume] = Field(
+    p133_is_spatiotemporally_separated: Optional[List[E92SpaceTimeVolume]] = Field(
         default=None,
         description='P133 is spatiotemporally separated from'
     )
@@ -612,8 +612,7 @@ class P157IsAtRestRelativeTo(PropertyMixin):
 
     """
 
-    p157_is_at_rest_relative_to: Optional[E18PhysicalThing] = Field(
-        default=None,
+    p157_is_at_rest_relative_to: List[E18PhysicalThing] = Field(
         description='P157 is at rest relative to (provides reference space for)'
     )
 
@@ -657,7 +656,7 @@ class P160HasTemporalProjection(PropertyMixin):
     """
 
     p160_has_temporal_projection: Optional[E52TimeSpan] = Field(
-        default=None,
+        min_length=1,
         description='P160 has temporal projection (is temporal projection of)'
     )
 
@@ -718,8 +717,8 @@ class P161HasSpatialProjection(PropertyMixin):
 
     """
 
-    p161_has_spatial_projection: Optional[E53Place] = Field(
-        default=None,
+    p161_has_spatial_projection: List[E53Place] = Field(
+        min_length=1,
         description='P161 has spatial projection (is spatial projection of)'
     )
 

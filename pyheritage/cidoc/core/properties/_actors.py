@@ -20,9 +20,9 @@ P152 has parent                       E21 -> E21
 
 from __future__ import annotations
 
-from typing import Optional, TYPE_CHECKING
+from typing import Any, List, Optional, TYPE_CHECKING
 
-from pydantic import Field
+from pydantic import Field, field_validator
 
 from pyheritage.cidoc.core.base import PropertyMixin
 
@@ -67,7 +67,7 @@ class P74HasCurrentOrFormerResidence(PropertyMixin):
 
     """
 
-    p74_has_current_of_former_residence: Optional[E53Place] = Field(
+    p74_has_current_of_former_residence: Optional[List[E53Place]] = Field(
         default=None,
         description='P74 has current or former residence (is current or former residence of)'
     )
@@ -106,7 +106,7 @@ class P75Possesses(PropertyMixin):
 
     """
 
-    p75_possesses: Optional[E30Right] = Field(default=None, description='P75 possesses (is possessed by)')
+    p75_possesses: Optional[List[E30Right]] = Field(default=None, description='P75 possesses (is possessed by)')
 
 
 # ******************************************************************************************************************* #
@@ -142,8 +142,10 @@ class P76HasContactPoint(PropertyMixin):
 
     """
 
-    p76_has_contact_point: Optional[E41Appellation] = Field(default=None, description='P76 has contact point'
-                                                                           ' (provides access to)')
+    p76_has_contact_point: Optional[List[E41Appellation]] = Field(
+        default=None,
+        description='P76 has contact point (provides access to)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -192,7 +194,7 @@ class P107HasCurrentOrFormerMember(PropertyMixin):
 
     """
 
-    p107_has_current_or_former_member: Optional[E39Actor] = Field(
+    p107_has_current_or_former_member: Optional[List[E39Actor]] = Field(
         default=None,
         description='P107 has current or former member (is current or former member of)'
     )
@@ -239,4 +241,22 @@ class P152HasParent(PropertyMixin):
 
     """
 
-    p152_has_parent: Optional[E21Person] = Field(default=None, description='P152 has parent (is parent of)')
+    p152_has_parent: List[E21Person] = Field(min_length=2, description='P152 has parent (is parent of)')
+
+    # ------------------------- #
+
+    @classmethod
+    @field_validator('p152_has_parent', mode='before')
+    def ensure_minimum_parents(cls, value: Any) -> Any:
+        """Ensure at least 2 parents are provided;
+
+        CIDOC CRM requires at least two parents to be provided ((2,n:0,n) in property quantification);
+
+        """
+        if value is None:
+            raise ValueError('P152 has parent: at least two parents must be provided!')
+
+        if isinstance(value, list) and len(value) < 2:
+            raise ValueError('P152 has parent: at least two parents must be provided!')
+
+        return value

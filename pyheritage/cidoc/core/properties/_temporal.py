@@ -88,7 +88,7 @@ P186 produced thing of product type E12 -> E99
 
 from __future__ import annotations
 
-from typing import Optional, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING
 
 from pydantic import Field
 
@@ -276,7 +276,7 @@ class P7TookPlaceAt(PropertyMixin):
 
     """
 
-    p7_took_place_at: Optional[E53Place] = Field(default=None, description='P7 took place at (witnessed)')
+    p7_took_place_at: List[E53Place] = Field(default=None, description='P7 took place at (witnessed)')
 
 
 # ******************************************************************************************************************* #
@@ -322,7 +322,7 @@ class P8TookPlaceOnOrWithin(PropertyMixin):
 
     """
 
-    p8_took_place_on_or_within: Optional[E18PhysicalThing] = Field(
+    p8_took_place_on_or_within: Optional[List[E18PhysicalThing]] = Field(
         default=None,
         description='P8 took place on or within (witnessed)'
     )
@@ -406,7 +406,10 @@ class P10FallsWithin(PropertyMixin):
 
     """
 
-    p10_falls_within: Optional[E92SpaceTimeVolume] = Field(default=None, description='P10 falls within (contains)')
+    p10_falls_within: Optional[List[E92SpaceTimeVolume]] = Field(
+        default=None,
+        description='P10 falls within (contains)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -461,7 +464,10 @@ class P11HadParticipant(PropertyMixin):
 
     """
 
-    p11_had_participant: Optional[E39Actor] = Field(default=None, description='P11 had participant (participated in)')
+    p11_had_participant: Optional[List[E39Actor]] = Field(
+        default=None,
+        description='P11 had participant (participated in)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -513,7 +519,7 @@ class P12OccurredInPresenceOf(PropertyMixin):
 
     """
 
-    p12_occurred_in_presence_of: Optional[E77PersistentItem] = Field(
+    p12_occurred_in_presence_of: List[E77PersistentItem] = Field(
         default=None,
         description='P12 occurred in presence of (was present at)'
     )
@@ -558,7 +564,7 @@ class P13Destroyed(PropertyMixin):
 
     """
 
-    p13_destroyed: Optional[E18PhysicalThing] = Field(default=None, description='P13 destroyed (was destroyed by)')
+    p13_destroyed: E18PhysicalThing = Field(default=None, description='P13 destroyed (was destroyed by)')
 
 
 # ******************************************************************************************************************* #
@@ -603,7 +609,7 @@ class P14CarriedOutBy(PropertyMixin):
 
     """
 
-    p14_carried_out_by: Optional[E39Actor] = Field(default=None, description='P14 carried out by (performed)')
+    p14_carried_out_by: List[E39Actor] = Field(default=None, description='P14 carried out by (performed)')
 
 
 # ******************************************************************************************************************* #
@@ -644,7 +650,7 @@ class P15WasInfluencedBy(PropertyMixin):
 
     """
 
-    p15_was_influenced_by: Optional[E1CRMEntity] = Field(
+    p15_was_influenced_by: Optional[List[E1CRMEntity]] = Field(
         default=None,
         description='P15 was influenced by (influenced)'
     )
@@ -702,7 +708,7 @@ class P16UsedSpecificObject(PropertyMixin):
 
     """
 
-    p16_used_specific_object: Optional[E70Thing] = Field(
+    p16_used_specific_object: Optional[List[E70Thing]] = Field(
         default=None,
         description='P16 used specific object (was used for)'
     )
@@ -746,7 +752,10 @@ class P17WasMotivatedBy(PropertyMixin):
 
     """
 
-    p17_was_motivated_by: Optional[E1CRMEntity] = Field(default=None, description='P17 was motivated by (motivated)')
+    p17_was_motivated_by: Optional[List[E1CRMEntity]] = Field(
+        default=None,
+        description='P17 was motivated by (motivated)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -789,7 +798,7 @@ class P19WasIntendedUseOf(PropertyMixin):
 
     """
 
-    p19_was_intended_use_of: Optional[E71HumanMadeThing] = Field(
+    p19_was_intended_use_of: Optional[List[E71HumanMadeThing]] = Field(
         default=None,
         description='P19 was intended of (was made for)'
     )
@@ -836,7 +845,7 @@ class P20HadSpecificPurpose(PropertyMixin):
 
     """
 
-    p20_had_specific_purpose: Optional[E5Event] = Field(
+    p20_had_specific_purpose: Optional[List[E5Event]] = Field(
         default=None,
         description='P20 had specific purpose (was purpose of)'
     )
@@ -880,7 +889,7 @@ class P21HadGeneralPurpose(PropertyMixin):
 
     """
 
-    p21_had_general_purpose: Optional[E55Type] = Field(
+    p21_had_general_purpose: Optional[List[E55Type]] = Field(
         default=None,
         description='P21 had general purpose (was purpose of)'
     )
@@ -927,7 +936,7 @@ class P22TransferredTitleTo(PropertyMixin):
 
     """
 
-    p22_transferred_title_to: Optional[E39Actor] = Field(
+    p22_transferred_title_to: Optional[List[E39Actor]] = Field(
         default=None,
         description='P22 transferred title to (acquired title through)'
     )
@@ -971,7 +980,7 @@ class P23TransferredTitleFrom(PropertyMixin):
 
     """
 
-    p23_transferred_title_from: Optional[E39Actor] = Field(
+    p23_transferred_title_from: Optional[List[E39Actor]] = Field(
         default=None,
         description='P23 transferred title from (surrendered title through)'
     )
@@ -1012,7 +1021,7 @@ class P24TransferredTitleOf(PropertyMixin):
 
     """
 
-    p24_transferred_title_of: Optional[E18PhysicalThing] = Field(
+    p24_transferred_title_of: List[E18PhysicalThing] = Field(
         default=None,
         description='P24 transferred title of (changed ownership through)'
     )
@@ -1055,7 +1064,7 @@ class P25Moved(PropertyMixin):
 
     """
 
-    p25_moved: Optional[E19PhysicalObject] = Field(default=None, description='P25 moved (moved by)')
+    p25_moved: List[E19PhysicalObject] = Field(default=None, description='P25 moved (moved by)')
 
 
 # ******************************************************************************************************************* #
@@ -1099,7 +1108,7 @@ class P26MovedTo(PropertyMixin):
 
     """
 
-    p26_moved_to: Optional[E53Place] = Field(derfault=None, description='P26 moved to (was destination of)')
+    p26_moved_to: List[E53Place] = Field(derfault=None, description='P26 moved to (was destination of)')
 
 
 # ******************************************************************************************************************* #
@@ -1143,7 +1152,7 @@ class P27MovedFrom(PropertyMixin):
 
     """
 
-    P27_moved_from: Optional[E53Place] = Field(default=None, description='P27 moved from (was origin of)')
+    P27_moved_from: List[E53Place] = Field(default=None, description='P27 moved from (was origin of)')
 
 
 # ******************************************************************************************************************* #
@@ -1187,7 +1196,7 @@ class P28CustodySurrenderedBy(PropertyMixin):
 
     """
 
-    p28_custody_surrendered_by: Optional[E39Actor] = Field(
+    p28_custody_surrendered_by: Optional[List[E39Actor]] = Field(
         default=None,
         description='P28 custody surrendered by (surrendered custody through)'
     )
@@ -1234,7 +1243,7 @@ class P29CustodyReceivedBy(PropertyMixin):
 
     """
 
-    p29_custody_received_by: Optional[E39Actor] = Field(
+    p29_custody_received_by: Optional[List[E39Actor]] = Field(
         default=None,
         description='P29 custody received by (received custody through)'
     )
@@ -1278,7 +1287,7 @@ class P30TransferredCustodyOf(PropertyMixin):
 
     """
 
-    p30_transferred_custody_of: Optional[E18PhysicalThing] = Field(
+    p30_transferred_custody_of: List[E18PhysicalThing] = Field(
         default=None,
         description='P30 transferred custody of (custody transferred through)'
     )
@@ -1320,7 +1329,7 @@ class P31HasModified(PropertyMixin):
 
     """
 
-    p31_has_modified: Optional[E18PhysicalThing] = Field(
+    p31_has_modified: List[E18PhysicalThing] = Field(
         default=None,
         description='P31 has modified (was modified by)'
     )
@@ -1365,7 +1374,7 @@ class P32UsedGeneralTechnique(PropertyMixin):
 
     """
 
-    p32_used_general_technique: Optional[E55Type] = Field(
+    p32_used_general_technique: Optional[List[E55Type]] = Field(
         default=None,
         description='P32 used general technique (was technique of)'
     )
@@ -1413,7 +1422,7 @@ class P33UsedSpecificTechnique(PropertyMixin):
 
     """
 
-    p33_used_specific_technique: Optional[E29DesignOrProcedure] = Field(
+    p33_used_specific_technique: Optional[List[E29DesignOrProcedure]] = Field(
         default=None,
         description='P33 used specific technique (was used by)'
     )
@@ -1456,7 +1465,7 @@ class P34Concerned(PropertyMixin):
 
     """
 
-    p34_concerned: Optional[E18PhysicalThing] = Field(
+    p34_concerned: List[E18PhysicalThing] = Field(
         default=None,
         description='P34 concerned (was assessed by)'
     )
@@ -1497,7 +1506,7 @@ class P35Identified(PropertyMixin):
 
     """
 
-    p35_identified: Optional[E3ConditionState] = Field(
+    p35_identified: List[E3ConditionState] = Field(
         default=None,
         description='P35 has identified (was identified by)'
     )
@@ -1540,7 +1549,7 @@ class P37Assigned(PropertyMixin):
 
     """
 
-    p37_assigned: Optional[E42Identifier] = Field(default=None, description='P37 assigned (was assigned by)')
+    p37_assigned: Optional[List[E42Identifier]] = Field(default=None, description='P37 assigned (was assigned by)')
 
 
 # ******************************************************************************************************************* #
@@ -1581,7 +1590,10 @@ class P38Deassigned(PropertyMixin):
 
     """
 
-    p38_deassigned: Optional[E42Identifier] = Field(default=None, description='P38 deassigned (was deassigned by)')
+    p38_deassigned: Optional[List[E42Identifier]] = Field(
+        default=None,
+        description='P38 deassigned (was deassigned by)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -1619,7 +1631,7 @@ class P39Measured(PropertyMixin):
 
     """
 
-    p39_measured: Optional[E1CRMEntity] = Field(default=None, description='P39 measured (was measured by)')
+    p39_measured: List[E1CRMEntity] = Field(default_factory=list, description='P39 measured (was measured by)')
 
 
 # ******************************************************************************************************************* #
@@ -1665,8 +1677,8 @@ class P40ObservedDimension(PropertyMixin):
 
     """
 
-    p40_observed_dimension: Optional[E54Dimension] = Field(
-        default=None,
+    p40_observed_dimension: List[E54Dimension] = Field(
+        default_factory=list,
         description='P40 observed dimension (was observed in)'
     )
 
@@ -1709,7 +1721,7 @@ class P41Classified(PropertyMixin):
 
     """
 
-    P41_classified: Optional[E1CRMEntity] = Field(default=None, description='P41 classified (was classified by)')
+    P41_classified: E1CRMEntity = Field(default=None, description='P41 classified (was classified by)')
 
 
 # ******************************************************************************************************************* #
@@ -1754,7 +1766,7 @@ class P42Assigned(PropertyMixin):
 
     """
 
-    p42_assigned: Optional[E55Type] = Field(default=None, description='P42 assigned (was assigned by)')
+    p42_assigned: List[E55Type] = Field(default_factory=list, description='P42 assigned (was assigned by)')
 
 
 # ******************************************************************************************************************* #
@@ -1798,7 +1810,7 @@ class P92BroughtIntoExistence(PropertyMixin):
 
     """
 
-    p92_brought_into_existence: Optional[E77PersistentItem] = Field(
+    p92_brought_into_existence: E77PersistentItem = Field(
         default=None,
         description='P92 brought into existence (was brought into existence by)'
     )
@@ -1850,7 +1862,7 @@ class P93TookOutOfExistence(PropertyMixin):
 
     """
 
-    p93_took_out_of_existence: Optional[E77PersistentItem] = Field(
+    p93_took_out_of_existence: E77PersistentItem = Field(
         default=None,
         description='P93 took out of existence (was taken out of existence by)'
     )
@@ -1894,7 +1906,7 @@ class P94HasCreated(PropertyMixin):
 
     """
 
-    p94_has_created: Optional[E28ConceptualObject] = Field(
+    p94_has_created: E28ConceptualObject = Field(
         default=None,
         description='P94 has created (was created by)'
     )
@@ -1934,7 +1946,7 @@ class P95HasFormed(PropertyMixin):
 
     """
 
-    p95_has_formed: Optional[E74Group] = Field(default=None, description='P95 has formed (was formed by)')
+    p95_has_formed: E74Group = Field(default=None, description='P95 has formed (was formed by)')
 
 
 # ******************************************************************************************************************* #
@@ -1976,7 +1988,7 @@ class P96ByMother(PropertyMixin):
 
     """
 
-    p96_by_mother: Optional[E21Person] = Field(default=None, description='P96 by mother (gave birth)')
+    p96_by_mother: List[E21Person] = Field(default_factory=list, description='P96 by mother (gave birth)')
 
 
 # ******************************************************************************************************************* #
@@ -2020,7 +2032,7 @@ class P97FromFather(PropertyMixin):
 
     """
 
-    p97_from_father: Optional[E21Person] = Field(default=None, description='P97 from father (was father for)')
+    p97_from_father: E21Person = Field(default=None, description='P97 from father (was father for)')
 
 
 # ******************************************************************************************************************* #
@@ -2098,7 +2110,7 @@ class P99Dissolved(PropertyMixin):
 
     """
 
-    p99_dissolved: Optional[E74Group] = Field(default=None, description='P99 dissolved (was dissolved by)')
+    p99_dissolved: E74Group = Field(default=None, description='P99 dissolved (was dissolved by)')
 
 
 # ******************************************************************************************************************* #
@@ -2138,7 +2150,7 @@ class P100WasDeathOf(PropertyMixin):
 
     """
 
-    p100_was_death_of: Optional[E21Person] = Field(default=None, description='P100 was death of (died in)')
+    p100_was_death_of: E21Person = Field(default=None, description='P100 was death of (died in)')
 
 
 # ******************************************************************************************************************* #
@@ -2181,7 +2193,7 @@ class P108HasProduced(PropertyMixin):
 
     """
 
-    p108_has_produced: Optional[E24PhysicalHumanMadeObject] = Field(
+    p108_has_produced: E24PhysicalHumanMadeObject = Field(
         default=None,
         description='P108 has produced (was produced by)'
     )
@@ -2225,8 +2237,8 @@ class P110Augmented(PropertyMixin):
 
     """
 
-    p110_augmented: Optional[E24PhysicalHumanMadeObject] = Field(
-        default=None,
+    p110_augmented: List[E24PhysicalHumanMadeObject] = Field(
+        default_factory=list,
         description='P110 augmented (was augmented by)'
     )
 
@@ -2267,7 +2279,7 @@ class P111Added(PropertyMixin):
 
     """
 
-    p111_added: Optional[E18PhysicalThing] = Field(default=None, description='P111 added (was added by)')
+    p111_added: List[E18PhysicalThing] = Field(default_factory=list, description='P111 added (was added by)')
 
 
 # ******************************************************************************************************************* #
