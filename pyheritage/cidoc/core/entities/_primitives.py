@@ -36,6 +36,7 @@ from pygeoif import from_wkt, geometry, shape
 from pyheritage.cidoc.core.base import entity_register
 from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
 from pyheritage.cidoc.core.enums import SpatialFormat, TimePrecision
+from pyheritage.cidoc.core.properties import P169DefinesSpacetimeVolume, P170DefinesTime
 
 
 __all__ = ('E59PrimitiveValue', 'E60Number', 'E61TimePrimitive', 'E62String', 'E94SpacePrimitive',
@@ -175,7 +176,7 @@ class E60Number(E59PrimitiveValue):
 
 
 @entity_register(label='E61 Time Primitive')
-class E61TimePrimitive(E59PrimitiveValue):
+class E61TimePrimitive(P170DefinesTime, E59PrimitiveValue):
     """'E61 Primitive Value' CRM entity model;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E61
@@ -1211,7 +1212,7 @@ class E94SpacePrimitive(E59PrimitiveValue):
 
 
 @entity_register(label='E95 SpaceTime Primitive')
-class E95SpaceTimePrimitive(E59PrimitiveValue):
+class E95SpaceTimePrimitive(P169DefinesSpacetimeVolume, E59PrimitiveValue):
     """'E95 SpaceTime Primitive' CRM entity model;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E95
@@ -1332,6 +1333,9 @@ def _coerce_e60(value: Any) -> E60Number:
     raise ValueError(f"Cannot coerce {value!r} to E60")
 
 
+# ******************************************************************************************************************* #
+
+
 def _coerce_e61(value: Any) -> E61TimePrimitive:
     """Coerce a value to class 'E61TimePrimitive';
 
@@ -1355,6 +1359,9 @@ def _coerce_e61(value: Any) -> E61TimePrimitive:
         return E61TimePrimitive(**value)
 
     raise ValueError(f"Cannot coerce {value!r} to E61")
+
+
+# ******************************************************************************************************************* #
 
 
 def _coerce_e62(value: Any) -> E62String:
@@ -1382,6 +1389,9 @@ def _coerce_e62(value: Any) -> E62String:
     raise ValueError(f"Cannot coerce {value!r} to E62")
 
 
+# ******************************************************************************************************************* #
+
+
 def _coerce_e94(value: Any) -> E94SpacePrimitive:
     """Coerce a value to class 'E94SpacePrimitive';
 
@@ -1405,6 +1415,9 @@ def _coerce_e94(value: Any) -> E94SpacePrimitive:
         return E94SpacePrimitive(**value)
 
     raise ValueError(f"Cannot coerce {value!r} to E94")
+
+
+# ******************************************************************************************************************* #
 
 
 CoercedNumber = Annotated[E60Number, BeforeValidator(_coerce_e60)]
