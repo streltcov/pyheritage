@@ -1052,6 +1052,26 @@ class E94SpacePrimitive(E59PrimitiveValue):
 
     # ------------------------------ #
 
+    @property
+    def centroid(self) -> Optional[tuple[float, float]]:
+        """Geometry centroid (lon, lat);
+
+        For a point, it coincides with the coordinates, geometric center for the polygon;
+
+        """
+        if self._geometry is None:
+            return None
+
+        # pygeoif не имеет centroid для всех типов - вычисляем через bounds;
+        bounds = self._geometry.bounds
+
+        if bounds:
+            return (bounds[0] + bounds[2]) / 2, (bounds[1] + bounds[3]) / 2
+
+        return None
+
+    # ------------------------------ #
+
     @classmethod
     def from_lat_lon(cls, latitude: float, longitude: float, altitude: float = None,
                      srs: str = "EPSG:4326") -> E94SpacePrimitive:
@@ -1209,6 +1229,26 @@ class E94SpacePrimitive(E59PrimitiveValue):
         if self._geometry:
             return self._geometry.__geo_interface__
         return None
+
+    # ------------------------------ #
+
+    def to_geojson_feature(self, properties: Optional[dict] = None) -> Optional[dict]:
+        """GeoJSON Feature with properties;
+
+        Args:
+            properties (dict): custom Feature properties;
+
+        """
+        geojson = self.to_geojson()
+
+        if not geojson:
+            return None
+
+        return {
+            "type": "Feature",
+            "geometry": geojson,
+            "properties": properties or {},
+        }
 
     # ------------------------------ #
 
