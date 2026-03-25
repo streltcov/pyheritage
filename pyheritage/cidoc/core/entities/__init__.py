@@ -7,7 +7,7 @@ CRM entrypoint - all entities must be imported only from this module;
 """
 
 
-from typing import Optional
+from typing import List, Optional
 
 from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
 from pyheritage.cidoc.core.entities._persistent import (
@@ -123,6 +123,7 @@ __all__ = ('CoercedNumber', 'CoercedSpace', 'CoercedString', 'CoercedTime', 'E1C
 
 
 __builtin_namespace__ = {
+    'List': List,
     'Optional': Optional,
 }
 
