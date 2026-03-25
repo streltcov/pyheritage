@@ -42,7 +42,23 @@ E96 Purchase
 
 from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
 from pyheritage.cidoc.core.entities._spacetime import E92SpaceTimeVolume
-from pyheritage.cidoc.core.properties import P4HasTimeSpan, P5ConsistsOf
+from pyheritage.cidoc.core.properties import (
+    P4HasTimeSpan,
+    P5ConsistsOf,
+    P7TookPlaceAt,
+    P8TookPlaceOnOrWithin,
+    P9ConsistsOf,
+    P11HadParticipant,
+    P12OccurredInPresenceOf,
+    P173StartsBeforeOrWithTheEndOf,
+    P174StartsBeforeTheEndOf,
+    P175StartsBeforeOrWithTheStartOf,
+    P176StartsBeforeTheStartOf,
+    P182EndsBeforeOrWitheStartOf,
+    P183EndsBeforeTheStartOf,
+    P184EndsBeforeOrWithTheEndOf,
+    P185EndsBeforeTheEndOf,
+)
 
 
 __all__ = ('E2TemporalEntity', 'E3ConditionState', 'E4Period', 'E5Event', 'E6Destruction', 'E7Activity',
@@ -53,7 +69,9 @@ __all__ = ('E2TemporalEntity', 'E3ConditionState', 'E4Period', 'E5Event', 'E6Des
            'E83TypeCreation', 'E85Joining', 'E86Leaving', 'E87CurationActivity', 'E96Purchase', )
 
 
-class E2TemporalEntity(P4HasTimeSpan, E1CRMEntity):
+class E2TemporalEntity(P4HasTimeSpan, P173StartsBeforeOrWithTheEndOf, P174StartsBeforeTheEndOf,
+                       P175StartsBeforeOrWithTheStartOf, P176StartsBeforeTheStartOf, P182EndsBeforeOrWitheStartOf,
+                       P183EndsBeforeTheStartOf, P184EndsBeforeOrWithTheEndOf, P185EndsBeforeTheEndOf, E1CRMEntity):
     """'E2 Temporal Entity' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E2
@@ -75,6 +93,23 @@ class E2TemporalEntity(P4HasTimeSpan, E1CRMEntity):
         and is an abstract class that typically has no direct instances. E2 Temporal Entity is specialized into
         E4 Period, which applies to a particular geographic area (defined with a greater or lesser degree of
         precision), and E3 Condition State, which applies to instances of E18 Physical Thing;
+
+    Examples:
+        Bronze Age (E4) (Childe, 1963)
+        the earthquake in Lisbon 1755 (E5) (Chester, 2001)
+        the Peterhof Palace near Saint Petersburg being in ruins from 1944 – 1946 (E3) (Maddox, 2015)
+    In First Order Logic:
+        E2(x) ⊃ E1(x)
+    Properties:
+        P4 has time-span (is time-span of): E52 Time-Span
+        P173 starts before or with the end of (ends after or with the start of): E2 Temporal Entity
+        P174 starts before the end of (ends after the start of): E2 Temporal Entity
+        P175 starts before or with the start of (starts after or with the start of): E2 Temporal Entity
+        P176 starts before the start of (starts after the start of): E2 Temporal Entity
+        P182 ends before or with the start of (starts after or with the end of): E2 Temporal Entity
+        P183 ends before the start of (starts after the end of): E2 Temporal Entity
+        P184 ends before or with the end of (ends with or after the end of): E2 Temporal Entity
+        P185 ends before the end of (ends after the end of): E2 Temporal Entity
 
     """
 
@@ -123,7 +158,7 @@ class E3ConditionState(P5ConsistsOf, E2TemporalEntity):
 # ******************************************************************************************************************* #
 
 
-class E4Period(E2TemporalEntity, E92SpaceTimeVolume):
+class E4Period(P7TookPlaceAt, P8TookPlaceOnOrWithin, P9ConsistsOf, E2TemporalEntity, E92SpaceTimeVolume):
     """'E4 Period' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E4
@@ -220,7 +255,7 @@ class E4Period(E2TemporalEntity, E92SpaceTimeVolume):
 # ******************************************************************************************************************* #
 
 
-class E5Event(E4Period):
+class E5Event(P11HadParticipant, P12OccurredInPresenceOf, E4Period):
     """'E5 Event' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E5
