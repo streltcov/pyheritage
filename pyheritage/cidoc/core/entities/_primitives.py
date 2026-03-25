@@ -1033,7 +1033,7 @@ class E94SpacePrimitive(E59PrimitiveValue):
         """Altitude for a Point geometry (if altitude is set);"""
         coordinates = self.coordinates
 
-        return coordinates[1] if coordinates else None
+        return coordinates[2] if coordinates and len(coordinates) > 2 else None
 
     # ------------------------------ #
 
