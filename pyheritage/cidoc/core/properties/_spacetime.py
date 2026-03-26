@@ -656,7 +656,6 @@ class P160HasTemporalProjection(PropertyMixin):
     """
 
     p160_has_temporal_projection: Optional[E52TimeSpan] = Field(
-        min_length=1,
         description='P160 has temporal projection (is temporal projection of)'
     )
 
