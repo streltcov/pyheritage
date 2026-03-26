@@ -40,6 +40,9 @@ E96 Purchase
 """
 
 
+# pylint:disable=R0901
+
+
 from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
 from pyheritage.cidoc.core.entities._spacetime import E92SpaceTimeVolume
 from pyheritage.cidoc.core.properties import (
@@ -50,14 +53,74 @@ from pyheritage.cidoc.core.properties import (
     P9ConsistsOf,
     P11HadParticipant,
     P12OccurredInPresenceOf,
+    P13Destroyed,
+    P14CarriedOutBy,
+    P15WasInfluencedBy,
+    P16UsedSpecificObject,
+    P17WasMotivatedBy,
+    P19WasIntendedUseOf,
+    P20HadSpecificPurpose,
+    P21HadGeneralPurpose,
+    P22TransferredTitleTo,
+    P23TransferredTitleFrom,
+    P24TransferredTitleOf,
+    P25Moved,
+    P26MovedTo,
+    P27MovedFrom,
+    P28CustodySurrenderedBy,
+    P29CustodyReceivedBy,
+    P30TransferredCustodyOf,
+    P31HasModified,
+    P32UsedGeneralTechnique,
+    P33UsedSpecificTechnique,
+    P34Concerned,
+    P35Identified,
+    P37Assigned,
+    P38Deassigned,
+    P39Measured,
+    P40ObservedDimension,
+    P41Classified,
+    P42Assigned,
+    P92BroughtIntoExistence,
+    P93TookOutOfExistence,
+    P94HasCreated,
+    P95HasFormed,
+    P96ByMother,
+    P97FromFather,
+    P98BroughtIntoLife,
+    P99Dissolved,
+    P100WasDeathOf,
+    P108HasProduced,
+    P110Augmented,
+    P111Added,
+    P112Diminished,
+    P113Removed,
+    P123ResultedIn,
+    P124Transformed,
+    P125UsedObjectOfType,
+    P126Employed,
+    P134Continued,
+    P135CreatedType,
+    P136WasBasedOn,
+    P140AssignedAttributeTo,
+    P141Assigned,
+    P142UsedConstituent,
+    P143Joined,
+    P144JoinedWith,
+    P145Separated,
+    P146SeparatedFrom,
+    P147Curated,
     P173StartsBeforeOrWithTheEndOf,
     P174StartsBeforeTheEndOf,
     P175StartsBeforeOrWithTheStartOf,
     P176StartsBeforeTheStartOf,
+    P177AssignedPropertyType,
+    P179HadSalesPrice,
     P182EndsBeforeOrWitheStartOf,
     P183EndsBeforeTheStartOf,
     P184EndsBeforeOrWithTheEndOf,
     P185EndsBeforeTheEndOf,
+    P186ProducedThingOfProductType,
 )
 
 
@@ -315,7 +378,7 @@ class E5Event(P11HadParticipant, P12OccurredInPresenceOf, E4Period):
 # ******************************************************************************************************************* #
 
 
-class E63BeginningOfExistence(E5Event):
+class E63BeginningOfExistence(P92BroughtIntoExistence, E5Event):
     """'E63 Beginning of Existence' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E63
@@ -351,7 +414,7 @@ class E63BeginningOfExistence(E5Event):
 # ******************************************************************************************************************* #
 
 
-class E64EndOfExistence(E5Event):
+class E64EndOfExistence(P93TookOutOfExistence, E5Event):
     """'E64 End of Existence' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E64
@@ -386,7 +449,7 @@ class E64EndOfExistence(E5Event):
 # ******************************************************************************************************************* #
 
 
-class E6Destruction(E64EndOfExistence):
+class E6Destruction(P13Destroyed, E64EndOfExistence):
     """'E6 Destruction' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E6
@@ -428,7 +491,9 @@ class E6Destruction(E64EndOfExistence):
 # ******************************************************************************************************************* #
 
 
-class E7Activity(E5Event):
+class E7Activity(P14CarriedOutBy, P15WasInfluencedBy, P16UsedSpecificObject, P17WasMotivatedBy, P19WasIntendedUseOf,
+                 P20HadSpecificPurpose, P21HadGeneralPurpose, P32UsedGeneralTechnique, P33UsedSpecificTechnique,
+                 P125UsedObjectOfType, P134Continued, E5Event):
     """'E7 Activity' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E7
@@ -483,7 +548,7 @@ class E7Activity(E5Event):
 # ******************************************************************************************************************* #
 
 
-class E8Acquisition(E7Activity):
+class E8Acquisition(P22TransferredTitleTo, P23TransferredTitleFrom, P24TransferredTitleOf, E7Activity):
     """'E8 Acquisition' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E8
@@ -530,7 +595,7 @@ class E8Acquisition(E7Activity):
 # ******************************************************************************************************************* #
 
 
-class E9Move(E7Activity):
+class E9Move(P25Moved, P26MovedTo, P27MovedFrom, E7Activity):
     """'E9 Move' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E9
@@ -566,7 +631,7 @@ class E9Move(E7Activity):
 # ******************************************************************************************************************* #
 
 
-class E10TransferOfCustody(E7Activity):
+class E10TransferOfCustody(P28CustodySurrenderedBy, P29CustodyReceivedBy, P30TransferredCustodyOf, E7Activity):
     """'E10 Transfer of Custody' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E10
@@ -616,7 +681,7 @@ class E10TransferOfCustody(E7Activity):
 # ******************************************************************************************************************* #
 
 
-class E11Modification(E7Activity):
+class E11Modification(P31HasModified, P126Employed, E7Activity):
     """'E11 Modification' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E11
@@ -663,7 +728,7 @@ class E11Modification(E7Activity):
 # ******************************************************************************************************************* #
 
 
-class E12Production(E11Modification, E63BeginningOfExistence):
+class E12Production(P108HasProduced, P186ProducedThingOfProductType, E11Modification, E63BeginningOfExistence):
     """'E12 Production' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E12
@@ -708,7 +773,7 @@ class E12Production(E11Modification, E63BeginningOfExistence):
 # ******************************************************************************************************************* #
 
 
-class E13AttributeAssignment(E7Activity):
+class E13AttributeAssignment(P140AssignedAttributeTo, P141Assigned, P177AssignedPropertyType, E7Activity):
     """'E13 Attribute Assignment' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E13
@@ -764,7 +829,7 @@ class E13AttributeAssignment(E7Activity):
 # ******************************************************************************************************************* #
 
 
-class E14ConditionAssessment(E13AttributeAssignment):
+class E14ConditionAssessment(P34Concerned, P35Identified, E13AttributeAssignment):
     """'E14 Condition Assessment' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E14
@@ -794,7 +859,7 @@ class E14ConditionAssessment(E13AttributeAssignment):
 # ******************************************************************************************************************* #
 
 
-class E15IdentifierAssignment(E13AttributeAssignment):
+class E15IdentifierAssignment(P37Assigned, P38Deassigned, P142UsedConstituent, E13AttributeAssignment):
     """'E15 Identifier Assignment' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E15
@@ -838,7 +903,7 @@ class E15IdentifierAssignment(E13AttributeAssignment):
 # ******************************************************************************************************************* #
 
 
-class E16Measurement(E13AttributeAssignment):
+class E16Measurement(P39Measured, P40ObservedDimension, E13AttributeAssignment):
     """'E16 Measurement' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E16
@@ -897,7 +962,7 @@ class E16Measurement(E13AttributeAssignment):
 # ******************************************************************************************************************* #
 
 
-class E17TypeAssignment(E13AttributeAssignment):
+class E17TypeAssignment(P41Classified, P42Assigned, E13AttributeAssignment):
     """'E17 Type Assignment' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E17
@@ -930,7 +995,7 @@ class E17TypeAssignment(E13AttributeAssignment):
 # ******************************************************************************************************************* #
 
 
-class E65Creation(E7Activity, E63BeginningOfExistence):
+class E65Creation(P94HasCreated, E7Activity, E63BeginningOfExistence):
     """'E65 Creation' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E65
@@ -959,7 +1024,7 @@ class E65Creation(E7Activity, E63BeginningOfExistence):
 # ******************************************************************************************************************* #
 
 
-class E66Formation(E7Activity, E63BeginningOfExistence):
+class E66Formation(P95HasFormed, E7Activity, E63BeginningOfExistence):
     """'E66 Formation' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E66
@@ -996,7 +1061,7 @@ class E66Formation(E7Activity, E63BeginningOfExistence):
 # ******************************************************************************************************************* #
 
 
-class E67Birth(E63BeginningOfExistence):
+class E67Birth(P96ByMother, P97FromFather, P98BroughtIntoLife, E63BeginningOfExistence):
     """'E67 Birth' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E67
@@ -1029,7 +1094,7 @@ class E67Birth(E63BeginningOfExistence):
 # ******************************************************************************************************************* #
 
 
-class E68Dissolution(E64EndOfExistence):
+class E68Dissolution(P99Dissolved, E64EndOfExistence):
     """'E68 Dissolution' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E68
@@ -1058,7 +1123,7 @@ class E68Dissolution(E64EndOfExistence):
 # ******************************************************************************************************************* #
 
 
-class E69Death(E64EndOfExistence):
+class E69Death(P100WasDeathOf, E64EndOfExistence):
     """'E69 Death' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E69
@@ -1087,7 +1152,7 @@ class E69Death(E64EndOfExistence):
 # ******************************************************************************************************************* #
 
 
-class E79PartAddition(E11Modification):
+class E79PartAddition(P110Augmented, P111Added, E11Modification):
     """'E79 Part Addition' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E79
@@ -1127,7 +1192,7 @@ class E79PartAddition(E11Modification):
 # ******************************************************************************************************************* #
 
 
-class E80PartRemoval(E11Modification):
+class E80PartRemoval(P112Diminished, P113Removed, E11Modification):
     """'E80 Part Removal' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E80
@@ -1166,7 +1231,7 @@ class E80PartRemoval(E11Modification):
 # ******************************************************************************************************************* #
 
 
-class E81Transformation(E63BeginningOfExistence, E64EndOfExistence):
+class E81Transformation(P123ResultedIn, P124Transformed, E63BeginningOfExistence, E64EndOfExistence):
     """'E81 Transformation' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E81
@@ -1206,7 +1271,7 @@ class E81Transformation(E63BeginningOfExistence, E64EndOfExistence):
 # ******************************************************************************************************************* #
 
 
-class E83TypeCreation(E65Creation):
+class E83TypeCreation(P135CreatedType, P136WasBasedOn, E65Creation):
     """'E83 Type Creation' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E83
@@ -1240,7 +1305,7 @@ class E83TypeCreation(E65Creation):
 # ******************************************************************************************************************* #
 
 
-class E85Joining(E7Activity):
+class E85Joining(P143Joined, P144JoinedWith, E7Activity):
     """'E85 Joining' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E85
@@ -1274,7 +1339,7 @@ class E85Joining(E7Activity):
 # ******************************************************************************************************************* #
 
 
-class E86Leaving(E7Activity):
+class E86Leaving(P145Separated, P146SeparatedFrom, E7Activity):
     """'E86 Leaving' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E86
@@ -1309,7 +1374,7 @@ class E86Leaving(E7Activity):
 # ******************************************************************************************************************* #
 
 
-class E87CurationActivity(E7Activity):
+class E87CurationActivity(P147Curated, E7Activity):
     """'E87 Curation Activity' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E87
@@ -1345,7 +1410,7 @@ class E87CurationActivity(E7Activity):
 # ******************************************************************************************************************* #
 
 
-class E96Purchase(E8Acquisition):
+class E96Purchase(P179HadSalesPrice, E8Acquisition):
     """'E96 Purchase' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E96
