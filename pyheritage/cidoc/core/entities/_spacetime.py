@@ -16,13 +16,41 @@ E93 Presence
 
 from pyheritage.cidoc.core.base import entity_register
 from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
+from pyheritage.cidoc.core.properties import (
+    P10FallsWithin,
+    P79BeginningIsQualifiedBy,
+    P80EndIsQualifiedBy,
+    P81OngoingThroughout,
+    P82AtSomeTimeWithin,
+    P86FallsWithin,
+    P89FallsWithin,
+    P90HasValue,
+    P91HasUnit,
+    P121OverlapsWith,
+    P122BordersWith,
+    P132SpatiotemporallyOverlaps,
+    P133IsSpatiotemporallySeparated,
+    P157IsAtRestRelativeTo,
+    P160HasTemporalProjection,
+    P161HasSpatialProjection,
+    P164During,
+    P166WasAPresenceOf,
+    P167At,
+    P168PlaceIsDefinedBy,
+    P171AtSomePlaceWithin,
+    P172Contains,
+    P191HadDuration,
+    P195WasAPresenceOf,
+    P197CoveredPartsOf,
+)
 
 
 __all__ = ('E52TimeSpan', 'E53Place', 'E54Dimension', 'E92SpaceTimeVolume', 'E93Presence', )
 
 
 @entity_register(label='E92 Spacetime Volume')
-class E92SpaceTimeVolume(E1CRMEntity):
+class E92SpaceTimeVolume(P10FallsWithin, P132SpatiotemporallyOverlaps, P133IsSpatiotemporallySeparated,
+                         P160HasTemporalProjection, P161HasSpatialProjection, E1CRMEntity):
     """'E92 Spacetime Volume' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E92
@@ -64,7 +92,7 @@ class E92SpaceTimeVolume(E1CRMEntity):
 
 
 @entity_register(label='E93 Presence')
-class E93Presence(E92SpaceTimeVolume):
+class E93Presence(P164During, P166WasAPresenceOf, P167At, P195WasAPresenceOf, P197CoveredPartsOf, E92SpaceTimeVolume):
     """'E93 Presence' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E93
@@ -109,7 +137,8 @@ class E93Presence(E92SpaceTimeVolume):
 
 
 @entity_register(label='E52 Time-Span')
-class E52TimeSpan(E1CRMEntity):
+class E52TimeSpan(P79BeginningIsQualifiedBy, P80EndIsQualifiedBy, P81OngoingThroughout, P82AtSomeTimeWithin,
+                  P86FallsWithin, P191HadDuration, E1CRMEntity):
     """'P52 Time-Span' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E52
@@ -167,7 +196,8 @@ class E52TimeSpan(E1CRMEntity):
 
 
 @entity_register(label='E53 Place')
-class E53Place(E1CRMEntity):
+class E53Place(P89FallsWithin, P121OverlapsWith, P122BordersWith, P157IsAtRestRelativeTo, P168PlaceIsDefinedBy,
+               P171AtSomePlaceWithin, P172Contains, E1CRMEntity):
     """'E53 Place' CRM entity;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E53
@@ -220,7 +250,7 @@ class E53Place(E1CRMEntity):
 
 
 @entity_register(label="E54 Dimension")
-class E54Dimension(E1CRMEntity):
+class E54Dimension(P90HasValue, P91HasUnit, E1CRMEntity):
     """'E54 Dimension' CRM entity model;
 
     https://cidoc-crm.org/html/cidoc_crm_v7.0.html#E54
