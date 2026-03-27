@@ -180,7 +180,7 @@ class P3HasNote(PropertyMixin):
 
     """
 
-    p3_has_note: Optional[CoercedString] = Field(default=None, description='P3 has note')
+    p3_has_note: Optional[List[CoercedString]] = Field(default=None, description='P3 has note')
 
 
 # ******************************************************************************************************************* #
