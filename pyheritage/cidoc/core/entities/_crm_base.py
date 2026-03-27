@@ -16,7 +16,7 @@ E1 CRM Entity
 
 from abc import ABC
 
-from pyheritage.cidoc.core.base import CRMEntityBase
+from pyheritage.cidoc.core.base import CRMEntityBase, entity_register
 from pyheritage.cidoc.core.properties import (
     P1IsIdentifiedBy,
     P2HasType,
@@ -29,6 +29,7 @@ from pyheritage.cidoc.core.properties import (
 __all__ = ('E1CRMEntity', )
 
 
+@entity_register(label='E1 CRM Entity')
 class E1CRMEntity(P1IsIdentifiedBy, P2HasType, P3HasNote, P48HasPreferredIdentifier, P137Exemplifies, CRMEntityBase,
                   ABC):
     """'E1 CRM Entity' model - basic CRM Entity class;
