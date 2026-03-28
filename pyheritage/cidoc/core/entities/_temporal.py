@@ -43,8 +43,8 @@ E96 Purchase
 # pylint:disable=R0901
 
 
-from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
-from pyheritage.cidoc.core.entities._spacetime import E92SpaceTimeVolume
+from pyheritage.cidoc.core.base import entity_register
+from pyheritage.cidoc.core.entities import E1CRMEntity, E92SpaceTimeVolume
 from pyheritage.cidoc.core.properties import (
     P4HasTimeSpan,
     P5ConsistsOf,
@@ -132,6 +132,7 @@ __all__ = ('E2TemporalEntity', 'E3ConditionState', 'E4Period', 'E5Event', 'E6Des
            'E83TypeCreation', 'E85Joining', 'E86Leaving', 'E87CurationActivity', 'E96Purchase', )
 
 
+@entity_register(label='E2 Temporal Entity')
 class E2TemporalEntity(P4HasTimeSpan, P173StartsBeforeOrWithTheEndOf, P174StartsBeforeTheEndOf,
                        P175StartsBeforeOrWithTheStartOf, P176StartsBeforeTheStartOf, P182EndsBeforeOrWitheStartOf,
                        P183EndsBeforeTheStartOf, P184EndsBeforeOrWithTheEndOf, P185EndsBeforeTheEndOf, E1CRMEntity):
@@ -180,6 +181,7 @@ class E2TemporalEntity(P4HasTimeSpan, P173StartsBeforeOrWithTheEndOf, P174Starts
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E3 Condition State')
 class E3ConditionState(P5ConsistsOf, E2TemporalEntity):
     """'E3 Condition State' CRM entity;
 
@@ -221,6 +223,7 @@ class E3ConditionState(P5ConsistsOf, E2TemporalEntity):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E4 Period')
 class E4Period(P7TookPlaceAt, P8TookPlaceOnOrWithin, P9ConsistsOf, E2TemporalEntity, E92SpaceTimeVolume):
     """'E4 Period' CRM entity;
 
@@ -318,6 +321,7 @@ class E4Period(P7TookPlaceAt, P8TookPlaceOnOrWithin, P9ConsistsOf, E2TemporalEnt
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E5 Event')
 class E5Event(P11HadParticipant, P12OccurredInPresenceOf, E4Period):
     """'E5 Event' CRM entity;
 
@@ -378,6 +382,7 @@ class E5Event(P11HadParticipant, P12OccurredInPresenceOf, E4Period):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E63 Beginning of Existence')
 class E63BeginningOfExistence(P92BroughtIntoExistence, E5Event):
     """'E63 Beginning of Existence' CRM entity;
 
@@ -414,6 +419,7 @@ class E63BeginningOfExistence(P92BroughtIntoExistence, E5Event):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E64 End of Existence')
 class E64EndOfExistence(P93TookOutOfExistence, E5Event):
     """'E64 End of Existence' CRM entity;
 
@@ -449,6 +455,7 @@ class E64EndOfExistence(P93TookOutOfExistence, E5Event):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E6 Destruction')
 class E6Destruction(P13Destroyed, E64EndOfExistence):
     """'E6 Destruction' CRM entity;
 
@@ -491,6 +498,7 @@ class E6Destruction(P13Destroyed, E64EndOfExistence):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E7 Activity')
 class E7Activity(P14CarriedOutBy, P15WasInfluencedBy, P16UsedSpecificObject, P17WasMotivatedBy, P19WasIntendedUseOf,
                  P20HadSpecificPurpose, P21HadGeneralPurpose, P32UsedGeneralTechnique, P33UsedSpecificTechnique,
                  P125UsedObjectOfType, P134Continued, E5Event):
@@ -548,6 +556,7 @@ class E7Activity(P14CarriedOutBy, P15WasInfluencedBy, P16UsedSpecificObject, P17
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E8 Acquisition')
 class E8Acquisition(P22TransferredTitleTo, P23TransferredTitleFrom, P24TransferredTitleOf, E7Activity):
     """'E8 Acquisition' CRM entity;
 
@@ -595,6 +604,7 @@ class E8Acquisition(P22TransferredTitleTo, P23TransferredTitleFrom, P24Transferr
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E9 Move')
 class E9Move(P25Moved, P26MovedTo, P27MovedFrom, E7Activity):
     """'E9 Move' CRM entity;
 
@@ -631,6 +641,7 @@ class E9Move(P25Moved, P26MovedTo, P27MovedFrom, E7Activity):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E10 Transfer of Custody')
 class E10TransferOfCustody(P28CustodySurrenderedBy, P29CustodyReceivedBy, P30TransferredCustodyOf, E7Activity):
     """'E10 Transfer of Custody' CRM entity;
 
@@ -681,6 +692,7 @@ class E10TransferOfCustody(P28CustodySurrenderedBy, P29CustodyReceivedBy, P30Tra
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E11 Modification')
 class E11Modification(P31HasModified, P126Employed, E7Activity):
     """'E11 Modification' CRM entity;
 
@@ -728,6 +740,7 @@ class E11Modification(P31HasModified, P126Employed, E7Activity):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E12 Production')
 class E12Production(P108HasProduced, P186ProducedThingOfProductType, E11Modification, E63BeginningOfExistence):
     """'E12 Production' CRM entity;
 
@@ -773,6 +786,7 @@ class E12Production(P108HasProduced, P186ProducedThingOfProductType, E11Modifica
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E13 Attribute Assignment')
 class E13AttributeAssignment(P140AssignedAttributeTo, P141Assigned, P177AssignedPropertyType, E7Activity):
     """'E13 Attribute Assignment' CRM entity;
 
@@ -829,6 +843,7 @@ class E13AttributeAssignment(P140AssignedAttributeTo, P141Assigned, P177Assigned
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E14 Condition Assessment')
 class E14ConditionAssessment(P34Concerned, P35Identified, E13AttributeAssignment):
     """'E14 Condition Assessment' CRM entity;
 
@@ -859,6 +874,7 @@ class E14ConditionAssessment(P34Concerned, P35Identified, E13AttributeAssignment
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E15 Identifier Assignment')
 class E15IdentifierAssignment(P37Assigned, P38Deassigned, P142UsedConstituent, E13AttributeAssignment):
     """'E15 Identifier Assignment' CRM entity;
 
@@ -903,6 +919,7 @@ class E15IdentifierAssignment(P37Assigned, P38Deassigned, P142UsedConstituent, E
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E16 Measurement')
 class E16Measurement(P39Measured, P40ObservedDimension, E13AttributeAssignment):
     """'E16 Measurement' CRM entity;
 
@@ -962,6 +979,7 @@ class E16Measurement(P39Measured, P40ObservedDimension, E13AttributeAssignment):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E17 Type Assignment')
 class E17TypeAssignment(P41Classified, P42Assigned, E13AttributeAssignment):
     """'E17 Type Assignment' CRM entity;
 
@@ -995,6 +1013,7 @@ class E17TypeAssignment(P41Classified, P42Assigned, E13AttributeAssignment):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E65 Creation')
 class E65Creation(P94HasCreated, E7Activity, E63BeginningOfExistence):
     """'E65 Creation' CRM entity;
 
@@ -1024,6 +1043,7 @@ class E65Creation(P94HasCreated, E7Activity, E63BeginningOfExistence):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E66 Formation')
 class E66Formation(P95HasFormed, E7Activity, E63BeginningOfExistence):
     """'E66 Formation' CRM entity;
 
@@ -1061,6 +1081,7 @@ class E66Formation(P95HasFormed, E7Activity, E63BeginningOfExistence):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E67 Birth')
 class E67Birth(P96ByMother, P97FromFather, P98BroughtIntoLife, E63BeginningOfExistence):
     """'E67 Birth' CRM entity;
 
@@ -1094,6 +1115,7 @@ class E67Birth(P96ByMother, P97FromFather, P98BroughtIntoLife, E63BeginningOfExi
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E68 Dissolution')
 class E68Dissolution(P99Dissolved, E64EndOfExistence):
     """'E68 Dissolution' CRM entity;
 
@@ -1123,6 +1145,7 @@ class E68Dissolution(P99Dissolved, E64EndOfExistence):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E69 Death')
 class E69Death(P100WasDeathOf, E64EndOfExistence):
     """'E69 Death' CRM entity;
 
@@ -1152,6 +1175,7 @@ class E69Death(P100WasDeathOf, E64EndOfExistence):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E79 Part Addition')
 class E79PartAddition(P110Augmented, P111Added, E11Modification):
     """'E79 Part Addition' CRM entity;
 
@@ -1192,6 +1216,7 @@ class E79PartAddition(P110Augmented, P111Added, E11Modification):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E80 Part Removal')
 class E80PartRemoval(P112Diminished, P113Removed, E11Modification):
     """'E80 Part Removal' CRM entity;
 
@@ -1231,6 +1256,7 @@ class E80PartRemoval(P112Diminished, P113Removed, E11Modification):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E81 Transformation')
 class E81Transformation(P123ResultedIn, P124Transformed, E63BeginningOfExistence, E64EndOfExistence):
     """'E81 Transformation' CRM entity;
 
@@ -1271,6 +1297,7 @@ class E81Transformation(P123ResultedIn, P124Transformed, E63BeginningOfExistence
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E83 Type Creation')
 class E83TypeCreation(P135CreatedType, P136WasBasedOn, E65Creation):
     """'E83 Type Creation' CRM entity;
 
@@ -1305,6 +1332,7 @@ class E83TypeCreation(P135CreatedType, P136WasBasedOn, E65Creation):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E85 Joining')
 class E85Joining(P143Joined, P144JoinedWith, E7Activity):
     """'E85 Joining' CRM entity;
 
@@ -1339,6 +1367,7 @@ class E85Joining(P143Joined, P144JoinedWith, E7Activity):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E86 Leaving')
 class E86Leaving(P145Separated, P146SeparatedFrom, E7Activity):
     """'E86 Leaving' CRM entity;
 
@@ -1374,6 +1403,7 @@ class E86Leaving(P145Separated, P146SeparatedFrom, E7Activity):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E87 Curation Activity')
 class E87CurationActivity(P147Curated, E7Activity):
     """'E87 Curation Activity' CRM entity;
 
@@ -1410,6 +1440,7 @@ class E87CurationActivity(P147Curated, E7Activity):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='E96 Purchase')
 class E96Purchase(P179HadSalesPrice, E8Acquisition):
     """'E96 Purchase' CRM entity;
 
