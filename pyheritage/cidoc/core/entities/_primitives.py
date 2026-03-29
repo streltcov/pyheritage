@@ -471,14 +471,25 @@ class E61TimePrimitive(P170DefinesTime, E59PrimitiveValue):
             * Approximate dates are treated as equal to exact dates;
 
         """
+        sort_key_year_offset = 1_000_000
+
         if self.__parsed and hasattr(self.__parsed, 'lower_strict'):
             ls = self.__parsed.lower_strict()
-            return f"{ls.tm_year:05d}-{ls.tm_mon:02d}-{ls.tm_mday:02d}"
+            adjusted = ls.tm_year + sort_key_year_offset
+
+            return f"{adjusted:07d}-{ls.tm_mon:02d}-{ls.tm_mday:02d}"
 
         if not self.value:
             return ""
 
         clean = self.value.split("/")[0].rstrip("~?%").replace("x", "0")
+        match = re.match(r'^(-?\d+)(.*)', clean)
+
+        if match:
+            year = int(match.group(1))
+            rest = match.group(2)
+            adjusted = year + sort_key_year_offset
+            return f"{adjusted:07d}{rest}"
 
         return clean
 
