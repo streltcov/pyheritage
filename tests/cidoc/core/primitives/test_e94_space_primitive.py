@@ -12,7 +12,7 @@ import pytest
 
 from pyheritage.cidoc.core.entities import E94SpacePrimitive
 from pyheritage.cidoc.core.entities._primitives import _coerce_e94  # noqa
-from pyheritage.cidoc.core.enums import SpatialFormat
+from pyheritage.cidoc.enums import SpatialFormat
 
 
 class TestE94EntityValidation:

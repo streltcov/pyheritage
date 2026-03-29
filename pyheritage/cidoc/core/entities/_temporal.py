@@ -43,7 +43,7 @@ E96 Purchase
 # pylint:disable=R0901
 
 
-from pyheritage.cidoc.core.base import entity_register
+from pyheritage.cidoc.base import entity_register
 from pyheritage.cidoc.core.entities import E1CRMEntity, E92SpaceTimeVolume
 from pyheritage.cidoc.core.properties import (
     P4HasTimeSpan,

@@ -33,10 +33,10 @@ from edtf.parser.edtf_exceptions import EDTFParseException
 from pydantic import BeforeValidator, Field, field_validator, PrivateAttr
 from pygeoif import from_wkt, geometry, shape
 
-from pyheritage.cidoc.core.base import entity_register
+from pyheritage.cidoc.base import entity_register
 from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
-from pyheritage.cidoc.core.enums import SpatialFormat, TimePrecision
 from pyheritage.cidoc.core.properties import P169DefinesSpacetimeVolume, P170DefinesTime
+from pyheritage.cidoc.enums import SpatialFormat, TimePrecision
 
 
 __all__ = ('E59PrimitiveValue', 'E60Number', 'E61TimePrimitive', 'E62String', 'E94SpacePrimitive',

@@ -92,7 +92,7 @@ from typing import List, Optional, TYPE_CHECKING
 
 from pydantic import Field
 
-from pyheritage.cidoc.core.base import PropertyMixin
+from pyheritage.cidoc.base import PropertyMixin
 
 
 if TYPE_CHECKING:

@@ -14,7 +14,7 @@ import pytest
 
 from pyheritage.cidoc.core.entities import E61TimePrimitive
 from pyheritage.cidoc.core.entities._primitives import _coerce_e61  # noqa
-from pyheritage.cidoc.core.enums import TimePrecision
+from pyheritage.cidoc.enums import TimePrecision
 
 
 class TestE61TimePrimitive:
