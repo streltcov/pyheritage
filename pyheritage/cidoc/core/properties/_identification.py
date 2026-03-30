@@ -360,7 +360,10 @@ class P137Exemplifies(PropertyMixin):
 
     """
 
-    p137_exemplifies: Optional[E55Type] = Field(default=None, description='P137 exemplifies (is exemplified by)')
+    p137_exemplifies: Optional[List[E55Type]] = Field(
+        default=None,
+        description='P137 exemplifies (is exemplified by)'
+    )
 
 
 # ******************************************************************************************************************* #

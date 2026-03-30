@@ -109,7 +109,10 @@ class P43HasDimension(PropertyMixin):
 
     """
 
-    p43_has_dimension: Optional[E54Dimension] = Field(default=None, description='P43 has dimension (is dimension of)')
+    p43_has_dimension: Optional[List[E54Dimension]] = Field(
+        default=None,
+        description='P43 has dimension (is dimension of)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -151,7 +154,7 @@ class P44HasCondition(PropertyMixin):
 
     """
 
-    p44_has_condition: Optional[E3ConditionState] = Field(
+    p44_has_condition: Optional[List[E3ConditionState]] = Field(
         default=None,
         description='P44 has condition (is condition of)'
     )
@@ -637,7 +640,7 @@ class P56BearsFeature(PropertyMixin):
 
     """
 
-    p56_bears_feature: Optional[E26PhysicalFeature] = Field(
+    p56_bears_feature: Optional[List[E26PhysicalFeature]] = Field(
         default=None,
         description='P56 bears feature (is found on)'
     )
@@ -723,7 +726,10 @@ class P59HasSection(PropertyMixin):
 
     """
 
-    p59_has_section: Optional[E53Place] = Field(default=None, description='P59 has section (is located on or within)')
+    p59_has_section: Optional[List[E53Place]] = Field(
+        default=None,
+        description='P59 has section (is located on or within)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -771,7 +777,7 @@ class P62Depicts(PropertyMixin):
 
     """
 
-    p62_depicts: Optional[E1CRMEntity] = Field(default=None, description='P62 depicts (is depicted by)')
+    p62_depicts: Optional[List[E1CRMEntity]] = Field(default=None, description='P62 depicts (is depicted by)')
 
 
 # ******************************************************************************************************************* #
@@ -1180,7 +1186,7 @@ class P196Defines(PropertyMixin):
 
     """
 
-    p196_defines: E92SpaceTimeVolume = Field(default=None, description='P196 defines (is defined by)')
+    p196_defines: E92SpaceTimeVolume = Field(description='P196 defines (is defined by)')
 
 
 # ******************************************************************************************************************* #
