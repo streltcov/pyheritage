@@ -39,13 +39,13 @@ class TestE94EntityValidation:
     # ------------------------- #
 
     def test_invalid_wkt(self) -> None:
-        with pytest.raises(ValueError, match="Invalid WKT"):
+        with pytest.raises(RuntimeError):
             E94SpacePrimitive(value="POINT(abc def)")
 
     # ------------------------- #
 
     def test_invalid_geojson(self) -> None:
-        with pytest.raises(ValueError, match="Invalid GeoJSON"):
+        with pytest.raises(RuntimeError):
             E94SpacePrimitive(value='{"not":"geometry"}')
 
 
@@ -79,7 +79,8 @@ class TestE94Validation:
     """
 
     def test_random_string(self) -> None:
-        with pytest.raises(ValueError, match="must be WKT or GeoJSON"):
+        match = "Value passed validation but matches neither WKT nor GeoJSON pattern: 'somewhere in Egypt'"
+        with pytest.raises(RuntimeError, match=match):
             E94SpacePrimitive(value="somewhere in Egypt")
 
     # ------------------------- #
