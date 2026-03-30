@@ -32,6 +32,7 @@ from edtf import EDTFObject, parse_edtf, text_to_edtf
 from edtf.parser.edtf_exceptions import EDTFParseException
 from pydantic import BeforeValidator, Field, field_validator, PrivateAttr
 from pygeoif import from_wkt, geometry, shape
+from pygeoif.geometry import Geometry
 
 from pyheritage.cidoc.base import entity_register
 from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
@@ -900,6 +901,41 @@ class E94SpacePrimitive(E59PrimitiveValue):
 
     # ------------------------------ #
 
+    @staticmethod
+    def _parse_wkt(value: str) -> Geometry:
+        """Parse a WKT string into a geometry object;
+
+        Raises:
+            RuntimeError: If the WKT string cannot be parsed;
+
+        """
+        try:
+            return from_wkt(value)
+        except Exception as e:
+            raise RuntimeError(f"Failed to parse WKT geometry: {value[:80]!r}") from e
+
+    # ------------------------------ #
+
+    @staticmethod
+    def _parse_geojson(value: str) -> Geometry:
+        """Parse a GeoJSON string into a geometry object;
+
+        Raises:
+            RuntimeError: If the string is not valid JSON or not a valid geometry;
+
+        """
+        try:
+            geojson = json.loads(value)
+        except json.JSONDecodeError as e:
+            raise RuntimeError(f"Invalid JSON value: {value[:80]!r}") from e
+
+        try:
+            return shape(geojson)
+        except Exception as e:
+            raise RuntimeError(f"Valid JSON but not a valid GeoJSON geometry: {value[:80]!r}") from e
+
+    # ------------------------------ #
+
     def model_post_init(self, context: Any) -> None:
         """Parse validated value into a pygeoif geometry object;
 
@@ -913,9 +949,9 @@ class E94SpacePrimitive(E59PrimitiveValue):
         value = self.value.strip()
 
         if _WKT_PREFIX.match(value):
-            self._geometry = from_wkt(value)
+            self._geometry = self._parse_wkt(value)
         elif value.startswith("{"):
-            self._geometry = shape(json.loads(value))
+            self._geometry = self._parse_geojson(value)
         else:
             raise RuntimeError(
                 f"Value passed validation but matches neither "
