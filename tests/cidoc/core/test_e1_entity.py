@@ -159,12 +159,12 @@ class TestE1CRMEntity:
     def test_p137_exemplifies_accepts_type(self) -> None:
         """Checks that P137 property accepts E55 Type instances;"""
         entity = E1CRMEntity(
-            p137_exemplifies=E55Type(
+            p137_exemplifies=[E55Type(
                 p1_is_identified_by=[E41Appellation(p190_has_symbolic_content='Exemplar Type')],
-            ),
+            )],
         )
         assert entity.p137_exemplifies is not None
-        assert isinstance(entity.p137_exemplifies, E55Type)
+        assert isinstance(entity.p137_exemplifies[0], E55Type)
 
     # === Serialization structure =====
 
@@ -179,7 +179,7 @@ class TestE1CRMEntity:
             ],
             p3_has_note=['Test note'],
             p48_has_preferred_identifier=E42Identifier(p190_has_symbolic_content='ID-123'),
-            p137_exemplifies=E55Type(p1_is_identified_by=[E41Appellation(p190_has_symbolic_content='Exemplar')]),
+            p137_exemplifies=[E55Type(p1_is_identified_by=[E41Appellation(p190_has_symbolic_content='Exemplar')])],
         )
 
         dump = entity.model_dump()
