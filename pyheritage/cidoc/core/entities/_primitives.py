@@ -766,8 +766,8 @@ class E62String(E59PrimitiveValue):
 
     # ------------------------------ #
 
-    @classmethod
     @field_validator("language")
+    @classmethod
     def validate_language_tag(cls, value: Optional[str]) -> Optional[str]:
         """Validation method for 'language' field;
 
@@ -790,9 +790,10 @@ class E62String(E59PrimitiveValue):
     # ------------------------------ #
 
     def __repr__(self) -> str:
-        language = f'{self.value} - {self.language}' if self.language else f'{self.value}'
+        if self.language:
+            return f'E62({self.value!r}, language={self.language!r})'
 
-        return f'E62({self.value}) {language}'
+        return f'E62({self.value!r})'
 
 
 # ******************************************************************************************************************* #
