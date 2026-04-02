@@ -43,8 +43,8 @@ addopts = [
 ]
 
 [tool.coverage.run]
-#source = ["pyheritage"]       # какой пакет измерять
 omit = [
+    "pyheritage/cidoc/core/properties/*.",
     "tests/*",
 ]
 
