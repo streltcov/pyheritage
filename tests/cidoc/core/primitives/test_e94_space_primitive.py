@@ -9,6 +9,7 @@
 
 
 import pytest
+from pygeoif.geometry import Point
 
 from pyheritage.cidoc.core.entities import E94SpacePrimitive
 from pyheritage.cidoc.core.entities._primitives import _coerce_e94  # noqa
@@ -261,3 +262,68 @@ class TestE94Coercion:
     def test_passthrough(self) -> None:
         entity = E94SpacePrimitive(value='POINT(30 31)')
         assert _coerce_e94(entity) is entity
+
+
+# ******************************************************************************************************************* #
+
+
+def test_from_geojson_dict() -> None:
+    geojson = {"type": "Point", "coordinates": [30.0, 31.0]}
+    sp = E94SpacePrimitive.from_geojson(geojson)
+
+    assert sp.is_point
+    assert sp.longitude == pytest.approx(30.0)
+    assert sp.latitude == pytest.approx(31.0)
+
+
+# ******************************************************************************************************************* #
+
+
+def test_from_geojson_custom_srs() -> None:
+    geojson = {"type": "Point", "coordinates": [500000, 3500000]}
+    sp = E94SpacePrimitive.from_geojson(geojson, srs="EPSG:32636")
+
+    assert sp.srs == "EPSG:32636"
+
+
+# ******************************************************************************************************************* #
+
+
+def test_from_geometry_pygeoif_point() -> None:
+    geom = Point(30.0, 31.0)
+    sp = E94SpacePrimitive.from_geometry(geom)
+
+    assert sp.is_point
+    assert sp.value.startswith("POINT")
+
+
+# ******************************************************************************************************************* #
+
+
+def test_from_geometry_with_custom_srs() -> None:
+    geom = Point(0, 0)
+    sp = E94SpacePrimitive.from_geometry(geom, srs="EPSG:3857")
+
+    assert sp.srs == "EPSG:3857"
+
+
+# ******************************************************************************************************************* #
+
+
+def test_geometry_property() -> None:
+    entity = E94SpacePrimitive(value='POINT(30 31)')
+
+    assert entity.geometry is not None
+    assert entity.geometry.geom_type == 'Point'
+
+
+# ******************************************************************************************************************* #
+
+
+def test_empty_geometry_properties() -> None:
+    entity = E94SpacePrimitive()
+
+    assert entity.geometry is None
+    assert entity.coordinates is None
+    assert entity.bounds is None
+    assert entity.centroid is None
