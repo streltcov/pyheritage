@@ -47,7 +47,7 @@ E99 Product Type
 """
 
 
-from pyheritage.cidoc.core.base import entity_register
+from pyheritage.cidoc.base import entity_register
 from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
 from pyheritage.cidoc.core.entities._spacetime import E54Dimension
 from pyheritage.cidoc.core.properties import (

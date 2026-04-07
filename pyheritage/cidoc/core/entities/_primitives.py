@@ -32,11 +32,12 @@ from edtf import EDTFObject, parse_edtf, text_to_edtf
 from edtf.parser.edtf_exceptions import EDTFParseException
 from pydantic import BeforeValidator, Field, field_validator, PrivateAttr
 from pygeoif import from_wkt, geometry, shape
+from pygeoif.geometry import Geometry
 
-from pyheritage.cidoc.core.base import entity_register
+from pyheritage.cidoc.base import entity_register
 from pyheritage.cidoc.core.entities._crm_base import E1CRMEntity
-from pyheritage.cidoc.core.enums import SpatialFormat, TimePrecision
 from pyheritage.cidoc.core.properties import P169DefinesSpacetimeVolume, P170DefinesTime
+from pyheritage.cidoc.enums import SpatialFormat, TimePrecision
 
 
 __all__ = ('E59PrimitiveValue', 'E60Number', 'E61TimePrimitive', 'E62String', 'E94SpacePrimitive',
@@ -471,14 +472,25 @@ class E61TimePrimitive(P170DefinesTime, E59PrimitiveValue):
             * Approximate dates are treated as equal to exact dates;
 
         """
+        sort_key_year_offset = 1_000_000
+
         if self.__parsed and hasattr(self.__parsed, 'lower_strict'):
             ls = self.__parsed.lower_strict()
-            return f"{ls.tm_year:05d}-{ls.tm_mon:02d}-{ls.tm_mday:02d}"
+            adjusted = ls.tm_year + sort_key_year_offset
+
+            return f"{adjusted:07d}-{ls.tm_mon:02d}-{ls.tm_mday:02d}"
 
         if not self.value:
             return ""
 
         clean = self.value.split("/")[0].rstrip("~?%").replace("x", "0")
+        match = re.match(r'^(-?\d+)(.*)', clean)
+
+        if match:
+            year = int(match.group(1))
+            rest = match.group(2)
+            adjusted = year + sort_key_year_offset
+            return f"{adjusted:07d}{rest}"
 
         return clean
 
@@ -754,8 +766,8 @@ class E62String(E59PrimitiveValue):
 
     # ------------------------------ #
 
-    @classmethod
     @field_validator("language")
+    @classmethod
     def validate_language_tag(cls, value: Optional[str]) -> Optional[str]:
         """Validation method for 'language' field;
 
@@ -778,9 +790,10 @@ class E62String(E59PrimitiveValue):
     # ------------------------------ #
 
     def __repr__(self) -> str:
-        language = f'{self.value} - {self.language}' if self.language else f'{self.value}'
+        if self.language:
+            return f'E62({self.value!r}, language={self.language!r})'
 
-        return f'E62({self.value}) {language}'
+        return f'E62({self.value!r})'
 
 
 # ******************************************************************************************************************* #
@@ -889,6 +902,41 @@ class E94SpacePrimitive(E59PrimitiveValue):
 
     # ------------------------------ #
 
+    @staticmethod
+    def _parse_wkt(value: str) -> Geometry:
+        """Parse a WKT string into a geometry object;
+
+        Raises:
+            RuntimeError: If the WKT string cannot be parsed;
+
+        """
+        try:
+            return from_wkt(value)
+        except Exception as e:
+            raise RuntimeError(f"Failed to parse WKT geometry: {value[:80]!r}") from e
+
+    # ------------------------------ #
+
+    @staticmethod
+    def _parse_geojson(value: str) -> Geometry:
+        """Parse a GeoJSON string into a geometry object;
+
+        Raises:
+            RuntimeError: If the string is not valid JSON or not a valid geometry;
+
+        """
+        try:
+            geojson = json.loads(value)
+        except json.JSONDecodeError as e:
+            raise RuntimeError(f"Invalid JSON value: {value[:80]!r}") from e
+
+        try:
+            return shape(geojson)
+        except Exception as e:
+            raise RuntimeError(f"Valid JSON but not a valid GeoJSON geometry: {value[:80]!r}") from e
+
+    # ------------------------------ #
+
     def model_post_init(self, context: Any) -> None:
         """Parse validated value into a pygeoif geometry object;
 
@@ -902,9 +950,9 @@ class E94SpacePrimitive(E59PrimitiveValue):
         value = self.value.strip()
 
         if _WKT_PREFIX.match(value):
-            self._geometry = from_wkt(value)
+            self._geometry = self._parse_wkt(value)
         elif value.startswith("{"):
-            self._geometry = shape(json.loads(value))
+            self._geometry = self._parse_geojson(value)
         else:
             raise RuntimeError(
                 f"Value passed validation but matches neither "

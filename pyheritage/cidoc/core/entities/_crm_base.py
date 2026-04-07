@@ -16,7 +16,7 @@ E1 CRM Entity
 
 from abc import ABC
 
-from pyheritage.cidoc.core.base import CRMEntityBase, entity_register
+from pyheritage.cidoc.base import CRMEntityBase, entity_register
 from pyheritage.cidoc.core.properties import (
     P1IsIdentifiedBy,
     P2HasType,

@@ -92,7 +92,7 @@ from typing import List, Optional, TYPE_CHECKING
 
 from pydantic import Field
 
-from pyheritage.cidoc.core.base import PropertyMixin
+from pyheritage.cidoc.base import PropertyMixin
 
 
 if TYPE_CHECKING:
@@ -226,7 +226,10 @@ class P5ConsistsOf(PropertyMixin):
 
     """
 
-    p5_consists_of: Optional[E3ConditionState] = Field(default=None, description='P5 consists of (forms part of)')
+    p5_consists_of: Optional[List[E3ConditionState]] = Field(
+        default=None,
+        description='P5 consists of (forms part of)'
+    )
 
 
 # ******************************************************************************************************************* #
@@ -276,7 +279,7 @@ class P7TookPlaceAt(PropertyMixin):
 
     """
 
-    p7_took_place_at: List[E53Place] = Field(default=None, description='P7 took place at (witnessed)')
+    p7_took_place_at: List[E53Place] = Field(min_length=1, description='P7 took place at (witnessed)')
 
 
 # ******************************************************************************************************************* #
@@ -3109,7 +3112,7 @@ class P173StartsBeforeOrWithTheEndOf(PropertyMixin):
 
     """
 
-    p173_starts_before_or_with_the_end_of: Optional[E2TemporalEntity] = Field(
+    p173_starts_before_or_with_the_end_of: Optional[List[E2TemporalEntity]] = Field(
         default=None,
         description='P173 starts before or with the end of (ends after or with the start of)'
     )
@@ -3165,7 +3168,7 @@ class P174StartsBeforeTheEndOf(PropertyMixin):
 
     """
 
-    p174_starts_before_the_end_of: Optional[E2TemporalEntity] = Field(
+    p174_starts_before_the_end_of: Optional[List[E2TemporalEntity]] = Field(
         default=None,
         description='P174 starts before the end of (ends after the start of)'
     )
@@ -3214,7 +3217,7 @@ class P175StartsBeforeOrWithTheStartOf(PropertyMixin):
 
     """
 
-    p175_starts_before_or_with_the_start_of: Optional[E2TemporalEntity] = Field(
+    p175_starts_before_or_with_the_start_of: Optional[List[E2TemporalEntity]] = Field(
         default=None,
         description='P175 starts before or with the start of (starts after or with the start of)'
     )
@@ -3263,7 +3266,7 @@ class P176StartsBeforeTheStartOf(PropertyMixin):
 
     """
 
-    p176_starts_before_the_start_of: Optional[E2TemporalEntity] = Field(
+    p176_starts_before_the_start_of: Optional[List[E2TemporalEntity]] = Field(
         default=None,
         description='P176 starts before the start of (starts after the start of)'
     )
@@ -3312,7 +3315,7 @@ class P177AssignedPropertyType(PropertyMixin):
 
     """
 
-    p177_assigned_property_type: Optional[E55Type] = Field(default=None, description='P177 assigned property type')
+    p177_assigned_property_type: Optional[List[E55Type]] = Field(description='P177 assigned property type')
 
 
 # ******************************************************************************************************************* #
@@ -3401,7 +3404,7 @@ class P182EndsBeforeOrWitheStartOf(PropertyMixin):
 
     """
 
-    p182_ends_before_or_with_start_of: Optional[E2TemporalEntity] = Field(
+    p182_ends_before_or_with_start_of: Optional[List[E2TemporalEntity]] = Field(
         default=None,
         description='P182 ends before or with the start of (starts after or with the end of)'
     )
@@ -3452,7 +3455,7 @@ class P183EndsBeforeTheStartOf(PropertyMixin):
 
     """
 
-    p183_ends_before_the_start_of: Optional[E2TemporalEntity] = Field(
+    p183_ends_before_the_start_of: Optional[List[E2TemporalEntity]] = Field(
         default=None,
         description='P183 ends before the start of (starts after the end of)'
     )
@@ -3499,7 +3502,7 @@ class P184EndsBeforeOrWithTheEndOf(PropertyMixin):
 
     """
 
-    p184_ends_before_or_with_the_end_of: Optional[E2TemporalEntity] = Field(
+    p184_ends_before_or_with_the_end_of: Optional[List[E2TemporalEntity]] = Field(
         default=None,
         description='P184 ends before or with the end of (ends with or after the end of)'
     )
@@ -3549,7 +3552,7 @@ class P185EndsBeforeTheEndOf(PropertyMixin):
 
     """
 
-    p185_ends_before_the_end_of: Optional[E2TemporalEntity] = Field(
+    p185_ends_before_the_end_of: Optional[List[E2TemporalEntity]] = Field(
         default=None,
         description='P185 ends before the end of (ends after the end of)'
     )
@@ -3590,7 +3593,7 @@ class P186ProducedThingOfProductType(PropertyMixin):
 
     """
 
-    p186_produced_thing_of_product_type: Optional[E99ProductType] = Field(
+    p186_produced_thing_of_product_type: Optional[List[E99ProductType]] = Field(
         default=None,
         description='P186 produced thing of product type (is produced by)'
     )

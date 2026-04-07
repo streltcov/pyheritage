@@ -29,7 +29,7 @@ from typing import List, Optional, TYPE_CHECKING
 
 from pydantic import Field
 
-from pyheritage.cidoc.core.base import PropertyMixin
+from pyheritage.cidoc.base import PropertyMixin
 
 
 if TYPE_CHECKING:
@@ -360,7 +360,10 @@ class P137Exemplifies(PropertyMixin):
 
     """
 
-    p137_exemplifies: Optional[E55Type] = Field(default=None, description='P137 exemplifies (is exemplified by)')
+    p137_exemplifies: Optional[List[E55Type]] = Field(
+        default=None,
+        description='P137 exemplifies (is exemplified by)'
+    )
 
 
 # ******************************************************************************************************************* #
