@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Dublin Core elements - title, creator, subject, description, publisher,
-contributor, date, type, format, identifier;
-
+"""Dublin Core elements - all 15 DC elements;
 
 """
 
@@ -11,7 +9,8 @@ from pyheritage.dc.base import dc_element, DCEntityBase
 
 
 __all__ = (
-    'DCCreator', 'DContributor', 'DDescription', 'DCFormat', 'DCIdentifier',
+    'DCCoverage', 'DCCreator', 'DContributor', 'DDescription', 'DCFormat',
+    'DCIdentifier', 'DCLanguage', 'DCRelation', 'DCRights', 'DCSource',
     'DCTitle', 'DCTType', 'DCDate', 'DPublisher', 'DSubject',
 )
 
@@ -170,6 +169,89 @@ class DCIdentifier(DCEntityBase):
 
     Recommended practice is to identify the resource by means of a string conforming to a formal
     identification system;
+
+    """
+
+    value: str
+
+
+# ******************************************************************************************************************* #
+
+
+@dc_element(label="dc:source")
+class DCSource(DCEntityBase):
+    """A related resource from which the described resource is derived;
+
+    https://www.dublincore.org/specifications/dublin-core/dcmi-element-terms/elements/dc/source/
+
+    The described resource may be derived from the related resource in whole or in part;
+
+    """
+
+    value: str
+
+
+# ******************************************************************************************************************* #
+
+
+@dc_element(label="dc:language")
+class DCLanguage(DCEntityBase):
+    """A language of the resource;
+
+    https://www.dublincore.org/specifications/dublin-core/dcmi-element-terms/elements/dc/language/
+
+    Recommended practice is to use a controlled vocabulary such as RFC 4646;
+
+    """
+
+    value: str
+
+
+# ******************************************************************************************************************* #
+
+
+@dc_element(label="dc:relation")
+class DCRelation(DCEntityBase):
+    """A related resource;
+
+    https://www.dublincore.org/specifications/dublin-core/dcmi-element-terms/elements/dc/relation/
+
+    Recommended practice is to identify the related resource by means of a string conforming
+    to a formal identification system;
+
+    """
+
+    value: str
+
+
+# ******************************************************************************************************************* #
+
+
+@dc_element(label="dc:coverage")
+class DCCoverage(DCEntityBase):
+    """The spatial or temporal topic of the resource, the spatial applicability of the resource,
+    or the jurisdiction under which the resource is relevant;
+
+    https://www.dublincore.org/specifications/dublin-core/dcmi-element-terms/elements/dc/coverage/
+
+    Spatial topic, spatial applicability, or temporal may be a named place, a location, or other
+    geographic feature;
+
+    """
+
+    value: str
+
+
+# ******************************************************************************************************************* #
+
+
+@dc_element(label="dc:rights")
+class DCRights(DCEntityBase):
+    """Information about rights held in and over the resource;
+
+    https://www.dublincore.org/specifications/dublin-core/dcmi-element-terms/elements/dc/rights/
+
+    Typically, Rights contains intellectual property rights statements;
 
     """
 
