@@ -6,9 +6,13 @@ CRMsci v2.0
 
 Entities
 --------
+S1 Matter Removal
+S2 Sample Taking
 S4 Observation
 S10 Material Substantial
 S15 Observable Entity
+S17 Physical Genesis
+S18 Alteration
 S20 Rigid Physical Feature
 S21 Measurement
 
@@ -18,16 +22,68 @@ S21 Measurement
 from abc import ABC
 
 from pyheritage.cidoc.base import entity_register
-from pyheritage.cidoc.core.entities import E1CRMEntity, E13AttributeAssignment, E26PhysicalFeature, E53Place, E70Thing
+from pyheritage.cidoc.core.entities import (
+    E1CRMEntity,
+    E5Event,
+    E7Activity,
+    E13AttributeAssignment,
+    E26PhysicalFeature,
+    E53Place,
+    E63BeginningOfExistence,
+    E70Thing,
+)
 
 
 __all__ = (
     'S10MaterialSubstantial',
     'S15ObservableEntity',
+    'S17PhysicalGenesis',
+    'S18Alteration',
+    'S1MatterRemoval',
     'S20RigidPhysicalFeature',
     'S21Measurement',
+    'S2SampleTaking',
     'S4Observation',
 )
+
+
+@entity_register(label='S1 Matter Removal')
+class S1MatterRemoval(E7Activity, ABC):
+    """'S1 Matter Removal' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S1
+
+    SubClass Of:
+        E7 Activity
+
+    SuperClass Of:
+        E80 Part Removal
+        S2 Sample Taking
+
+    Scope Note:
+        This class comprises the activities that result in an instance of S10 Material Substantial being
+        decreased by the removal of an amount of matter. Typical scenarios include the removal of a
+        component or piece of a physical object, removal of an archaeological or geological layer, taking
+        a tissue sample from a body or a sample of fluid from a body of water. The removed matter may
+        acquire a persistent identity of different nature beyond the act of its removal, such as becoming
+        a physical object in the narrower sense. Such cases should be modeled by using multiple
+        instantiation with adequate concepts of creating the respective items.
+
+    Examples:
+        - the removal of the layer of black overpainting that covered the background of 'La Gioconda
+          of the Prado' between 2011 and 2012 by the Prado Museum in Madrid (S1) (Museo del Prado, 2012)
+
+    In First Order Logic:
+        S1(x) ⇒ E7(x)
+
+    Properties:
+        O1 diminished (was diminished by): S10 Material Substantial
+        O2 removed (was removed by): S11 Amount of Matter
+
+    """
+
+
+# ******************************************************************************************************************* #
 
 
 @entity_register(label='S4 Observation')
@@ -248,5 +304,128 @@ class S20RigidPhysicalFeature(E26PhysicalFeature, E53Place):
     Properties:
         O7 confines (is confined by): S10 Material Substantial
         O23 is defined by (defines): E92 Spacetime Volume
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S18 Alteration')
+class S18Alteration(E5Event, ABC):
+    """'S18 Alteration' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S18
+
+    SubClass Of:
+        E5 Event
+
+    SuperClass Of:
+        S17 Physical Genesis
+        E11 Modification
+
+    Scope Note:
+        This class comprises natural events or man-made processes that create, alter or change physical
+        things, by affecting permanently their form or consistency without changing their identity.
+        Examples include alterations on depositional features-layers by natural factors or disturbance
+        by roots or insects, organic alterations, petrification, etc.
+
+    Examples:
+        - the petrification process of the Lesvos forest related to the intense volcanic activity in
+          Lesvos island during late Oligocene - middle Miocene period (S18) (Marinos, 1997)
+        - the flattening of the Lanhydrock Pedigree parchment after humidification (E11)
+          (Pickwoad, N., 2016)
+
+    In First Order Logic:
+        S18(x) ⇒ E5(x)
+
+    Properties:
+        O18 altered (was altered by): E18 Physical Thing
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S17 Physical Genesis')
+class S17PhysicalGenesis(E63BeginningOfExistence, S18Alteration, ABC):
+    """'S17 Physical Genesis' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S17
+
+    SubClass Of:
+        E63 Beginning of Existence
+        S18 Alteration
+
+    SuperClass Of:
+        E12 Production
+
+    Scope Note:
+        This class comprises events or processes that result in (generate) physical things, man-made or
+        natural, coming into being in the form by which they are later identified. The creation of a new
+        physical item, at the same time, can be a result of an alteration (modification) -- it can become
+        a new thing due to an alteration activity.
+
+    Examples:
+        - the desertification process that resulted in the spatial distribution of 'tiger bush' pattern
+          on the gradually sloped terrain in Western Africa, as it was studied in 1994 (S17)
+          (Thiery et al., 1995)
+        - the corrosion process affecting my copper samples in the artificial aging salt-spray apparatus
+          after 10 cycles which produced layers of cuprite and malachite (E12)
+
+    In First Order Logic:
+        S17(x) ⇒ E63(x)
+        S17(x) ⇒ S18(x)
+
+    Properties:
+        O17 generated (was generated by): E18 Physical Thing
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S2 Sample Taking')
+class S2SampleTaking(S1MatterRemoval, ABC):
+    """'S2 Sample Taking' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S2
+
+    SubClass Of:
+        S1 Matter Removal
+
+    SuperClass Of:
+        S3 Measurement by Sampling
+        S24 Sample Splitting
+
+    Scope Note:
+        This class comprises the activity that results in taking an amount of matter as sample for
+        further analysis from a material substantial such as a body of water, a geological formation
+        or an archaeological object. The removed matter may acquire a persistent identity of different
+        nature beyond the act of its removal, such as becoming a physical object in the narrower sense.
+        The sample is typically removed from a physical feature which is used as a frame of reference,
+        the place of sampling. In case of non-rigid Material Substantials, the source of sampling may
+        regarded not to be modified by the activity of sample taking.
+
+    Examples:
+        - the water sampling carried out by IGME, sampled from borehole 10/G5 at 419058.03, 4506565,
+          95.7 Mygdonia basin on 28/6/2005 (S2) (Lucchese et al., 2013; Kritikos et al., 2013;
+          InGeoCloudS, 2012; InGeoCloudS, 2013)
+        - the collection of specimen 'FHO - Benth. - 1055' from a plant of the species 'spiciformis'
+          in Zambia by Bullock, A.A. in 1939 (S2)
+        - the collection of micro-sample 7, from the paint layer on the area of the apple shown on the
+          painting 'Cupid complaining to Venus' (Cranach) by Joyce Plesters in June 1963 (S2)
+          (The National Gallery, London, 1963)
+
+    In First Order Logic:
+        S2(x) ⇒ S1(x)
+
+    Properties:
+        O3 sampled from (was sample by): S10 Material Substantial
+        O4 sampled at (was sampling location of): E53 Place
+        O5 removed (was removed by): S13 Sample
+        O20 sampled from type of part (type of part was sampled by): E55 Type
 
     """
