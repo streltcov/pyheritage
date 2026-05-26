@@ -10,6 +10,11 @@ S1 Matter Removal
 S2 Sample Taking
 S3 Measurement by Sampling
 S4 Observation
+S5 Inference Making
+S6 Data Evaluation
+S7 Simulation or Prediction
+S8 Categorical Hypothesis Building
+S9 Property Type
 S10 Material Substantial
 S11 Amount of Matter
 S13 Sample
@@ -33,6 +38,7 @@ from pyheritage.cidoc.core.entities import (
     E13AttributeAssignment,
     E26PhysicalFeature,
     E53Place,
+    E55Type,
     E63BeginningOfExistence,
     E70Thing,
 )
@@ -52,6 +58,11 @@ __all__ = (
     'S2SampleTaking',
     'S3MeasurementBySampling',
     'S4Observation',
+    'S5InferenceMaking',
+    'S6DataEvaluation',
+    'S7SimulationOrPrediction',
+    'S8CategoricalHypothesisBuilding',
+    'S9PropertyType',
 )
 
 
@@ -596,5 +607,210 @@ class S19EncounterEvent(S4Observation):
     Properties:
         O19 encountered object (was object encountered through): E18 Physical Thing
         O21 encountered at (witnessed encounter): E53 Place
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S5 Inference Making')
+class S5InferenceMaking(E13AttributeAssignment, ABC):
+    """'S5 Inference Making' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S5
+
+    SubClass Of:
+        E13 Attribute Assignment
+
+    SuperClass Of:
+        S6 Data Evaluation
+        S7 Simulation or Prediction
+        S8 Categorical Hypothesis Building
+
+    Scope Note:
+        This class comprises the action of making propositions and statements about particular states of
+        affairs in reality or in possible realities or categorical descriptions of reality by using
+        inferences from other statements based on hypotheses and any form of formal or informal logic.
+        It includes evaluations, calculations, and interpretations based on mathematical formulations
+        and propositions.
+
+    Examples:
+        - the inference made by Sakellarakis in 1980 about the sacrifice of a young man in the Minoan
+          temple of Anemospilia based on the skeleton found (and 2 more) in the west room of the temple
+          and the ritual bronze knife on it and the hypothesis that he died from loss of blood (S5)
+          [the evidence was that his bones remained white in contrast to the others]
+          (Sakellarakis and Sapouna-Sakellaraki, 1981)
+        - the inference that the underdrawing of the painting 'Cupid complaining to Venus' was done
+          with red pigment, based on the observation that red pigment lines appear under the top paint
+          layers (S5) (Foister, 2015)
+
+    In First Order Logic:
+        S5(x) ⇒ E13(x)
+
+    Properties:
+        (none)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S6 Data Evaluation')
+class S6DataEvaluation(S5InferenceMaking):
+    """'S6 Data Evaluation' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S6
+
+    SubClass Of:
+        S5 Inference Making
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises the action of concluding propositions on a respective reality from
+        observational data by making evaluations based on mathematical inference rules and calculations
+        using established hypotheses, such as the calculation of an earthquake epicenter. S6 Data
+        Evaluation is not defined as S21/E16 Measurement; Secondary derivations of dimensions of an
+        object from data measured by different processes are regarded as S6 Data Evaluation and not
+        determining instances of Measurement in its own right. For instance, the volume of a statue
+        concluded from a 3D model is an instance of S6 Data Evaluation and not of Measurement.
+
+    Examples:
+        - the calculation of the earthquake epicenter of Lokris area in 1989 by IGME (S6)
+          (Ganas et al., 2006)
+        - the calculation of the intensity distance and assignment of PGA_N using the gcf2sac software
+          from the EPPO shock wave recording of 2/2/1990 in Athens (S6)
+          (Lucchese et al., 2013; Kritikos et al., 2013; InGeoCloudS, 2012; InGeoCloudS, 2013)
+        - the calculation of the overall height of the statue of Hercules in the Temple of Hercules in
+          Amman from the measurement of the size of the fragment of the fingers (S6)
+          ('Temple of Hercules (Amman)', Wikipedia, 2022)
+
+    In First Order Logic:
+        S6(x) ⇒ S5(x)
+
+    Properties:
+        O10 assigned dimension (dimension was assigned by): E54 Dimension
+        O11 described (was described by): S15 Observable Entity
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S7 Simulation or Prediction')
+class S7SimulationOrPrediction(S5InferenceMaking):
+    """'S7 Simulation or Prediction' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S7
+
+    SubClass Of:
+        S5 Inference Making
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises activities of executing algorithms or software for simulating the behavior
+        and the properties of a system of interacting components that form part of reality or not by
+        using a mathematical model of the respective interactions. In particular it implies making
+        predictions about the future behaviors of a system of interacting components of reality by
+        starting simulation from an actually observed state, such as weather forecasts. Simulations
+        may also be used to understand the effects of a theory, to compare theoretical predictions
+        with reality, or to show differences with another theory.
+
+    Examples:
+        - the forecasting of the imminent flooding of Venice in November 2012 by the Hellenic Centre
+          for Marine Research using the Poseidon Sea Level Forecast System, 72 hours before its actual
+          occurrence (S7) (slide 18 in Kores et al., 2013)
+        - predicting the required temperature to maintain a target RH(%) of 50 based on monthly average
+          temperature and RH in Birmingham, UK (S7) [using the 'Calculator for conservation heating']
+          (Padfield, no date)
+
+    In First Order Logic:
+        S7(x) ⇒ S5(x)
+
+    Properties:
+        (none)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S8 Categorical Hypothesis Building')
+class S8CategoricalHypothesisBuilding(S5InferenceMaking):
+    """'S8 Categorical Hypothesis Building' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S8
+
+    SubClass Of:
+        S5 Inference Making
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises the action of making categorical hypotheses based on inference rules and
+        theories; By categorical hypotheses we mean assumptions about the kinds of interactions and
+        related kinds of structures of a domain that have the character of "laws" of nature or human
+        behavior, be it necessary or probabilistic. Categorical hypotheses are developed by "induction"
+        from finite numbers of observation and the absence of observations of particular kinds. As such,
+        categorical hypotheses are always subject to falsification by new evidence. Instances of S8
+        Categorical Hypothesis Building include making and questioning categorical hypotheses.
+
+    Examples:
+        - hypothesising that 'no binding before the 9th century is made with spine supports' by
+          Szirmai (S8) [documented in section 7.1 and 7.2 of 'The Archaeology of Medieval bookbinding']
+          (Szirmai, J.A. 1999)
+
+    In First Order Logic:
+        S8(x) ⇒ S5(x)
+
+    Properties:
+        (none)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S9 Property Type')
+class S9PropertyType(E55Type):
+    """'S9 Property Type' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S9
+
+    SubClass Of:
+        E55 Type
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises types of properties. Typically, instances of S9 Property Type would be
+        taken from an ontology or terminological system. In particular, instances of this class can
+        be used to describe in a parametric way what kind of properties the values in scientific data
+        sets are about. By virtue of such descriptions, numeric data can be interpreted as sets of
+        propositions in terms of a formal ontology, such as "concentration of nitrate", observed in
+        the ground water from a certain borehole.
+
+    Examples:
+        - the velocity (S9) (of a station that is observed, meaning a share-wave velocity over the
+          first 30 m). (Lucchese et al., 2013; Kritikos et al., 2013; InGeoCloudS, 2012;
+          InGeoCloudS, 2013)
+        - the retention time (S9) [in gas chromatography, meaning the time it takes for a component
+          to pass through the chromatographer's column] ('Gas chromatography', Wikipedia, 2018)
+
+    In First Order Logic:
+        S9(x) ⇒ E55(x)
+
+    Properties:
+        (none)
 
     """
