@@ -5,7 +5,7 @@
 """
 
 
-from pyheritage.dc.elements import _core
+from pyheritage.dc.elements import _core, _terms
 
 
-__all__ = ('_core', )
+__all__ = ('_core', '_terms', )
