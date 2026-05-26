@@ -8,11 +8,15 @@ Entities
 --------
 S1 Matter Removal
 S2 Sample Taking
+S3 Measurement by Sampling
 S4 Observation
 S10 Material Substantial
+S11 Amount of Matter
+S13 Sample
 S15 Observable Entity
 S17 Physical Genesis
 S18 Alteration
+S19 Encounter Event
 S20 Rigid Physical Feature
 S21 Measurement
 
@@ -36,13 +40,17 @@ from pyheritage.cidoc.core.entities import (
 
 __all__ = (
     'S10MaterialSubstantial',
+    'S11AmountOfMatter',
+    'S13Sample',
     'S15ObservableEntity',
     'S17PhysicalGenesis',
     'S18Alteration',
+    'S19EncounterEvent',
     'S1MatterRemoval',
     'S20RigidPhysicalFeature',
     'S21Measurement',
     'S2SampleTaking',
+    'S3MeasurementBySampling',
     'S4Observation',
 )
 
@@ -227,6 +235,84 @@ class S10MaterialSubstantial(E70Thing, S15ObservableEntity):
     Properties:
         O15 occupied (was occupied by): E53 Place
         O25 contains (is contained in): S10 Material Substantial
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S11 Amount of Matter')
+class S11AmountOfMatter(S10MaterialSubstantial, ABC):
+    """'S11 Amount of Matter' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S11
+
+    SubClass Of:
+        S10 Material Substantial
+
+    SuperClass Of:
+        S12 Amount of Fluid
+        S13 Sample
+
+    Scope Note:
+        This class comprises fixed amounts of matter specified as some air, some water, some soil, etc.,
+        defined by the total and integrity of their material content. In order to be able to identify
+        and preserve an instance of S11 Amount of Matter, some sort of confinement is needed that serves
+        as a constraint for the enclosed matter and the integrity of the content, such as a bottle.
+        In contrast to instances of E18 Physical Thing, no stability of form is required. The content
+        may be put into another bottle without losing its identity. An instance of S11 Amount of Matter
+        may lose its identifying features by such processes. What matters for the identity of an instance
+        of S11 Amount of Matter is the preservation of a relevant composition from the initial state of
+        definition onwards.
+
+    Examples:
+        - the mass of soil that was removed from sections 1, 2, 3 and 4 of the site of Palamari at Skyros
+          island, Greece, after the cleaning of the site in 2006 (S11) (Archaeological Institute of
+          America, 2006)
+        - the amount of natural cement (S11) that was added in a proportion of 5% in 2016 for the
+          development of the sample of mortar in the laboratory of Ceramic, in Boumerdes University
+          (Kelouaz et al., 2016)
+
+    In First Order Logic:
+        S11(x) ⇒ S10(x)
+
+    Properties:
+        (none)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S13 Sample')
+class S13Sample(S11AmountOfMatter):
+    """'S13 Sample' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S13
+
+    SubClass Of:
+        S11 Amount of Matter
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises instances of S11 Amount of Matter taken from some instance of S10 Material
+        Substantial with the intention to be analyzed, studied or just to be kept as reference.
+
+    Examples:
+        - the groundwater sample (S13) taken from borehole 10/G5 of the area of Mygdonia basin
+          (Lucchese et al., 2013; Kritikos et al., 2013; InGeoCloudS, 2012; InGeoCloudS, 2013)
+        - the micro-sample 7, taken from the painting 'Cupid complaining to Venus' (Cranach)
+          by Joyce Plesters in June, 1963 (S13) (The National Gallery, London, 1963)
+
+    In First Order Logic:
+        S13(x) ⇒ S11(x)
+
+    Properties:
+        (none)
 
     """
 
@@ -427,5 +513,88 @@ class S2SampleTaking(S1MatterRemoval, ABC):
         O4 sampled at (was sampling location of): E53 Place
         O5 removed (was removed by): S13 Sample
         O20 sampled from type of part (type of part was sampled by): E55 Type
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S3 Measurement by Sampling')
+class S3MeasurementBySampling(S2SampleTaking, S21Measurement):
+    """'S3 Measurement by Sampling' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S3
+
+    SubClass Of:
+        S2 Sample Taking
+        S21 Measurement
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises activities of taking a sample and measuring or analyzing it as one unit
+        of activity that results in the assignment of a value to a property of the sampled实物.
+        S3 Measurement by Sampling inherits the properties of S2 Sample Taking (O3 sampled from:
+        S10 Material Substantial and O4 sampled at: E53 Place) and the properties of S21 Measurement
+        (O24 measured: S15 Observable Entity), if the sample is not documented beyond the context
+        of the activity.
+
+    Examples:
+        - the chemical analysis 1 on 20/4/2004 which sampled from layer 50501 and observed the
+          presence of organic matter (S3) (Lucchese et al., 2013; Kritikos et al., 2013;
+          InGeoCloudS, 2012; InGeoCloudS, 2013)
+        - the Sphaerosyllis levantina specimen length measurement on 12/3/1999 (S3)
+          (Bekiari et al., 2014)
+        - the measurement of refractive index of a glass sample from the painting 'The Virgin and
+          Child before a Firescreen' (after Campin) in 2014 (S3) (Foister, S, 2015)
+
+    In First Order Logic:
+        S3(x) ⇒ S2(x)
+        S3(x) ⇒ S21(x)
+
+    Properties:
+        (none — inherits all from S2 Sample Taking and S21 Measurement)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S19 Encounter Event')
+class S19EncounterEvent(S4Observation):
+    """'S19 Encounter Event' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S19
+
+    SubClass Of:
+        S4 Observation
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises activities of S4 Observation (substance) where an E39 Actor encounters
+        an instance of E18 Physical Thing at some location that is not further examined or observed
+        within the context of this activity. The encountered object is generally part of a larger
+        physical feature or collection, and is subject to being identified and described.
+
+    Examples:
+        - the encounter of the Villa of the Papyri scrolls in Herculaneum in 1752 (S19)
+          (Bonn-Muller, 2010)
+        - the detection of lagocephalus sceleratus was carried out with the trawler 419 in the
+          Mediterranean sea, during the first week of August 2014 (S19)
+          (Bekiari et al., 2014)
+        - the encounter of oak planks from a ship during a dig in a mound at the farm Lille Oseberg
+          in Norway in 1904 (S19) (Ferguson, 2009, p.10-11)
+
+    In First Order Logic:
+        S19(x) ⇒ S4(x)
+
+    Properties:
+        O19 encountered object (was object encountered through): E18 Physical Thing
+        O21 encountered at (witnessed encounter): E53 Place
 
     """
