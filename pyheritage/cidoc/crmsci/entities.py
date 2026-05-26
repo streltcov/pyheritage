@@ -17,13 +17,18 @@ S8 Categorical Hypothesis Building
 S9 Property Type
 S10 Material Substantial
 S11 Amount of Matter
+S12 Amount of Fluid
 S13 Sample
+S14 Fluid Body
 S15 Observable Entity
 S17 Physical Genesis
 S18 Alteration
 S19 Encounter Event
 S20 Rigid Physical Feature
 S21 Measurement
+S22 Segment of Matter
+S23 Position Determination
+S24 Sample Splitting
 
 """
 
@@ -47,7 +52,9 @@ from pyheritage.cidoc.core.entities import (
 __all__ = (
     'S10MaterialSubstantial',
     'S11AmountOfMatter',
+    'S12AmountOfFluid',
     'S13Sample',
+    'S14FluidBody',
     'S15ObservableEntity',
     'S17PhysicalGenesis',
     'S18Alteration',
@@ -55,6 +62,9 @@ __all__ = (
     'S1MatterRemoval',
     'S20RigidPhysicalFeature',
     'S21Measurement',
+    'S22SegmentOfMatter',
+    'S23PositionDetermination',
+    'S24SampleSplitting',
     'S2SampleTaking',
     'S3MeasurementBySampling',
     'S4Observation',
@@ -324,6 +334,81 @@ class S13Sample(S11AmountOfMatter):
 
     Properties:
         (none)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S14 Fluid Body')
+class S14FluidBody(S10MaterialSubstantial, ABC):
+    """'S14 Fluid Body' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S14
+
+    SubClass Of:
+        S10 Material Substantial
+
+    SuperClass Of:
+        S12 Amount of Fluid
+
+    Scope Note:
+        This class comprises a mass of matter in fluid form environmentally constraint in some
+        persistent form allowing for identifying it for the management or research of material
+        phenomena, such as a part of the sea, a river, the atmosphere or the milk in a bottle.
+        Fluids are generally defined by the continuity criterion which is characteristic of their
+        substance: their amorphous matter is continuous and tends to flow. Therefore, contiguous
+        amounts of matter within a fluid body may stay contiguous or at least be locally spatially
+        confined for a sufficiently long time in order to be temporarily identified and traced.
+        This is a much weaker concept of stability of form than the one we would apply to what one
+        would call a physical object. In general, an instance of Fluid Body may gain or lose matter
+        over time through so-called sources or sinks in its surface, in contrast to physical things,
+        which may lose or gain matter by exchange of pieces such as spare parts or corrosion.
+
+    Examples:
+        - the Rhine River
+
+    In First Order Logic:
+        S14(x) ⇒ S10(x)
+
+    Properties:
+        (none — inherits O15 occupied: E53 Place and O25 contains: S10 Material Substantial from
+        S10 Material Substantial)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S12 Amount of Fluid')
+class S12AmountOfFluid(S11AmountOfMatter, S14FluidBody):
+    """'S12 Amount of Fluid' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S12
+
+    SubClass Of:
+        S11 Amount of Matter
+        S14 Fluid Body
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises fixed amounts of fluid (be they gas or liquid) defined by the total
+        of its material content, typically molecules. They frequently acquire identity in laboratory
+        practice by the fact of being kept or handled together within some adequate containers.
+
+    Examples:
+        - J.K.'s blood sample 0019FCF5 for the measurement of the cholesterol blood level (fictitious)
+
+    In First Order Logic:
+        S12(x) ⇒ S11(x)
+        S12(x) ⇒ S14(x)
+
+    Properties:
+        O6 is former or current part of (has former or current part): S14 Fluid Body
 
     """
 
@@ -812,5 +897,156 @@ class S9PropertyType(E55Type):
 
     Properties:
         (none)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S22 Segment of Matter')
+class S22SegmentOfMatter(S20RigidPhysicalFeature):
+    """'S22 Segment of Matter' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S22
+
+    SubClass Of:
+        S20 Rigid Physical Feature
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises physical features with relative stability of form and structure within a
+        declared spatial volume of interest. The spatial extent of an instance of S22 Segment of Matter
+        may be declared or defined by a researcher or observer usually because the arrangement and
+        composition of substance is characteristic for the surrounding matter or can be interpreted as
+        traces of its genesis and subsequent internal and external processes it was exposed to. The
+        defining spatial extent is typically declared on a continuous matter by means of geometric
+        determination without observable boundaries on all sides or any side. It may however be
+        extracted at some point in time along the declared boundaries.
+
+        An instance of S22 Segment of Matter is regarded to be existing from the time on it completely
+        solidified with a structure that is still preserved in a recognizable way at the time of its
+        spatial definition. Its existence is regarded to end when its respective integrity is partially
+        or completely corrupted. Uncorrupted subsections of an instance of S22 Segment of Matter may
+        continue to exist as segments of matter in their own right beyond the existence of the
+        containing instance, and may have solidified before it.
+
+        Typical examples are segments of archaeological or geological layers. They are regarded as
+        uncorrupted even if they have undergone conformal deformations, such as compressions or shifts,
+        as long as the effects of these deformations do not destroy the relevant structures of interest.
+
+    Examples:
+        - the clay floor A11 [Heterogeneous, yellow to grey silty clay; clear, wavy lower boundary]
+          (illu p. 1601, Croix et al, 2019)
+
+    In First Order Logic:
+        S22(x) ⇒ S20(x)
+
+    Properties:
+        O23 is defined by (defines): E92 Spacetime Volume
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S23 Position Determination')
+class S23PositionDetermination(S4Observation):
+    """'S23 Position Determination' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S23
+
+    SubClass Of:
+        S4 Observation
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises activities of determining positions in space and time. The determined
+        position is intended to approximate a part or all of the extent of the presence (instance of
+        E93 Presence) of an instance of E18 Physical Thing or E4 Period of interest, such as the
+        outer walls of an excavated settlement, the position of a ship sailing or the start and end
+        of athlete's run in a competition. Characteristically, a theodolite or GPS device may be
+        positioned on some persistent feature. Determining the position of the device will yield an
+        approximation of the position of the feature of interest. Alternatively, some material item
+        may be observed moving through a determined position at a given time.
+
+        This class does not inherit properties from class S21 Measurement. A position determination
+        is an evaluation of a combination of measurement of multiple associated distances and/or
+        angles (instances of E54 Dimension) from a particular spot to certain reference points of
+        previously known position in the same reference space. A particular role is played by the
+        Earth's magnetic field and rotational axis as reference for an angle or direction. Often,
+        the observed constituting dimensions are not documented, or hidden in an electronic device
+        software. The determined position is given as an E94 Space Primitive corresponding to a
+        declarative place. Together with the measured time-span covering the time-critical
+        observations it forms a spacetime volume, which should normally overlap with the
+        spatiotemporal extent of the thing or phenomenon of interest.
+
+    Examples:
+        - the determination of the position of the Titanic for the initial distress call after
+          hitting an iceberg (S23) [The iceberg was hit on 14 April 1912 at 23:40 ship's time.
+          The subsequent position determination was likely done by Capt. Edward Smith and was
+          transmitted 15 April 1912 at 00:27.] (Halpern, 2011)
+        - the determination of the position of the Titanic by officer Joseph G. Boxhall after the
+          initial distress signal was sent (S23) [done between 00:27 and 00:35, when Boxhall showed
+          the coordinates to Smith] (Halpern, 2011)
+        - the determination of the position of the Titanic by Robert Ballard's team after the
+          Titanic ship-wreck was found (S23) (Ballard et al., 1987)
+        - Samuel Halpern's 2007 determination of the position of the Titanic at the time of the
+          collision (S23) [based on the position of the ship-wreck] (Halpern, 2007)
+
+    In First Order Logic:
+        S23(x) ⇒ S4(x)
+
+    Properties:
+        O30 determined position (was determined by): E94 Space Primitive
+        O31 has validity time-span (is time-span validity for): E52 Time-Span
+        O32 determined position of (was located by): S15 Observable Entity
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='S24 Sample Splitting')
+class S24SampleSplitting(S2SampleTaking):
+    """'S24 Sample Splitting' CRMsci entity;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S24
+
+    SubClass Of:
+        S2 Sample Taking
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises the activity of dividing an instance of S13 Sample into new instances
+        of S13 Sample. This activity describes cases of sub-sampling where the resulting instance
+        maintains the characteristic qualities of the original instance. Any observations of these
+        qualities made on the new instance also apply to the original one. This class should be used
+        to model cases of splitting a homogenous sample into multiple ones.
+
+    Examples:
+        - the activity of removing a part from the sample, which was originally taken from the tusk
+          fragment GT993 by Godfrey et al. in 2000, in order to analyse it through ICP-AES analysis
+          to reveal the composition of the original sample [A sample from a section of the tusk
+          fragment GT993 which was originally found in the ship-wreck of Vergulde Draeck in Western
+          Australia was taken. This sample was homogenous (ground to fine powder). Part of the sample
+          was then removed for elemental analysis using inductively coupled plasma atomic emission
+          spectrometry (ICP-AES). Another part was removed for carbon/nitrogen analysis using a LECO
+          analyser.] (Godfrey et al., 2002)
+
+    In First Order Logic:
+        S24(x) ⇒ S2(x)
+
+    Properties:
+        O27 split (was source for): S13 Sample
+        O29 removed sub-sample (was sub-sample removed by): S13 Sample
 
     """
