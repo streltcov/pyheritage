@@ -36,6 +36,7 @@ S24 Sample Splitting
 from abc import ABC
 
 from pyheritage.cidoc.base import entity_register
+from pyheritage.cidoc.core import entities as _core_entities_module
 from pyheritage.cidoc.core.entities import (
     E1CRMEntity,
     E5Event,
@@ -46,6 +47,14 @@ from pyheritage.cidoc.core.entities import (
     E55Type,
     E63BeginningOfExistence,
     E70Thing,
+)
+from pyheritage.cidoc.crmsci.properties import (
+    O1Diminished,
+    O2Removed,
+    O3SampledFrom,
+    O4SampledAt,
+    O5Removed,
+    O20SampledFromTypeOfPart,
 )
 
 
@@ -77,7 +86,7 @@ __all__ = (
 
 
 @entity_register(label='S1 Matter Removal')
-class S1MatterRemoval(E7Activity, ABC):
+class S1MatterRemoval(O1Diminished, O2Removed, E7Activity, ABC):
     """'S1 Matter Removal' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S1
@@ -570,7 +579,7 @@ class S17PhysicalGenesis(E63BeginningOfExistence, S18Alteration, ABC):
 
 
 @entity_register(label='S2 Sample Taking')
-class S2SampleTaking(S1MatterRemoval, ABC):
+class S2SampleTaking(O3SampledFrom, O4SampledAt, O5Removed, O20SampledFromTypeOfPart, S1MatterRemoval, ABC):
     """'S2 Sample Taking' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S2
@@ -1050,3 +1059,15 @@ class S24SampleSplitting(S2SampleTaking):
         O29 removed sub-sample (was sub-sample removed by): S13 Sample
 
     """
+
+
+__crmsci_namespace__ = {
+    'S10MaterialSubstantial': S10MaterialSubstantial,
+    'S11AmountOfMatter': S11AmountOfMatter,
+    'S13Sample': S13Sample,
+}
+
+__namespace__ = {**_core_entities_module.__namespace__, **__crmsci_namespace__}
+
+S1MatterRemoval.model_rebuild(_types_namespace=__namespace__)
+S2SampleTaking.model_rebuild(_types_namespace=__namespace__)
