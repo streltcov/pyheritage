@@ -17,7 +17,7 @@ from pyheritage.cidoc.base import PropertyMixin
 
 
 if TYPE_CHECKING:
-    from pyheritage.cidoc.core.entities import E53Place, E54Dimension, E55Type
+    from pyheritage.cidoc.core.entities import E1CRMEntity, E5Event, E18PhysicalThing, E53Place, E54Dimension, E55Type
     from pyheritage.cidoc.crmsci.entities import (
         S9PropertyType,
         S10MaterialSubstantial,
@@ -39,6 +39,14 @@ __all__ = (
     'O8Observed',
     'O9ObservedPropertyType',
     'O10AssignedDimension',
+    'O11Described',
+    'O12HasDimension',
+    'O13Triggered',
+    'O15Occupied',
+    'O16ObservedValue',
+    'O17Generated',
+    'O18Altered',
+    'O19EncounteredObject',
     'O20SampledFromTypeOfPart',
 )
 
@@ -480,6 +488,383 @@ class O10AssignedDimension(PropertyMixin):
         default=None,
         min_length=1,
         description='O10 assigned dimension (dimension was assigned by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O11Described(PropertyMixin):
+    """'O11 described (was described by)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O11
+
+    Domain:
+        S6 Data Evaluation
+    Range:
+        S15 Observable Entity
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property associates an instance of S6 Data Evaluation with an instance of
+        S15 Observable Entity for which a data evaluation activity provides a description.
+        This description of any Observable Entity is based on data evaluations.
+
+    Properties:
+        -
+    Examples:
+        - The quantitative analysis of Munsell colour data carried out by C.T. Brown in
+          1999 in Yukatan, Mexico (S6) described the slipped sherds of Mayapan period
+          ceramics (S15) (Ruck and Brown, 2015).
+        - The linear extrapolation of overall figure height from the size of the fingers
+          (S6) described the statue of Hercules (S15) [The statue is located in Amman]
+          ('Temple of Hercules (Amman)', Wikipedia, 2022).
+
+    In First Order Logic:
+        O11(x,y) ⊃ S6(x)
+        O11(x,y) ⊃ S15(y)
+
+    """
+
+    o11_described: List[S15ObservableEntity] = Field(
+        default=None,
+        min_length=1,
+        description='O11 described (was described by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O12HasDimension(PropertyMixin):
+    """'O12 has dimension (is dimension of)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O12
+
+    Domain:
+        S15 Observable Entity
+    Range:
+        E54 Dimension
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        one to many, dependent (0,n:1,1)
+
+    Scope Note:
+        This property associates an instance of S15 Observable Entity with an instance of
+        E54 Dimension that the observable entity has. It offers no information about how
+        and when an E54 Dimension was established. In case the instance of S15 Observable
+        Entity is more specifically an instance of E18 Physical Thing, using the property
+        O12 has dimension (is dimension of) is equivalent to using the property P43 has
+        dimension (is dimension of). In other words, using the one implies the other.
+
+    Properties:
+        -
+    Examples:
+        - The earthquake of Mexico city in 2017 (E7) has dimension magnitude 6.2 Richter
+          (Mindock, 2017).
+        - The landslide that was activated in Parnitha in 1999 after the earthquake (E26),
+          has dimension crest length > 70 (Lucchese et al., 2013; Kritikos et al., 2013;
+          InGeoCloudS, 2012; InGeoCloudS, 2013).
+
+    In First Order Logic:
+        O12(x,y) ⊃ S15(x)
+        O12(x,y) ⊃ E54(y)
+        [O12(x,y) ∧ E18(x)] ⊃ P43(x,y)
+        [P43(x,y) ∧ E18(x)] ⊃ O12(x,y)
+
+    """
+
+    o12_has_dimension: List[E54Dimension] = Field(
+        default=None,
+        description='O12 has dimension (is dimension of)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O13Triggered(PropertyMixin):
+    """'O13 triggered (was triggered by)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O13
+
+    Domain:
+        E5 Event
+    Range:
+        E5 Event
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E5 Event that triggered another instance
+        of E5 Event with the latter. It identifies the interaction between events: an
+        event can activate (trigger) other events in a target system that is in a
+        situation of sustained tension, such as a trap or an unstable mountain slope
+        giving way to a land slide after a rain or earthquake. In that sense the
+        triggering event is interpreted as a cause. However, the association of the two
+        events is based on their temporal proximity, with the triggering event ending
+        when the triggered event starts.
+
+    Properties:
+        -
+    Examples:
+        - The earthquake of Parnitha in 1999 (E5) triggered the rotational landslide
+          that was observed along the road on the same day (E5). (fictitious)
+        - The explosion at the Montserrat massif in 2007 (E5) (near Barcelona, Spain)
+          triggered the rock fall event (E5) which happened on 2007-02-14
+          (Vilajosana et al., 2008).
+        - The 1966 flood in Florence (E5) triggered mould growth on books (E5) stored
+          in flooded library rooms (Rubinstein, N., 1966).
+
+    In First Order Logic:
+        O13(x,y) ⊃ E5(x)
+        O13(x,y) ⊃ E5(y)
+        O13(x,y) ⊃ P182(x,y)
+
+    """
+
+    o13_triggered: List[E5Event] = Field(
+        default=None,
+        description='O13 triggered (was triggered by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O15Occupied(PropertyMixin):
+    """'O15 occupied (was occupied by)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O15
+
+    Domain:
+        S10 Material Substantial
+    Range:
+        E53 Place
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        one to one (1,1:0,n)
+
+    Scope Note:
+        This property associates an instance of S10 Material Substantial with the instance
+        of E53 Place that this substance occupied. It describes the space filled (occupied)
+        by a physical matter. This property is the development of the shortcut expressed
+        in the proposition of classification: "S20 Physical Feature" isA "E53 Place".
+        This property is equivalent to P156 occupies (is occupied by) with domain E18
+        Physical Thing and range E53 Place.
+
+    Properties:
+        -
+    Examples:
+        - The layer of pink plaster that occupied the block 30 floor of the area X. on
+          2009-02-03. [The plaster covered the floor] (fictitious)
+
+    In First Order Logic:
+        O15(x,y) ⊃ S10(x)
+        O15(x,y) ⊃ E53(y)
+        [O15(x,y) ∧ E18(x)] ⊃ P156(x,y)
+        [P156(x,y) ∧ E18(x)] ⊃ O15(x,y)
+
+    """
+
+    o15_occupied: E53Place = Field(
+        description='O15 occupied (was occupied by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O16ObservedValue(PropertyMixin):
+    """'O16 observed value (value was observed by)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O16
+
+    Domain:
+        S4 Observation
+    Range:
+        E1 CRM Entity
+    SubProperty Of:
+        E13 Attribute Assignment. P141 assigned (was assigned by): E1 CRM Entity
+    SuperProperty Of:
+        S23 Position Determination. O30 determined position (was determined by): E94 Space Primitive
+        E16 Measurement. P40 observed dimension (was observed in): E54 Dimension
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property associates a value assigned to an entity observed by S4 Observation.
+
+    Properties:
+        -
+    Examples:
+        - The surface survey at the bronze age site of Mitrou in east Lokris carried out
+          by Cornell University in 1989 (S4) observed value 600 (of sherds) (E1)
+          (Kramer-Hajos and O'Neill, 2008).
+
+    In First Order Logic:
+        O16(x,y) ⊃ S4(x)
+        O16(x,y) ⊃ E1(y)
+        O16(x,y) ⊃ P141(x,y)
+
+    """
+
+    o16_observed_value: E1CRMEntity = Field(
+        description='O16 observed value (value was observed by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O17Generated(PropertyMixin):
+    """'O17 generated (was generated by)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O17
+
+    Domain:
+        S17 Physical Genesis
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        S18 Alteration. O18 altered (was altered by): E18 Physical Thing
+    SuperProperty Of:
+        E12 Production. P108 has produced (was produced by): E24 Physical Human-Made Thing
+    Quantification:
+        one to many, necessary (1,n:0,1)
+
+    Scope Note:
+        This property associates an instance of S17 Physical Genesis event with an
+        instance of E18 Physical Thing that the event generated.
+
+    Properties:
+        -
+    Examples:
+        - The landslide of Parnitha in 1999 generated the head of the landslide feature.
+          (fictitious)
+        - The mud flow in the western region of Thessaly million years ago generated the
+          deposits of solidified mud with irregular surface in the area. (fictitious)
+        - The introduction of my copper samples in the salt-spray apparatus (S17)
+          generated new corrosion layers of cuprite and malachite (E18).
+          (Velios, 1998)
+
+    In First Order Logic:
+        O17(x,y) ⊃ S17(x)
+        O17(x,y) ⊃ E18(y)
+
+    """
+
+    o17_generated: List[E18PhysicalThing] = Field(
+        default=None,
+        min_length=1,
+        description='O17 generated (was generated by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O18Altered(PropertyMixin):
+    """'O18 altered (was altered by)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O18
+
+    Domain:
+        S18 Alteration
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        E11 Modification. P31 has modified (was modified by): E18 Physical Thing
+        S17 Physical Genesis. O17 generated (was generated by): E18 Physical Thing
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property associates an instance of S18 Alteration process with an instance
+        of E18 Physical Thing which was altered by this activity.
+
+    Properties:
+        -
+    Examples:
+        - The death of the trees caused by beetle infestation in 1995 (S18), altered
+          the Brazilian forest (E18) (Paine, 2008).
+        - The application of tension (S18) altered the humidified parchment of the
+          Lanhydrock Pedigree (E18) (Pickwoad, 2010).
+
+    In First Order Logic:
+        O18(x,y) ⊃ S18(x)
+        O18(x,y) ⊃ E18(y)
+
+    """
+
+    o18_altered: List[E18PhysicalThing] = Field(
+        default=None,
+        min_length=1,
+        description='O18 altered (was altered by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O19EncounteredObject(PropertyMixin):
+    """'O19 encountered object (was object encountered through)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O19
+
+    Domain:
+        S19 Encounter Event
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property associates an instance of S19 Encounter Event with an instance of
+        E18 Physical Thing that was encountered or observed as present during the event.
+
+    Properties:
+        -
+    Examples:
+        - The encounter of a marble floor during the digging of a well in 1750 (S19)
+          encountered object the Villa of the Papyri in Herculaneum (E18).
+          (Sider, 1990, p. 536)
+        - The encounter of oak planks from a ship during a dig in a mound at the farm
+          Lille Oseberg in Norway, in 1904 (S19) encountered object the Oseberg Ship
+          (E18). (Ferguson, 2009, p.10-11)
+
+    In First Order Logic:
+        O19(x,y) ⊃ S19(x)
+        O19(x,y) ⊃ E18(y)
+        O19(x,y) ⊃ (∃z)[E53(z) ∧ O21(x,z)]
+
+    """
+
+    o19_encountered_object: List[E18PhysicalThing] = Field(
+        default=None,
+        min_length=1,
+        description='O19 encountered object (was object encountered through)',
     )
 
 
