@@ -54,6 +54,18 @@ from pyheritage.cidoc.crmsci.properties import (
     O3SampledFrom,
     O4SampledAt,
     O5Removed,
+    O6IsFormerOrCurrentPartOf,
+    O7Confines,
+    O8Observed,
+    O9ObservedPropertyType,
+    O10AssignedDimension,
+    O11Described,
+    O12HasDimension,
+    O15Occupied,
+    O16ObservedValue,
+    O17Generated,
+    O18Altered,
+    O19EncounteredObject,
     O20SampledFromTypeOfPart,
 )
 
@@ -125,7 +137,7 @@ class S1MatterRemoval(O1Diminished, O2Removed, E7Activity, ABC):
 
 
 @entity_register(label='S4 Observation')
-class S4Observation(E13AttributeAssignment, ABC):
+class S4Observation(O16ObservedValue, O8Observed, O9ObservedPropertyType, E13AttributeAssignment, ABC):
     """'S4 Observation' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S4
@@ -179,7 +191,7 @@ class S4Observation(E13AttributeAssignment, ABC):
 
 
 @entity_register(label='S15 Observable Entity')
-class S15ObservableEntity(E1CRMEntity, ABC):
+class S15ObservableEntity(O12HasDimension, E1CRMEntity, ABC):
     """'S15 Observable Entity' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S15
@@ -232,7 +244,7 @@ class S15ObservableEntity(E1CRMEntity, ABC):
 
 
 @entity_register(label='S10 Material Substantial')
-class S10MaterialSubstantial(E70Thing, S15ObservableEntity):
+class S10MaterialSubstantial(O15Occupied, E70Thing, S15ObservableEntity):
     """'S10 Material Substantial' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S10
@@ -392,7 +404,7 @@ class S14FluidBody(S10MaterialSubstantial, ABC):
 
 
 @entity_register(label='S12 Amount of Fluid')
-class S12AmountOfFluid(S11AmountOfMatter, S14FluidBody):
+class S12AmountOfFluid(O6IsFormerOrCurrentPartOf, S11AmountOfMatter, S14FluidBody):
     """'S12 Amount of Fluid' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S12
@@ -463,7 +475,7 @@ class S21Measurement(S4Observation, ABC):
 
 
 @entity_register(label='S20 Rigid Physical Feature')
-class S20RigidPhysicalFeature(E26PhysicalFeature, E53Place):
+class S20RigidPhysicalFeature(O7Confines, E26PhysicalFeature, E53Place):
     """'S20 Rigid Physical Feature' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S20
@@ -503,7 +515,7 @@ class S20RigidPhysicalFeature(E26PhysicalFeature, E53Place):
 
 
 @entity_register(label='S18 Alteration')
-class S18Alteration(E5Event, ABC):
+class S18Alteration(O18Altered, E5Event, ABC):
     """'S18 Alteration' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S18
@@ -540,7 +552,7 @@ class S18Alteration(E5Event, ABC):
 
 
 @entity_register(label='S17 Physical Genesis')
-class S17PhysicalGenesis(E63BeginningOfExistence, S18Alteration, ABC):
+class S17PhysicalGenesis(O17Generated, E63BeginningOfExistence, S18Alteration, ABC):
     """'S17 Physical Genesis' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S17
@@ -669,7 +681,7 @@ class S3MeasurementBySampling(S2SampleTaking, S21Measurement):
 
 
 @entity_register(label='S19 Encounter Event')
-class S19EncounterEvent(S4Observation):
+class S19EncounterEvent(O19EncounteredObject, S4Observation):
     """'S19 Encounter Event' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S19
@@ -752,7 +764,7 @@ class S5InferenceMaking(E13AttributeAssignment, ABC):
 
 
 @entity_register(label='S6 Data Evaluation')
-class S6DataEvaluation(S5InferenceMaking):
+class S6DataEvaluation(O10AssignedDimension, O11Described, S5InferenceMaking):
     """'S6 Data Evaluation' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S6
@@ -1062,12 +1074,29 @@ class S24SampleSplitting(S2SampleTaking):
 
 
 __crmsci_namespace__ = {
+    'S9PropertyType': S9PropertyType,
     'S10MaterialSubstantial': S10MaterialSubstantial,
     'S11AmountOfMatter': S11AmountOfMatter,
     'S13Sample': S13Sample,
+    'S14FluidBody': S14FluidBody,
+    'S15ObservableEntity': S15ObservableEntity,
 }
+
+
+# ******************************************************************************************************************* #
+
 
 __namespace__ = {**_core_entities_module.__namespace__, **__crmsci_namespace__}
 
+
+S10MaterialSubstantial.model_rebuild(_types_namespace=__namespace__)
 S1MatterRemoval.model_rebuild(_types_namespace=__namespace__)
 S2SampleTaking.model_rebuild(_types_namespace=__namespace__)
+S4Observation.model_rebuild(_types_namespace=__namespace__)
+S6DataEvaluation.model_rebuild(_types_namespace=__namespace__)
+S12AmountOfFluid.model_rebuild(_types_namespace=__namespace__)
+S15ObservableEntity.model_rebuild(_types_namespace=__namespace__)
+S17PhysicalGenesis.model_rebuild(_types_namespace=__namespace__)
+S18Alteration.model_rebuild(_types_namespace=__namespace__)
+S19EncounterEvent.model_rebuild(_types_namespace=__namespace__)
+S20RigidPhysicalFeature.model_rebuild(_types_namespace=__namespace__)
