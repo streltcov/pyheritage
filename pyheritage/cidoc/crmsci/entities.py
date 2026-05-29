@@ -1089,7 +1089,11 @@ __crmsci_namespace__ = {
 __namespace__ = {**_core_entities_module.__namespace__, **__crmsci_namespace__}
 
 
+S9PropertyType.model_rebuild(_types_namespace=__namespace__)
 S10MaterialSubstantial.model_rebuild(_types_namespace=__namespace__)
+S11AmountOfMatter.model_rebuild(_types_namespace=__namespace__)
+S13Sample.model_rebuild(_types_namespace=__namespace__)
+S14FluidBody.model_rebuild(_types_namespace=__namespace__)
 S1MatterRemoval.model_rebuild(_types_namespace=__namespace__)
 S2SampleTaking.model_rebuild(_types_namespace=__namespace__)
 S4Observation.model_rebuild(_types_namespace=__namespace__)
@@ -1100,3 +1104,11 @@ S17PhysicalGenesis.model_rebuild(_types_namespace=__namespace__)
 S18Alteration.model_rebuild(_types_namespace=__namespace__)
 S19EncounterEvent.model_rebuild(_types_namespace=__namespace__)
 S20RigidPhysicalFeature.model_rebuild(_types_namespace=__namespace__)
+S3MeasurementBySampling.model_rebuild(_types_namespace=__namespace__)
+S5InferenceMaking.model_rebuild(_types_namespace=__namespace__)
+S7SimulationOrPrediction.model_rebuild(_types_namespace=__namespace__)
+S8CategoricalHypothesisBuilding.model_rebuild(_types_namespace=__namespace__)
+S21Measurement.model_rebuild(_types_namespace=__namespace__)
+S22SegmentOfMatter.model_rebuild(_types_namespace=__namespace__)
+S23PositionDetermination.model_rebuild(_types_namespace=__namespace__)
+S24SampleSplitting.model_rebuild(_types_namespace=__namespace__)
