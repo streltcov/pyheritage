@@ -17,7 +17,15 @@ from pyheritage.cidoc.base import PropertyMixin
 
 
 if TYPE_CHECKING:
-    from pyheritage.cidoc.core.entities import E1CRMEntity, E5Event, E18PhysicalThing, E53Place, E54Dimension, E55Type
+    from pyheritage.cidoc.core.entities import (
+        E1CRMEntity,
+        E5Event,
+        E18PhysicalThing,
+        E53Place,
+        E54Dimension,
+        E55Type,
+        E92SpaceTimeVolume,
+    )
     from pyheritage.cidoc.crmsci.entities import (
         S9PropertyType,
         S10MaterialSubstantial,
@@ -48,6 +56,11 @@ __all__ = (
     'O18Altered',
     'O19EncounteredObject',
     'O20SampledFromTypeOfPart',
+    'O21EncounteredAt',
+    'O23IsDefinedBy',
+    'O24Measured',
+    'O25Contains',
+    'O27Split',
 )
 
 
@@ -905,4 +918,200 @@ class O20SampledFromTypeOfPart(PropertyMixin):
     o20_sampled_from_type_of_part: List[E55Type] = Field(
         default=None,
         description='O20 sampled from type of part (type of part was sampled by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O21EncounteredAt(PropertyMixin):
+    """'O21 encountered at (witnessed encounter)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O21
+
+    Domain:
+        S19 Encounter Event
+    Range:
+        E53 Place
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        one to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property associates an instance of S19 Encounter Event with the instance of
+        E53 Place at which the encountered object is located.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        O21(x,y) ⊃ S19(x)
+        O21(x,y) ⊃ E53(y)
+
+    """
+
+    o21_encountered_at: E53Place = Field(
+        description='O21 encountered at (witnessed encounter)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O23IsDefinedBy(PropertyMixin):
+    """'O23 is defined by (defines)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O23
+
+    Domain:
+        S20 Rigid Physical Feature
+    Range:
+        E92 Spacetime Volume
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        one to one, necessary (1,1:0,1)
+
+    Scope Note:
+        This property associates an instance of S20 Rigid Physical Feature (or S22 Segment
+        of Matter) with the instance of E92 Spacetime Volume that defines its spatiotemporal
+        extent.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        O23(x,y) ⊃ S20(x)
+        O23(x,y) ⊃ E92(y)
+
+    """
+
+    o23_is_defined_by: E92SpaceTimeVolume = Field(
+        description='O23 is defined by (defines)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O24Measured(PropertyMixin):
+    """'O24 measured (was measured by)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O24
+
+    Domain:
+        S21 Measurement
+    Range:
+        S15 Observable Entity
+    SubProperty Of:
+        S4 Observation. O8 observed (was observed by): S15 Observable Entity
+    SuperProperty Of:
+        E16 Measurement. P39 measured (was measured by): E18 Physical Thing
+    Quantification:
+        one to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property associates an instance of S21 Measurement with the instance of
+        S15 Observable Entity that was measured in the activity.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        O24(x,y) ⊃ S21(x)
+        O24(x,y) ⊃ S15(y)
+        O24(x,y) ⊃ O8(x,y)
+
+    """
+
+    o24_measured: S15ObservableEntity = Field(
+        description='O24 measured (was measured by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O25Contains(PropertyMixin):
+    """'O25 contains (is contained in)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O25
+
+    Domain:
+        S10 Material Substantial
+    Range:
+        S10 Material Substantial
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        E18 Physical Thing. P46 is composed of (forms part of): E18 Physical Thing
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of S10 Material Substantial with an instance
+        of S10 Material Substantial that it contains as part of its substance.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        O25(x,y) ⊃ S10(x)
+        O25(x,y) ⊃ S10(y)
+
+    """
+
+    o25_contains: List[S10MaterialSubstantial] = Field(
+        default=None,
+        description='O25 contains (is contained in)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O27Split(PropertyMixin):
+    """'O27 split (was source for)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O27
+
+    Domain:
+        S24 Sample Splitting
+    Range:
+        S13 Sample
+    SubProperty Of:
+        S2 Sample Taking. O3 sampled from (was sample by): S10 Material Substantial
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many, necessary (1,n:0,n)
+
+    Scope Note:
+        This property associates an instance of S24 Sample Splitting with the instance of
+        S13 Sample which is the source sample that was split into new samples.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        O27(x,y) ⊃ S24(x)
+        O27(x,y) ⊃ S13(y)
+        O27(x,y) ⊃ O3(x,y)
+
+    """
+
+    o27_split: List[S13Sample] = Field(
+        default=None,
+        min_length=1,
+        description='O27 split (was source for)',
     )
