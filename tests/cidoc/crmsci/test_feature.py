@@ -22,7 +22,7 @@ from pyheritage.cidoc.core.entities import (
     E92SpaceTimeVolume,
 )
 from pyheritage.cidoc.crmsci.entities import S20RigidPhysicalFeature, S22SegmentOfMatter
-from pyheritage.cidoc.crmsci.properties import O7Confines
+from pyheritage.cidoc.crmsci.properties import O7Confines, O23IsDefinedBy
 
 
 def _inner_place() -> E53Place:
@@ -32,14 +32,16 @@ def _inner_place() -> E53Place:
 def _required_kwargs() -> dict:
     timespan = make_timespan('Reference Time')
     inner = _inner_place()
+    stv = E92SpaceTimeVolume(
+        p160_has_temporal_projection=timespan,
+        p161_has_spatial_projection=[inner],
+    )
     return {
         'p157_is_at_rest_relative_to': [],
         'p45_consists_of': [E57Material()],
         'p53_has_former_or_current_location': [],
-        'p196_defines': E92SpaceTimeVolume(
-            p160_has_temporal_projection=timespan,
-            p161_has_spatial_projection=[inner],
-        ),
+        'p196_defines': stv,
+        'o23_is_defined_by': stv,
     }
 
 
@@ -143,6 +145,38 @@ class TestS20RigidPhysicalFeature:
                 o7_confines=['invalid'],  # type: ignore[list-item]
                 **_required_kwargs(),
             )
+
+    # ------------------------- #
+
+    def test_mro_includes_o23_is_defined_by(self) -> None:
+        """Verify O23IsDefinedBy property mixin is present in S20 MRO;"""
+        assert O23IsDefinedBy in S20RigidPhysicalFeature.__mro__
+
+    # ------------------------- #
+
+    def test_o23_is_defined_by_field_exists(self) -> None:
+        """Verify o23_is_defined_by field is present in S20;"""
+        entity = S20RigidPhysicalFeature(**_required_kwargs())
+        assert hasattr(entity, 'o23_is_defined_by')
+
+    # ------------------------- #
+
+    def test_o23_is_defined_by_accepts_spacetime_volume(self) -> None:
+        """Verify o23_is_defined_by accepts an E92SpaceTimeVolume;"""
+        timespan = make_timespan('Ref Time')
+        inner = _inner_place()
+        stv = E92SpaceTimeVolume(
+            p160_has_temporal_projection=timespan,
+            p161_has_spatial_projection=[inner],
+        )
+        entity = S20RigidPhysicalFeature(
+            p157_is_at_rest_relative_to=[],
+            p45_consists_of=[E57Material()],
+            p53_has_former_or_current_location=[],
+            p196_defines=stv,
+            o23_is_defined_by=stv,
+        )
+        assert entity.o23_is_defined_by is stv
 
     # ------------------------- #
 
