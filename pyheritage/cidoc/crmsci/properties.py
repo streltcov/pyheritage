@@ -2,7 +2,42 @@
 
 """CRMsci property models;
 
+(Mixin classes for entity models);
+
 CRMsci v2.0
+
+------------------------------------------------
+Properties
+------------------------------------------------
+O1  diminished                        S1  -> S10
+O2  removed                           S1  -> S11
+O3  sampled from                      S2  -> S10
+O4  sampled at                        S2  -> E53
+O5  removed                           S2  -> S13
+O6  is former or current part of      S12 -> S14
+O7  confines                          S20 -> S10
+O8  observed                          S4  -> S15
+O9  observed property type            S4  -> S9
+O10 assigned dimension                S6  -> E54
+O11 described                         S6  -> S15
+O12 has dimension                     S15 -> E54
+O13 triggered                         E5  -> E5
+O15 occupied                          S10 -> E53
+O16 observed value                    S4  -> E1
+O17 generated                         S17 -> E18
+O18 altered                           S18 -> E18
+O19 encountered object                S19 -> E18
+O20 sampled from type of part         S2  -> E55
+O21 encountered at                    S19 -> E53
+O23 is defined by                     S20 -> E92
+O24 measured                          S21 -> S15
+O25 contains                          S10 -> S10
+O27 split                             S24 -> S13
+O28 is conceptually greater than      E55 -> E55
+O29 removed sub-sample                S24 -> S13
+O30 determined position               S23 -> E94
+O31 has validity time-span            S23 -> E52
+O32 determined position of            S23 -> S15
 
 """
 
@@ -21,10 +56,12 @@ if TYPE_CHECKING:
         E1CRMEntity,
         E5Event,
         E18PhysicalThing,
+        E52TimeSpan,
         E53Place,
         E54Dimension,
         E55Type,
         E92SpaceTimeVolume,
+        E94SpacePrimitive,
     )
     from pyheritage.cidoc.crmsci.entities import (
         S9PropertyType,
@@ -61,6 +98,11 @@ __all__ = (
     'O24Measured',
     'O25Contains',
     'O27Split',
+    'O28IsConceptuallyGreaterThan',
+    'O29RemovedSubSample',
+    'O30DeterminedPosition',
+    'O31HasValidityTimeSpan',
+    'O32DeterminedPositionOf',
 )
 
 
@@ -1114,4 +1156,198 @@ class O27Split(PropertyMixin):
         default=None,
         min_length=1,
         description='O27 split (was source for)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O28IsConceptuallyGreaterThan(PropertyMixin):
+    """'O28 is conceptually greater than (is conceptually less than)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O28
+
+    Domain:
+        E55 Type
+    Range:
+        E55 Type
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property allows an instance of E55 Type from a particular concept scheme
+        or vocabulary to be declared as having an order relative to other instances of
+        E55 Type in the same or other concept schemes.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        O28(x,y) ⊃ E55(x)
+        O28(x,y) ⊃ E55(y)
+
+    """
+
+    o28_is_conceptually_greater_than: List[E55Type] = Field(
+        default=None,
+        description='O28 is conceptually greater than (is conceptually less than)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O29RemovedSubSample(PropertyMixin):
+    """'O29 removed sub-sample (was sub-sample removed by)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O29
+
+    Domain:
+        S24 Sample Splitting
+    Range:
+        S13 Sample
+    SubProperty Of:
+        S2 Sample Taking. O5 removed (was removed by): S13 Sample
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of S24 Sample Splitting with the resulting
+        instance of S13 Sample that has been removed from the original sample.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        O29(x,y) ⊃ S24(x)
+        O29(x,y) ⊃ S13(y)
+
+    """
+
+    o29_removed_sub_sample: List[S13Sample] = Field(
+        default=None,
+        description='O29 removed sub-sample (was sub-sample removed by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O30DeterminedPosition(PropertyMixin):
+    """'O30 determined position (was determined by)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O30
+
+    Domain:
+        S23 Position Determination
+    Range:
+        E94 Space Primitive
+    SubProperty Of:
+        S4 Observation. O16 observed value (value was observed by): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of S23 Position Determination with
+        the instance of E94 Space Primitive which is the result of that determination.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        O30(x,y) ⊃ S23(x)
+        O30(x,y) ⊃ E94(y)
+
+    """
+
+    o30_determined_position: List[E94SpacePrimitive] = Field(
+        default=None,
+        description='O30 determined position (was determined by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O31HasValidityTimeSpan(PropertyMixin):
+    """'O31 has validity time-span (is time-span validity for)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O31
+
+    Domain:
+        S23 Position Determination
+    Range:
+        E52 Time-Span
+    SubProperty Of:
+        E2 Temporal Entity. P4 has time-span (is time-span of): E52 Time-Span
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property associates an instance of S23 Position Determination with
+        the instance of E52 Time-Span for which the determination is valid.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        O31(x,y) ⊃ S23(x)
+        O31(x,y) ⊃ E52(y)
+
+    """
+
+    o31_has_validity_time_span: E52TimeSpan = Field(
+        description='O31 has validity time-span (is time-span validity for)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class O32DeterminedPositionOf(PropertyMixin):
+    """'O32 determined position of (was located by)' CRMsci property;
+
+    https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#O32
+
+    Domain:
+        S23 Position Determination
+    Range:
+        S15 Observable Entity
+    SubProperty Of:
+        S4 Observation. O8 observed (was observed by): S15 Observable Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property connects an instance of S23 Position Determination with the
+        instance of S15 Observable Entity whose position is being determined.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        O32(x,y) ⊃ S23(x)
+        O32(x,y) ⊃ S15(y)
+
+    """
+
+    o32_determined_position_of: S15ObservableEntity = Field(
+        description='O32 determined position of (was located by)',
     )
