@@ -47,6 +47,7 @@ from pyheritage.cidoc.core.entities import (
     E55Type,
     E63BeginningOfExistence,
     E70Thing,
+    E94SpacePrimitive,
 )
 from pyheritage.cidoc.crmsci.properties import (
     O1Diminished,
@@ -67,6 +68,15 @@ from pyheritage.cidoc.crmsci.properties import (
     O18Altered,
     O19EncounteredObject,
     O20SampledFromTypeOfPart,
+    O21EncounteredAt,
+    O23IsDefinedBy,
+    O24Measured,
+    O25Contains,
+    O27Split,
+    O29RemovedSubSample,
+    O30DeterminedPosition,
+    O31HasValidityTimeSpan,
+    O32DeterminedPositionOf,
 )
 
 
@@ -94,6 +104,7 @@ __all__ = (
     'S7SimulationOrPrediction',
     'S8CategoricalHypothesisBuilding',
     'S9PropertyType',
+    'E94SpacePrimitive',
 )
 
 
@@ -244,7 +255,7 @@ class S15ObservableEntity(O12HasDimension, E1CRMEntity, ABC):
 
 
 @entity_register(label='S10 Material Substantial')
-class S10MaterialSubstantial(O15Occupied, E70Thing, S15ObservableEntity):
+class S10MaterialSubstantial(O25Contains, O15Occupied, E70Thing, S15ObservableEntity):
     """'S10 Material Substantial' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S10
@@ -438,7 +449,7 @@ class S12AmountOfFluid(O6IsFormerOrCurrentPartOf, S11AmountOfMatter, S14FluidBod
 
 
 @entity_register(label='S21 Measurement')
-class S21Measurement(S4Observation, ABC):
+class S21Measurement(O24Measured, S4Observation, ABC):
     """'S21 Measurement' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S21
@@ -475,7 +486,7 @@ class S21Measurement(S4Observation, ABC):
 
 
 @entity_register(label='S20 Rigid Physical Feature')
-class S20RigidPhysicalFeature(O7Confines, E26PhysicalFeature, E53Place):
+class S20RigidPhysicalFeature(O23IsDefinedBy, O7Confines, E26PhysicalFeature, E53Place):
     """'S20 Rigid Physical Feature' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S20
@@ -681,7 +692,7 @@ class S3MeasurementBySampling(S2SampleTaking, S21Measurement):
 
 
 @entity_register(label='S19 Encounter Event')
-class S19EncounterEvent(O19EncounteredObject, S4Observation):
+class S19EncounterEvent(O21EncounteredAt, O19EncounteredObject, S4Observation):
     """'S19 Encounter Event' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S19
@@ -975,7 +986,7 @@ class S22SegmentOfMatter(S20RigidPhysicalFeature):
 
 
 @entity_register(label='S23 Position Determination')
-class S23PositionDetermination(S4Observation):
+class S23PositionDetermination(O32DeterminedPositionOf, O31HasValidityTimeSpan, O30DeterminedPosition, S4Observation):
     """'S23 Position Determination' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S23
@@ -1035,7 +1046,7 @@ class S23PositionDetermination(S4Observation):
 
 
 @entity_register(label='S24 Sample Splitting')
-class S24SampleSplitting(S2SampleTaking):
+class S24SampleSplitting(O29RemovedSubSample, O27Split, S2SampleTaking):
     """'S24 Sample Splitting' CRMsci entity;
 
     https://cidoc-crm.org/extensions/crmsci/html/CRMsci_v2.0.html#S24
@@ -1080,6 +1091,7 @@ __crmsci_namespace__ = {
     'S13Sample': S13Sample,
     'S14FluidBody': S14FluidBody,
     'S15ObservableEntity': S15ObservableEntity,
+    'E94SpacePrimitive': E94SpacePrimitive,
 }
 
 
