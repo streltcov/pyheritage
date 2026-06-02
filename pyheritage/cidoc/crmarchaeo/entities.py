@@ -24,15 +24,27 @@ from abc import ABC
 
 from pyheritage.cidoc.base import entity_register
 from pyheritage.cidoc.core import entities as _core_entities_module
-from pyheritage.cidoc.core.entities import E12Production, E64EndOfExistence
-from pyheritage.cidoc.crmsci.entities import S1MatterRemoval, S4Observation, S20RigidPhysicalFeature
+from pyheritage.cidoc.core.entities import E12Production, E13AttributeAssignment, E25HumanMadeFeature, E64EndOfExistence
+from pyheritage.cidoc.crmsci.entities import (
+    S1MatterRemoval,
+    S4Observation,
+    S17PhysicalGenesis,
+    S18Alteration,
+    S20RigidPhysicalFeature,
+)
 
 
 __all__ = (
     'A1ExcavationProcessingUnit',
+    'A10ExcavationInterface',
     'A2StratigraphicVolumeUnit',
     'A3StratigraphicInterface',
+    'A4StratigraphicGenesis',
+    'A5StratigraphicModification',
+    'A6GroupDeclarationEvent',
+    'A7Embedding',
     'A8StratigraphicUnit',
+    'A9ArchaeologicalExcavation',
 )
 
 
@@ -165,6 +177,262 @@ class A3StratigraphicInterface(A8StratigraphicUnit):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='A5 Stratigraphic Modification')
+class A5StratigraphicModification(S18Alteration, ABC):
+    """'A5 Stratigraphic Modification' CRMArchaeo entity;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A5
+
+    SubClass Of:
+        S18 Alteration
+
+    SuperClass Of:
+        A4 Stratigraphic Genesis
+
+    Scope Note:
+        This class comprises activities or processes resulting in the modification of Stratigraphic
+        Units after their genesis through instances of A4 Stratigraphic Genesis Event.
+
+    Examples:
+        - The event that eroded the number (1) Stratigraphic Volume Unit in Figure 4 and diminished
+          it to its actual size.
+        - During the excavation at Eagle Cave, Texas, archaeologists found many burrows, about 7 cm
+          in diameter on average, deriving from rodents, lizards, and insects, which have disturbed
+          (A5) the intact layers (A8). [Larsen, M. 2015].
+        - At the Dutton Paleo-Indian site, Colorado, involutions (flame-structures) due to
+          aquaturbations, caused deformation (A5) of the saturated soil (A8).
+          [Wood & Johnson 1978, pp. 315-380].
+
+    In First Order Logic:
+        A5(x) ⇒ S18(x)
+
+    Properties:
+        AP8 disturbed (was disturbed by): A8 Stratigraphic Unit
+        AP13 has stratigraphic relation to (is stratigraphic relation of): A5 Stratigraphic Modification
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='A4 Stratigraphic Genesis')
+class A4StratigraphicGenesis(S17PhysicalGenesis, A5StratigraphicModification, ABC):
+    """'A4 Stratigraphic Genesis' CRMArchaeo entity;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A4
+
+    SubClass Of:
+        S17 Physical Genesis
+        A5 Stratigraphic Modification
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises activities or processes that have produced homogeneous, distinguishable
+        units of stratification that are in a relatively stable form from the time of their genesis
+        until they are observed. Such processes may be the aggregation of cycles of
+        erosion/destruction, deposit/accumulation, or transformation/modification occurring on a
+        particular site throughout a particular period of time. These processes are usually not only
+        due to natural forces (i.e., climate, the impact of flora and fauna, other natural events),
+        but also to human activities, in particular excavation and construction. An event of
+        stratification genesis typically produces two main forms of stratification units, both a
+        deposit and an interface.
+
+    Examples:
+        - The cut in the pre-existing strata of the posthole in Figure 8 produced the stratigraphic
+          interface number [3]; the filling of the posthole with detritus or some other matter
+          produced stratigraphic unit number (18).
+        - In the excavation of Akrotiri, Thera, five distinct layers (A2) of pumice create a level
+          (A8), about one metre thick, which covers the ruins caused by the earthquake (A4). Above
+          the pumice, the deposition of successive layers (A2) of volcanic ash created an 8-10 m
+          thick level (A8) (Fig. 5, 9). [Doumas 2015].
+        - At the northern section of trenches 6 and 21 from the Paliambela Kolindros site at least
+          seven (7) distinct fill episodes (A4) of a neolithic ditch produced the deposits (A8)
+          L14-L18 and L22-L24 (Fig. 10).
+
+    In First Order Logic:
+        A4(x) ⇒ S17(x)
+        A4(x) ⇒ A5(x)
+
+    Properties:
+        AP7 produced (was produced by): A8 Stratigraphic Unit
+        AP9 took matter from (provided matter to): S10 Material Substantial
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='A6 Group Declaration Event')
+class A6GroupDeclarationEvent(E13AttributeAssignment):
+    """'A6 Group Declaration Event' CRMArchaeo entity;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A6
+
+    SubClass Of:
+        E13 Attribute Assignment
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises interpretive activities that lead to the recognition two or more
+        instances of Stratigraphic Units (A8) or other Physical Thing (E18) that simultaneously
+        exist at the time of this activity or at the time of an archaeological observation this
+        activity refers to as source and that are attributed to be the remains of one complete
+        instance of Physical Thing (E18) that had existed at a time of reference in the past.
+        Instances of this class could be, for example: two stratigraphic units (with no evident
+        contact) cut through by a ditch having been segments of the same original stratigraphic
+        unit, two or more surviving parts of a structure having been segments of the same wall,
+        a number of postholes being the indication of a past wooden house or a number of potsherds
+        being segments of the same original artefact.
+
+    Examples:
+        - The excavator declared the post holes [7] and [8] in Figure 4 to be part of one building.
+        - Individual deposits (A8) forming the fill of a neolithic ditch (L14-18 and L22-24) in
+          Trenches 6 and 21 at the archaeological site of Paliambela Kolindros have been grouped
+          by the excavating team into larger stratigraphic entities or fill episodes (A8)
+          [Figure 10].
+
+    In First Order Logic:
+        A6(x) ⇒ E13(x)
+
+    Properties:
+        AP16 assigned attribute to (was attributed by): E18 Physical Thing
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='A7 Embedding')
+class A7Embedding(A8StratigraphicUnit):
+    """'A7 Embedding' CRMArchaeo entity;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A7
+
+    SubClass Of:
+        A8 Stratigraphic Unit
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises instances of A8 Stratigraphic Unit partially or completely embedding
+        one or more instances of E20 Physical Thing and at a particular position with relative
+        stability in one or more instances of A2 Stratigraphic Volume Units. Normally, an embedding
+        is expected to have been stable from the time of generation of the first instance of A2
+        Stratigraphic Volume Unit that surrounds it. However, it may also be due to later intrusion.
+        As an empirical fact, the expert may only be able to decide that a particular embedding is
+        not recent, i.e. has been persisting for longer than the activity that encountered it. This
+        class can be used to document the fact of embedding generally with respect to the surrounding
+        matter or, more specifically, with respect to a more precise position within this matter.
+
+    Examples:
+        - Several pottery vessels (E19) that were discovered (S19) during the excavation process of
+          Room 6 (A1) of the West House at Akrotiri, Thera, were embedded (A7) within the deposit
+          (A8) on the ground floor (E53) (Fig.8) (Michailidou 2001, Fig.55, Fig.59).
+        - San Galgano's sword embedded at the Hermitage of Monte Siepi, as a symbol of peace he
+          embedded his sword in a stone, which can still be seen today.
+
+    In First Order Logic:
+        A7(x) ⇒ A8(x)
+
+    Properties:
+        AP17 is found by (found): S19 Encounter Event
+        AP18 is embedding of (is embedded): E18 Physical Thing
+        AP19 is embedding in (contains embedding): A2 Stratigraphic Volume Unit
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='A9 Archaeological Excavation')
+class A9ArchaeologicalExcavation(S4Observation):
+    """'A9 Archaeological Excavation' CRMArchaeo entity;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A9
+
+    SubClass Of:
+        S4 Observation
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class describes the general concept of archaeological excavation intended as a
+        coordinated set of activities performed on an area considered as part of a broader
+        topographical, rural, urban, or monumental context. An archaeological excavation is
+        usually under the responsibility of a coordinator, officially designated, which is legally
+        and scientifically responsible for all the activities carried out within each instance of
+        A1 Excavation Processing Unit and is also responsible for the documentation of the whole
+        process.
+
+    Examples:
+        - The archaeological excavation (A9) of the West House (E24) that took place at the
+          archaeological site of Akrotiri, Thera (E53) during the years (1967-1973) (E52) by the
+          archaeologist Sp. Marinatos (E39). [Μιχαηλίδου 2001, p. 41] [Palyvou 200].
+
+    In First Order Logic:
+        A9(x) ⇒ S4(x)
+
+    Properties:
+        AP3 investigated (was investigated by): E27 Site
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='A10 Excavation Interface')
+class A10ExcavationInterface(S20RigidPhysicalFeature, E25HumanMadeFeature):
+    """'A10 Excavation Interface' CRMArchaeo entity;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A10
+
+    SubClass Of:
+        S20 Rigid Physical Feature
+        E25 Human-Made Feature
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises instances of S20 Rigid Physical Feature that constitutes a surface
+        produced through one or several instances of A1 Excavation Processing Unit. Instances are
+        often documented through drawing and/or measured by technical means such as photography,
+        tachymetry or laser scanning. Using a planar excavation methodology this is typically the
+        surface of a planum or the surface of a profile. Using a stratigraphic excavation
+        methodology, the instance of A10 Excavation Interface would have the intention to
+        approximate an instance of A3 Stratigraphic Interface. The drawing and measurement of
+        profiles is also common practice when a stratigraphic excavation methodology is used.
+
+    Examples:
+        - The Excavation Interface Planum 6 of square I22 in Area F-I is documented in the field
+          drawing "Planum 6 F-I i22" created in Fall 1982.
+        - The Excavation Interface Eastern profile of square I22 in Area F-I is documented in field
+          drawing "Ostprofil F-I i22" and confines the excavation square I22 to the east.
+
+    In First Order Logic:
+        A10(x) ⇒ S20(x)
+        A10(x) ⇒ E25(x)
+
+    Properties:
+        (none)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
 @entity_register(label='A1 Excavation Processing Unit')
 class A1ExcavationProcessingUnit(S1MatterRemoval, S4Observation, E12Production, E64EndOfExistence, ABC):
     """'A1 Excavation Processing Unit' CRMArchaeo entity;
@@ -232,10 +500,16 @@ class A1ExcavationProcessingUnit(S1MatterRemoval, S4Observation, E12Production, 
 
 
 __crmarchaeo_namespace__ = {
+    'A10ExcavationInterface': A10ExcavationInterface,
     'A1ExcavationProcessingUnit': A1ExcavationProcessingUnit,
     'A2StratigraphicVolumeUnit': A2StratigraphicVolumeUnit,
     'A3StratigraphicInterface': A3StratigraphicInterface,
+    'A4StratigraphicGenesis': A4StratigraphicGenesis,
+    'A5StratigraphicModification': A5StratigraphicModification,
+    'A6GroupDeclarationEvent': A6GroupDeclarationEvent,
+    'A7Embedding': A7Embedding,
     'A8StratigraphicUnit': A8StratigraphicUnit,
+    'A9ArchaeologicalExcavation': A9ArchaeologicalExcavation,
 }
 
 
@@ -252,7 +526,13 @@ __namespace__ = {
 }
 
 
+A10ExcavationInterface.model_rebuild(_types_namespace=__namespace__)
 A1ExcavationProcessingUnit.model_rebuild(_types_namespace=__namespace__)
 A2StratigraphicVolumeUnit.model_rebuild(_types_namespace=__namespace__)
 A3StratigraphicInterface.model_rebuild(_types_namespace=__namespace__)
+A4StratigraphicGenesis.model_rebuild(_types_namespace=__namespace__)
+A5StratigraphicModification.model_rebuild(_types_namespace=__namespace__)
+A6GroupDeclarationEvent.model_rebuild(_types_namespace=__namespace__)
+A7Embedding.model_rebuild(_types_namespace=__namespace__)
 A8StratigraphicUnit.model_rebuild(_types_namespace=__namespace__)
+A9ArchaeologicalExcavation.model_rebuild(_types_namespace=__namespace__)
