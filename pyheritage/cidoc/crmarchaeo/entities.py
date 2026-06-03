@@ -24,7 +24,25 @@ from abc import ABC
 
 from pyheritage.cidoc.base import entity_register
 from pyheritage.cidoc.core import entities as _core_entities_module
-from pyheritage.cidoc.core.entities import E12Production, E13AttributeAssignment, E25HumanMadeFeature, E64EndOfExistence
+from pyheritage.cidoc.core.entities import (
+    E12Production,
+    E13AttributeAssignment,
+    E25HumanMadeFeature,
+    E64EndOfExistence,
+)
+from pyheritage.cidoc.crmarchaeo.properties import (
+    AP1Produced,
+    AP2Discarded,
+    AP3Investigated,
+    AP4ProducedSurface,
+    AP5RemovedPartOrAll,
+    AP6IntendedToApproximate,
+    AP7Produced,
+    AP8Disturbed,
+    AP9TookMatterFrom,
+    AP10Destroyed,
+    AP11HasPhysicalRelationTo,
+)
 from pyheritage.cidoc.crmsci.entities import (
     S1MatterRemoval,
     S4Observation,
@@ -49,7 +67,7 @@ __all__ = (
 
 
 @entity_register(label='A8 Stratigraphic Unit')
-class A8StratigraphicUnit(S20RigidPhysicalFeature, ABC):
+class A8StratigraphicUnit(AP11HasPhysicalRelationTo, S20RigidPhysicalFeature, ABC):
     """'A8 Stratigraphic Unit' CRMArchaeo entity;
 
     https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A8
@@ -178,7 +196,7 @@ class A3StratigraphicInterface(A8StratigraphicUnit):
 
 
 @entity_register(label='A5 Stratigraphic Modification')
-class A5StratigraphicModification(S18Alteration, ABC):
+class A5StratigraphicModification(AP8Disturbed, S18Alteration, ABC):
     """'A5 Stratigraphic Modification' CRMArchaeo entity;
 
     https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A5
@@ -217,7 +235,13 @@ class A5StratigraphicModification(S18Alteration, ABC):
 
 
 @entity_register(label='A4 Stratigraphic Genesis')
-class A4StratigraphicGenesis(S17PhysicalGenesis, A5StratigraphicModification, ABC):
+class A4StratigraphicGenesis(
+    AP7Produced,
+    AP9TookMatterFrom,
+    S17PhysicalGenesis,
+    A5StratigraphicModification,
+    ABC,
+):
     """'A4 Stratigraphic Genesis' CRMArchaeo entity;
 
     https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A4
@@ -354,7 +378,7 @@ class A7Embedding(A8StratigraphicUnit):
 
 
 @entity_register(label='A9 Archaeological Excavation')
-class A9ArchaeologicalExcavation(S4Observation):
+class A9ArchaeologicalExcavation(AP3Investigated, S4Observation):
     """'A9 Archaeological Excavation' CRMArchaeo entity;
 
     https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A9
@@ -434,7 +458,19 @@ class A10ExcavationInterface(S20RigidPhysicalFeature, E25HumanMadeFeature):
 
 
 @entity_register(label='A1 Excavation Processing Unit')
-class A1ExcavationProcessingUnit(S1MatterRemoval, S4Observation, E12Production, E64EndOfExistence, ABC):
+class A1ExcavationProcessingUnit(
+    AP10Destroyed,
+    AP1Produced,
+    AP2Discarded,
+    AP4ProducedSurface,
+    AP5RemovedPartOrAll,
+    AP6IntendedToApproximate,
+    S1MatterRemoval,
+    S4Observation,
+    E12Production,
+    E64EndOfExistence,
+    ABC,
+):
     """'A1 Excavation Processing Unit' CRMArchaeo entity;
 
     https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A1
@@ -516,12 +552,16 @@ __crmarchaeo_namespace__ = {
 # ******************************************************************************************************************* #
 
 
-from pyheritage.cidoc.crmsci import entities as _crmsci_entities_module  # noqa: E402
+from pyheritage.cidoc.crmsci import (  # noqa: E402
+    entities as _crmsci_entities_module,
+)
 
 
 __namespace__ = {
     **_core_entities_module.__namespace__,
     **_crmsci_entities_module.__crmsci_namespace__,
+    # CRMsci range types not in __crmsci_namespace__ but used by AP fields
+    'S22SegmentOfMatter': _crmsci_entities_module.S22SegmentOfMatter,
     **__crmarchaeo_namespace__,
 }
 
