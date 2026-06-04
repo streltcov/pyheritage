@@ -42,6 +42,15 @@ from pyheritage.cidoc.crmarchaeo.properties import (
     AP9TookMatterFrom,
     AP10Destroyed,
     AP11HasPhysicalRelationTo,
+    AP12Confines,
+    AP13HasStratigraphicRelationTo,
+    AP15IsOrContainsRemainsOf,
+    AP16AssignedAttributeTo,
+    AP17IsFoundBy,
+    AP18IsEmbeddingOf,
+    AP19IsEmbeddingIn,
+    AP21Contains,
+    AP32DiscardedInto,
 )
 from pyheritage.cidoc.crmsci.entities import (
     S1MatterRemoval,
@@ -110,7 +119,7 @@ class A8StratigraphicUnit(AP11HasPhysicalRelationTo, S20RigidPhysicalFeature, AB
 
 
 @entity_register(label='A2 Stratigraphic Volume Unit')
-class A2StratigraphicVolumeUnit(A8StratigraphicUnit):
+class A2StratigraphicVolumeUnit(AP21Contains, AP15IsOrContainsRemainsOf, A8StratigraphicUnit):
     """'A2 Stratigraphic Volume Unit' CRMArchaeo entity;
 
     https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A2
@@ -156,7 +165,7 @@ class A2StratigraphicVolumeUnit(A8StratigraphicUnit):
 
 
 @entity_register(label='A3 Stratigraphic Interface')
-class A3StratigraphicInterface(A8StratigraphicUnit):
+class A3StratigraphicInterface(AP12Confines, A8StratigraphicUnit):
     """'A3 Stratigraphic Interface' CRMArchaeo entity;
 
     https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A3
@@ -196,7 +205,7 @@ class A3StratigraphicInterface(A8StratigraphicUnit):
 
 
 @entity_register(label='A5 Stratigraphic Modification')
-class A5StratigraphicModification(AP8Disturbed, S18Alteration, ABC):
+class A5StratigraphicModification(AP13HasStratigraphicRelationTo, AP8Disturbed, S18Alteration, ABC):
     """'A5 Stratigraphic Modification' CRMArchaeo entity;
 
     https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A5
@@ -291,7 +300,7 @@ class A4StratigraphicGenesis(
 
 
 @entity_register(label='A6 Group Declaration Event')
-class A6GroupDeclarationEvent(E13AttributeAssignment):
+class A6GroupDeclarationEvent(AP16AssignedAttributeTo, E13AttributeAssignment):
     """'A6 Group Declaration Event' CRMArchaeo entity;
 
     https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A6
@@ -334,7 +343,7 @@ class A6GroupDeclarationEvent(E13AttributeAssignment):
 
 
 @entity_register(label='A7 Embedding')
-class A7Embedding(A8StratigraphicUnit):
+class A7Embedding(AP19IsEmbeddingIn, AP18IsEmbeddingOf, AP17IsFoundBy, A8StratigraphicUnit):
     """'A7 Embedding' CRMArchaeo entity;
 
     https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#A7
@@ -465,6 +474,7 @@ class A1ExcavationProcessingUnit(
     AP4ProducedSurface,
     AP5RemovedPartOrAll,
     AP6IntendedToApproximate,
+    AP32DiscardedInto,
     S1MatterRemoval,
     S4Observation,
     E12Production,
@@ -561,6 +571,7 @@ __namespace__ = {
     **_core_entities_module.__namespace__,
     **_crmsci_entities_module.__crmsci_namespace__,
     # CRMsci range types not in __crmsci_namespace__ but used by AP fields
+    'S19EncounterEvent': _crmsci_entities_module.S19EncounterEvent,
     'S22SegmentOfMatter': _crmsci_entities_module.S22SegmentOfMatter,
     **__crmarchaeo_namespace__,
 }
