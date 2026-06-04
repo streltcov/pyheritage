@@ -53,15 +53,22 @@ from pyheritage.cidoc.base import PropertyMixin
 
 
 if TYPE_CHECKING:
-    from pyheritage.cidoc.core.entities import E27Site, E55Type
+    from pyheritage.cidoc.core.entities import (
+        E18PhysicalThing,
+        E27Site,
+        E55Type,
+    )
     from pyheritage.cidoc.crmarchaeo.entities import (
+        A2StratigraphicVolumeUnit,
         A3StratigraphicInterface,
+        A5StratigraphicModification,
         A8StratigraphicUnit,
         A10ExcavationInterface,
     )
     from pyheritage.cidoc.crmsci.entities import (
         S10MaterialSubstantial,
         S11AmountOfMatter,
+        S19EncounterEvent,
         S22SegmentOfMatter,
     )
 
@@ -78,6 +85,14 @@ __all__ = (
     'AP9TookMatterFrom',
     'AP10Destroyed',
     'AP11HasPhysicalRelationTo',
+    'AP12Confines',
+    'AP13HasStratigraphicRelationTo',
+    'AP15IsOrContainsRemainsOf',
+    'AP16AssignedAttributeTo',
+    'AP17IsFoundBy',
+    'AP18IsEmbeddingOf',
+    'AP19IsEmbeddingIn',
+    'AP21Contains',
 )
 
 
@@ -524,4 +539,327 @@ class AP11HasPhysicalRelationTo(PropertyMixin):
     ap11_1_has_type: List[E55Type] = Field(
         default=None,
         description='AP11.1 has type (type of physical relation)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP12Confines(PropertyMixin):
+    """'AP12 confines (is confined by)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP12
+
+    Domain:
+        A3 Stratigraphic Interface
+    Range:
+        A2 Stratigraphic Volume Unit
+    SubProperty Of:
+        S20 Rigid Physical Feature. O7 confines (is confined by): S10 Material Substantial
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of A3 Stratigraphic Interface with the instance of
+        A2 Stratigraphic Volume Unit that it bounds. The interface is the boundary surface that
+        confines the volume of the stratigraphic unit.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP12(x,y) ⊃ A3(x)
+        AP12(x,y) ⊃ A2(y)
+
+    """
+
+    ap12_confines: List[A2StratigraphicVolumeUnit] = Field(
+        default=None,
+        description='AP12 confines (is confined by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP13HasStratigraphicRelationTo(PropertyMixin):
+    """'AP13 has stratigraphic relation to (is stratigraphic relation of)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP13
+
+    Domain:
+        A5 Stratigraphic Modification
+    Range:
+        A5 Stratigraphic Modification
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of A5 Stratigraphic Modification with another
+        instance of A5 Stratigraphic Modification with which it has a stratigraphic relation.
+        The qualifiers AP13.1 and AP13.2 allow specifying the type and justification of the
+        relation.
+
+    Properties:
+        AP13.1 has type: E55 Type
+        AP13.2 justified by (is justification of): AP11 has physical relation to
+    Examples:
+        -
+    In First Order Logic:
+        AP13(x,y) ⊃ A5(x)
+        AP13(x,y) ⊃ A5(y)
+
+    """
+
+    ap13_has_stratigraphic_relation_to: List[A5StratigraphicModification] = Field(
+        default=None,
+        description='AP13 has stratigraphic relation to (is stratigraphic relation of)',
+    )
+
+    ap13_1_has_type: List[E55Type] = Field(
+        default=None,
+        description='AP13.1 has type (type of stratigraphic relation)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP15IsOrContainsRemainsOf(PropertyMixin):
+    """'AP15 is or contains remains of (is or has remains contained in)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP15
+
+    Domain:
+        A2 Stratigraphic Volume Unit
+    Range:
+        S10 Material Substantial
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of A2 Stratigraphic Volume Unit with an instance
+        of S10 Material Substantial that it is or contains remains of. This allows linking
+        stratigraphic deposits to the original material that they represent.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP15(x,y) ⊃ A2(x)
+        AP15(x,y) ⊃ S10(y)
+
+    """
+
+    ap15_is_or_contains_remains_of: List[S10MaterialSubstantial] = Field(
+        default=None,
+        description='AP15 is or contains remains of (is or has remains contained in)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP16AssignedAttributeTo(PropertyMixin):
+    """'AP16 assigned attribute to (was attributed by)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP16
+
+    Domain:
+        A6 Group Declaration Event
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        E13 Attribute Assignment. P141 assigned (was assigned by): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of A6 Group Declaration Event with the instance of
+        E18 Physical Thing to which an attribute was assigned by this declaration event.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP16(x,y) ⊃ A6(x)
+        AP16(x,y) ⊃ E18(y)
+
+    """
+
+    ap16_assigned_attribute_to: List[E18PhysicalThing] = Field(
+        default=None,
+        description='AP16 assigned attribute to (was attributed by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP17IsFoundBy(PropertyMixin):
+    """'AP17 is found by (found)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP17
+
+    Domain:
+        A7 Embedding
+    Range:
+        S19 Encounter Event
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of A7 Embedding with the instance of S19 Encounter
+        Event through which the embedded object was found.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP17(x,y) ⊃ A7(x)
+        AP17(x,y) ⊃ S19(y)
+
+    """
+
+    ap17_is_found_by: List[S19EncounterEvent] = Field(
+        default=None,
+        description='AP17 is found by (found)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP18IsEmbeddingOf(PropertyMixin):
+    """'AP18 is embedding of (is embedded)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP18
+
+    Domain:
+        A7 Embedding
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of A7 Embedding with the instance of E18 Physical
+        Thing that is embedded within this embedding.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP18(x,y) ⊃ A7(x)
+        AP18(x,y) ⊃ E18(y)
+
+    """
+
+    ap18_is_embedding_of: List[E18PhysicalThing] = Field(
+        default=None,
+        description='AP18 is embedding of (is embedded)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP19IsEmbeddingIn(PropertyMixin):
+    """'AP19 is embedding in (contains embedding)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP19
+
+    Domain:
+        A7 Embedding
+    Range:
+        A2 Stratigraphic Volume Unit
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property associates an instance of A7 Embedding with the instance of A2
+        Stratigraphic Volume Unit that contains this embedding.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP19(x,y) ⊃ A7(x)
+        AP19(x,y) ⊃ A2(y)
+
+    """
+
+    ap19_is_embedding_in: List[A2StratigraphicVolumeUnit] = Field(
+        default=None,
+        min_length=1,
+        description='AP19 is embedding in (contains embedding)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP21Contains(PropertyMixin):
+    """'AP21 contains (is contained in)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP21
+
+    Domain:
+        A2 Stratigraphic Volume Unit
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of A2 Stratigraphic Volume Unit with an instance of
+        E18 Physical Thing that it contains.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP21(x,y) ⊃ A2(x)
+        AP21(x,y) ⊃ E18(y)
+
+    """
+
+    ap21_contains: List[E18PhysicalThing] = Field(
+        default=None,
+        description='AP21 contains (is contained in)',
     )
