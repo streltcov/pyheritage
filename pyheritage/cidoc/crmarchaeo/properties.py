@@ -54,6 +54,8 @@ from pyheritage.cidoc.base import PropertyMixin
 
 if TYPE_CHECKING:
     from pyheritage.cidoc.core.entities import (
+        E2TemporalEntity,
+        E4Period,
         E18PhysicalThing,
         E27Site,
         E55Type,
@@ -93,6 +95,17 @@ __all__ = (
     'AP18IsEmbeddingOf',
     'AP19IsEmbeddingIn',
     'AP21Contains',
+    'AP22IsEqualInTimeTo',
+    'AP23Finishes',
+    'AP24Starts',
+    'AP25OccursDuring',
+    'AP26OverlapsInTimeWith',
+    'AP27MeetsInTimeWith',
+    'AP28OccursBefore',
+    'AP29AppearsIn',
+    'AP30RestrictedTo',
+    'AP31TypicalFor',
+    'AP32DiscardedInto',
 )
 
 
@@ -862,4 +875,433 @@ class AP21Contains(PropertyMixin):
     ap21_contains: List[E18PhysicalThing] = Field(
         default=None,
         description='AP21 contains (is contained in)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP22IsEqualInTimeTo(PropertyMixin):
+    """'AP22 is equal in time to' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP22
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P154 is equal in time to (is equal in time to): E2 Temporal Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E2 Temporal Entity with another instance
+        of E2 Temporal Entity that is equal to it in time.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP22(x,y) ⊃ E2(x)
+        AP22(x,y) ⊃ E2(y)
+
+    """
+
+    ap22_is_equal_in_time_to: List[E2TemporalEntity] = Field(
+        default=None,
+        description='AP22 is equal in time to',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP23Finishes(PropertyMixin):
+    """'AP23 finishes (is finished by)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP23
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P115 finishes (is finished by): E2 Temporal Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E2 Temporal Entity with another instance
+        of E2 Temporal Entity that finishes it in time.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP23(x,y) ⊃ E2(x)
+        AP23(x,y) ⊃ E2(y)
+
+    """
+
+    ap23_finishes: List[E2TemporalEntity] = Field(
+        default=None,
+        description='AP23 finishes (is finished by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP24Starts(PropertyMixin):
+    """'AP24 starts (is started by)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP24
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P116 starts (is started by): E2 Temporal Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E2 Temporal Entity with another instance
+        of E2 Temporal Entity that starts it in time.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP24(x,y) ⊃ E2(x)
+        AP24(x,y) ⊃ E2(y)
+
+    """
+
+    ap24_starts: List[E2TemporalEntity] = Field(
+        default=None,
+        description='AP24 starts (is started by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP25OccursDuring(PropertyMixin):
+    """'AP25 occurs during (includes)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP25
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P117 occurs during (includes): E2 Temporal Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E2 Temporal Entity with another instance
+        of E2 Temporal Entity during which it occurs.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP25(x,y) ⊃ E2(x)
+        AP25(x,y) ⊃ E2(y)
+
+    """
+
+    ap25_occurs_during: List[E2TemporalEntity] = Field(
+        default=None,
+        description='AP25 occurs during (includes)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP26OverlapsInTimeWith(PropertyMixin):
+    """'AP26 overlaps in time with (is overlapped in time by)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP26
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P118 overlaps in time with (is overlapped in time by): E2 Temporal Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E2 Temporal Entity with another instance
+        of E2 Temporal Entity that it overlaps in time with.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP26(x,y) ⊃ E2(x)
+        AP26(x,y) ⊃ E2(y)
+
+    """
+
+    ap26_overlaps_in_time_with: List[E2TemporalEntity] = Field(
+        default=None,
+        description='AP26 overlaps in time with (is overlapped in time by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP27MeetsInTimeWith(PropertyMixin):
+    """'AP27 meets in time with (is met in time by)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP27
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P119 meets in time with (is met in time by): E2 Temporal Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E2 Temporal Entity with another instance
+        of E2 Temporal Entity that it meets in time with.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP27(x,y) ⊃ E2(x)
+        AP27(x,y) ⊃ E2(y)
+
+    """
+
+    ap27_meets_in_time_with: List[E2TemporalEntity] = Field(
+        default=None,
+        description='AP27 meets in time with (is met in time by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP28OccursBefore(PropertyMixin):
+    """'AP28 occurs before (occurs after)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP28
+
+    Domain:
+        E2 Temporal Entity
+    Range:
+        E2 Temporal Entity
+    SubProperty Of:
+        E2 Temporal Entity. P120 occurs before (occurs after): E2 Temporal Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E2 Temporal Entity with another instance
+        of E2 Temporal Entity that occurs before it in time.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP28(x,y) ⊃ E2(x)
+        AP28(x,y) ⊃ E2(y)
+
+    """
+
+    ap28_occurs_before: List[E2TemporalEntity] = Field(
+        default=None,
+        description='AP28 occurs before (occurs after)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP29AppearsIn(PropertyMixin):
+    """'AP29 appears in' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP29
+
+    Domain:
+        E55 Type
+    Range:
+        E4 Period
+    SubProperty Of:
+        E4 Period. P89 falls within (contains): E4 Period
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E55 Type with an instance of E4 Period
+        in which this type appears.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP29(x,y) ⊃ E55(x)
+        AP29(x,y) ⊃ E4(y)
+
+    """
+
+    ap29_appears_in: List[E4Period] = Field(
+        default=None,
+        description='AP29 appears in',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP30RestrictedTo(PropertyMixin):
+    """'AP30 restricted to' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP30
+
+    Domain:
+        E55 Type
+    Range:
+        E4 Period
+    SubProperty Of:
+        E4 Period. P89 falls within (contains): E4 Period
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E55 Type with an instance of E4 Period
+        to which this type is restricted.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP30(x,y) ⊃ E55(x)
+        AP30(x,y) ⊃ E4(y)
+
+    """
+
+    ap30_restricted_to: List[E4Period] = Field(
+        default=None,
+        description='AP30 restricted to',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP31TypicalFor(PropertyMixin):
+    """'AP31 typical for' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP31
+
+    Domain:
+        E55 Type
+    Range:
+        E4 Period
+    SubProperty Of:
+        E4 Period. P89 falls within (contains): E4 Period
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of E55 Type with an instance of E4 Period
+        for which this type is typical.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP31(x,y) ⊃ E55(x)
+        AP31(x,y) ⊃ E4(y)
+
+    """
+
+    ap31_typical_for: List[E4Period] = Field(
+        default=None,
+        description='AP31 typical for',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class AP32DiscardedInto(PropertyMixin):
+    """'AP32 discarded into (was discarded by)' CRMArchaeo property;
+
+    https://cidoc-crm.org/extensions/crmarchaeo/html/CRMarchaeo_v2.0.html#AP32
+
+    Domain:
+        A1 Excavation Processing Unit
+    Range:
+        S11 Amount of Matter
+    SubProperty Of:
+        S1 Matter Removal. O2 removed (was removed by): S11 Amount of Matter
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of A1 Excavation Processing Unit with the
+        instance of S11 Amount of Matter into which the discarded matter was placed.
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        AP32(x,y) ⊃ A1(x)
+        AP32(x,y) ⊃ S11(y)
+
+    """
+
+    ap32_discarded_into: List[S11AmountOfMatter] = Field(
+        default=None,
+        description='AP32 discarded into (was discarded by)',
     )
