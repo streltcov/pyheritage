@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Tests for A1 Excavation Processing Unit;
 
 A1 is declared with ABC — tested for metadata and MRO only;

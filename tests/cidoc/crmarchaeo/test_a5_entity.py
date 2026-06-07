@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Tests for A5 Stratigraphic Modification;
 
 """

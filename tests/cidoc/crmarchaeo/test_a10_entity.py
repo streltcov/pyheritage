@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
+
 """Tests for A10 Excavation Interface;
 
-A10 has no CRMArchaeo-specific properties — only CIDOC/CRMsci inherited ones.
+A10 has no CRMArchaeo-specific properties — only CIDOC/CRMsci inherited ones;
 
 """
 

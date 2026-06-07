@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Tests for A6 Group Declaration Event;
 
 """

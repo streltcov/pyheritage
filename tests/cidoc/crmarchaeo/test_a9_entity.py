@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Tests for A9 Archaeological Excavation;
 
 """
