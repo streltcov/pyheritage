@@ -10,6 +10,10 @@ A1 is declared with ABC — tested for metadata and MRO only;
 
 from abc import ABC
 
+import pytest
+from pydantic import ValidationError
+from tests.cidoc.crmarchaeo.helpers import make_s4_kwargs
+
 from pyheritage.cidoc.core.entities import (
     E1CRMEntity,
     E12Production,
@@ -102,6 +106,16 @@ class TestA1ExcavationProcessingUnit:
 
     # ------------------------- #
 
+    def test_ap5_rejects_empty_list(self) -> None:
+        """Verify AP5 raises ValidationError for empty list (min_length=1);"""
+        with pytest.raises(ValidationError):
+            A1ExcavationProcessingUnit(
+                ap5_removed_part_or_all=[],
+                **make_s4_kwargs(),
+            )
+
+    # ------------------------- #
+
     def test_mro_includes_ap6_intended_to_approximate(self) -> None:
         """Verify AP6 Intended to Approximate mixin is in A1 MRO;"""
         assert AP6IntendedToApproximate in A1ExcavationProcessingUnit.__mro__
@@ -111,6 +125,16 @@ class TestA1ExcavationProcessingUnit:
     def test_mro_includes_ap10_destroyed(self) -> None:
         """Verify AP10 Destroyed mixin is in A1 MRO;"""
         assert AP10Destroyed in A1ExcavationProcessingUnit.__mro__
+
+    # ------------------------- #
+
+    def test_ap10_rejects_empty_list(self) -> None:
+        """Verify AP10 raises ValidationError for empty list (min_length=1);"""
+        with pytest.raises(ValidationError):
+            A1ExcavationProcessingUnit(
+                ap10_destroyed=[],
+                **make_s4_kwargs(),
+            )
 
     # ------------------------- #
 

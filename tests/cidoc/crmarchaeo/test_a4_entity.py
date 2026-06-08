@@ -132,6 +132,18 @@ class TestA4StratigraphicGenesis:
 
     # ------------------------- #
 
+    def test_ap7_rejects_empty_list(self) -> None:
+        """Verify AP7 raises ValidationError for empty list (min_length=1);"""
+        with pytest.raises(ValidationError):
+            A4StratigraphicGenesis(
+                ap7_produced=[],
+                **make_e13_kwargs(),
+                o18_altered=[make_a8()],
+                o17_generated=[make_a8()],
+            )
+
+    # ------------------------- #
+
     def test_ap9_field_exists(self) -> None:
         """Verify ap9_took_matter_from field exists with default;"""
         entity = make_a4()
@@ -166,6 +178,18 @@ class TestA4StratigraphicGenesis:
         with pytest.raises(ValidationError):
             A4StratigraphicGenesis(
                 ap9_took_matter_from=['invalid'],
+                **make_e13_kwargs(),
+                o18_altered=[make_a8()],
+                o17_generated=[make_a8()],
+            )
+
+    # ------------------------- #
+
+    def test_ap9_rejects_empty_list(self) -> None:
+        """Verify AP9 raises ValidationError for empty list (min_length=1);"""
+        with pytest.raises(ValidationError):
+            A4StratigraphicGenesis(
+                ap9_took_matter_from=[],
                 **make_e13_kwargs(),
                 o18_altered=[make_a8()],
                 o17_generated=[make_a8()],

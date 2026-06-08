@@ -391,6 +391,45 @@ class TestA7Embedding:
 
     # ------------------------- #
 
+    def test_ap19_rejects_empty_list(self) -> None:
+        """Verify AP19 raises ValidationError for empty list (min_length=1);"""
+        with pytest.raises(ValidationError):
+            A7Embedding(
+                ap19_is_embedding_in=[],
+                **make_s20_kwargs(),
+                ap17_is_found_by=[S19EncounterEvent(
+                    p1_is_identified_by=[E41Appellation(p190_has_symbolic_content='E')],
+                    p7_took_place_at=[E53Place(p157_is_at_rest_relative_to=[])],
+                    p160_has_temporal_projection=E52TimeSpan(),
+                    p161_has_spatial_projection=[E53Place(p157_is_at_rest_relative_to=[])],
+                    p177_assigned_property_type=[E55Type()],
+                    o8_observed=S10MaterialSubstantial(o15_occupied=E53Place(p157_is_at_rest_relative_to=[])),
+                    o9_observed_property_type=S9PropertyType(),
+                    o16_observed_value=E41Appellation(),
+                    o19_encountered_object=[E18PhysicalThing(
+                        p1_is_identified_by=[E41Appellation(p190_has_symbolic_content='O')],
+                        p45_consists_of=[E57Material()],
+                        p53_has_former_or_current_location=[],
+                        p196_defines=E92SpaceTimeVolume(
+                            p160_has_temporal_projection=E52TimeSpan(),
+                            p161_has_spatial_projection=[E53Place(p157_is_at_rest_relative_to=[])],
+                        ),
+                    )],
+                    o21_encountered_at=E53Place(p157_is_at_rest_relative_to=[]),
+                )],
+                ap18_is_embedding_of=[E18PhysicalThing(
+                    p1_is_identified_by=[E41Appellation(p190_has_symbolic_content='X')],
+                    p45_consists_of=[E57Material()],
+                    p53_has_former_or_current_location=[],
+                    p196_defines=E92SpaceTimeVolume(
+                        p160_has_temporal_projection=E52TimeSpan(),
+                        p161_has_spatial_projection=[E53Place(p157_is_at_rest_relative_to=[])],
+                    ),
+                )],
+            )
+
+    # ------------------------- #
+
     def test_model_dump_includes_properties(self) -> None:
         """Verify model_dump includes id, AP17, AP18, and AP19 fields;"""
         entity = make_a7()
