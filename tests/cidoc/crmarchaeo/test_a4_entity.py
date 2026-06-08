@@ -15,6 +15,7 @@ from tests.cidoc.crmarchaeo.helpers import make_a4, make_a8, make_e13_kwargs
 from pyheritage.cidoc.core.entities import E1CRMEntity, E41Appellation, E53Place
 from pyheritage.cidoc.crmarchaeo.entities import (
     A4StratigraphicGenesis,
+    A5StratigraphicModification,
     A8StratigraphicUnit,
 )
 from pyheritage.cidoc.crmarchaeo.properties import (
@@ -50,6 +51,12 @@ class TestA4StratigraphicGenesis:
     def test_inherits_from_s17(self) -> None:
         """Verify A4 inherits from S17 Physical Genesis;"""
         assert issubclass(A4StratigraphicGenesis, S17PhysicalGenesis)
+
+    # ------------------------- #
+
+    def test_inherits_from_a5(self) -> None:
+        """Verify A4 inherits from A5 Stratigraphic Modification;"""
+        assert issubclass(A4StratigraphicGenesis, A5StratigraphicModification)
 
     # ------------------------- #
 
