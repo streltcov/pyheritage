@@ -6,6 +6,8 @@
 
 # pylint: disable=E0401,C0116,W0612
 
+from abc import ABC
+
 import pytest
 from pydantic import ValidationError
 from tests.cidoc.crmarchaeo.helpers import make_a4, make_a8, make_e13_kwargs
@@ -36,6 +38,12 @@ class TestA4StratigraphicGenesis:
     def test_crm_label(self) -> None:
         """Verify CRM label matches A4 Stratigraphic Genesis;"""
         assert A4StratigraphicGenesis.crm_label == 'A4 Stratigraphic Genesis'
+
+    # ------------------------- #
+
+    def test_is_abstract(self) -> None:
+        """Verify A4 is abstract (ABC in MRO);"""
+        assert ABC in A4StratigraphicGenesis.__mro__
 
     # ------------------------- #
 
