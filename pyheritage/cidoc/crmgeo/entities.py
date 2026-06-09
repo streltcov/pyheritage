@@ -35,6 +35,13 @@ from pyheritage.cidoc.core.entities import (
     E89PropositionalObject,
     E92SpaceTimeVolume,
 )
+from pyheritage.cidoc.crmgeo.properties import (
+    Q6IsAtRestRelativeTo,
+    Q7Describes,
+    Q8IsFixedOn,
+    Q9IsExpressedInTermsOf,
+    Q10DefinesPlace,
+)
 
 
 __all__ = (
@@ -42,6 +49,7 @@ __all__ = (
     'SP2PhenomenalPlace',
     'SP3ReferenceSpace',
     'SP4SpatialCoordinateReferenceSystem',
+    'SP5GeometricPlaceExpression',
     'SP6DeclarativePlace',
     'SP7DeclarativeSpacetimeVolume',
     'SP10DeclarativeTimeSpan',
@@ -133,7 +141,7 @@ class SP2PhenomenalPlace(E53Place, ABC):
 
 
 @entity_register(label='SP3 Reference Space')
-class SP3ReferenceSpace(E1CRMEntity, ABC):
+class SP3ReferenceSpace(Q6IsAtRestRelativeTo, E1CRMEntity, ABC):
     """'SP3 Reference Space' CRMgeo entity;
 
     https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP3
@@ -172,7 +180,7 @@ class SP3ReferenceSpace(E1CRMEntity, ABC):
 
 
 @entity_register(label='SP4 Spatial Coordinate Reference System')
-class SP4SpatialCoordinateReferenceSystem(E29DesignOrProcedure):
+class SP4SpatialCoordinateReferenceSystem(Q7Describes, Q8IsFixedOn, E29DesignOrProcedure):
     """'SP4 Spatial Coordinate Reference System' CRMgeo entity;
 
     https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP4
@@ -206,6 +214,42 @@ class SP4SpatialCoordinateReferenceSystem(E29DesignOrProcedure):
 
     Properties:
         (none added yet)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='SP5 Geometric Place Expression')
+class SP5GeometricPlaceExpression(Q9IsExpressedInTermsOf, Q10DefinesPlace, E1CRMEntity, ABC):
+    """'SP5 Geometric Place Expression' CRMgeo entity;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP5
+
+    SubClass Of:
+        E1 CRM Entity
+
+    SuperClass Of:
+        SP15 Geometry
+
+    Scope Note:
+        This class comprises the expressions that define the extent and position
+        of instances of SP6 Declarative Place in terms of a specific SP4 Spatial
+        Coordinate Reference System. It may consist of coordinates or other
+        geometric descriptions. Instances of SP5 Geometric Place Expression are
+        regarded as immaterial items in the sense of information objects.
+
+    Examples:
+        - The GML point representation "45.67 88.56"
+        - A polygon approximating the boundaries of the UK
+
+    In First Order Logic:
+        SP5(x) ⇒ E1(x)
+
+    Properties:
+        Q9 is expressed in terms of: SP4 Spatial Coordinate Reference System
+        Q10 defines place: SP6 Declarative Place
 
     """
 
@@ -422,6 +466,7 @@ __crmgeo_namespace__ = {
     'SP2PhenomenalPlace': SP2PhenomenalPlace,
     'SP3ReferenceSpace': SP3ReferenceSpace,
     'SP4SpatialCoordinateReferenceSystem': SP4SpatialCoordinateReferenceSystem,
+    'SP5GeometricPlaceExpression': SP5GeometricPlaceExpression,
     'SP6DeclarativePlace': SP6DeclarativePlace,
     'SP7DeclarativeSpacetimeVolume': SP7DeclarativeSpacetimeVolume,
     'SP10DeclarativeTimeSpan': SP10DeclarativeTimeSpan,
@@ -437,6 +482,7 @@ SP1PhenomenalSpacetimeVolume.model_rebuild(_types_namespace=__namespace__)
 SP2PhenomenalPlace.model_rebuild(_types_namespace=__namespace__)
 SP3ReferenceSpace.model_rebuild(_types_namespace=__namespace__)
 SP4SpatialCoordinateReferenceSystem.model_rebuild(_types_namespace=__namespace__)
+SP5GeometricPlaceExpression.model_rebuild(_types_namespace=__namespace__)
 SP6DeclarativePlace.model_rebuild(_types_namespace=__namespace__)
 SP7DeclarativeSpacetimeVolume.model_rebuild(_types_namespace=__namespace__)
 SP10DeclarativeTimeSpan.model_rebuild(_types_namespace=__namespace__)
