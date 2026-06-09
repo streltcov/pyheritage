@@ -30,6 +30,7 @@ from pyheritage.cidoc.core import entities as _core_entities_module
 from pyheritage.cidoc.core.entities import (
     E1CRMEntity,
     E29DesignOrProcedure,
+    E52TimeSpan,
     E53Place,
     E89PropositionalObject,
     E92SpaceTimeVolume,
@@ -42,6 +43,10 @@ __all__ = (
     'SP3ReferenceSpace',
     'SP4SpatialCoordinateReferenceSystem',
     'SP6DeclarativePlace',
+    'SP7DeclarativeSpacetimeVolume',
+    'SP10DeclarativeTimeSpan',
+    'SP11TemporalReferenceSystem',
+    'SP13PhenomenalTimeSpan',
 )
 
 
@@ -254,12 +259,174 @@ class SP6DeclarativePlace(E53Place, E89PropositionalObject):
 # ******************************************************************************************************************* #
 
 
+@entity_register(label='SP7 Declarative Spacetime Volume')
+class SP7DeclarativeSpacetimeVolume(E92SpaceTimeVolume, E89PropositionalObject):
+    """'SP7 Declarative Spacetime Volume' CRMgeo entity;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP7
+
+    SubClass Of:
+        E92 Spacetime Volume
+        E89 Propositional Object
+
+    Scope Note:
+        This class comprises instances of E92 Spacetime Volumes whose temporal and
+        spatial extent and position is defined by a SP12 Spacetime Volume Expression.
+        There is one implicit or explicit SP3 Reference Space in which the SP12
+        Spacetime Volume Expression describes the intended Spacetime Volume. As we
+        restrict the model to Galilean physics and explicitly exclude systems with
+        velocities close to the speed of light we do not model a "Reference Time" as
+        it would be necessary for relativistic physics. Even though SP12 Spacetime
+        Volume Expressions have an unlimited precision, measurement devices and the
+        precision of the position of reference features relating the SP4 Spatial
+        Coordinate Reference System to a SP3 Reference Space impose limitations to
+        the determination of the spatial part of an SP7 Declarative Spacetime Volume
+        in the real world. Several SP12 Spacetime Volume Expressions may denote the
+        same SP7 Declarative Spacetime Volume if their precision falls within the
+        same range.
+
+    Examples:
+        - The spacetime volume defined by a polygon approximating the Danube river
+          flood in Austria between 6th and 9th of August 2002
+        - The spacetime volume of the Orinoco river in 1529 defined in the map of
+          Diego Ribeiro in 1529
+        - The spacetime volume representing the boundaries of the UK from 1900-1950
+
+    In First Order Logic:
+        SP7(x) ⇒ E92(x)
+        SP7(x) ⇒ E89(x)
+
+    Properties:
+        (none added yet)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='SP10 Declarative Time-Span')
+class SP10DeclarativeTimeSpan(E52TimeSpan, E89PropositionalObject):
+    """'SP10 Declarative Time-Span' CRMgeo entity;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP10
+
+    SubClass Of:
+        E52 Time-Span
+        E89 Propositional Object
+
+    Scope Note:
+        This class comprises instances of E52 Time-Spans that represent the Time
+        Span defined by a SP14 Time Expression. Thus they derive their identity
+        through an expression defining an extent in time. Even though SP10 Declarative
+        Time Spans have an unlimited precision, measurement devices and the possible
+        precision within the SP11 Temporal Reference System impose limitations to the
+        determination of an SP10 Declarative Time Span. The accuracy of an SP10
+        Declarative Time Span depends upon the documentation and measurement method.
+        SP10 Declarative Time Spans may be used to approximate actual (phenomenal)
+        Time-Spans of temporal entities.
+
+    Examples:
+        - Extent in time defined by the expression "1961"
+        - Extent in time defined by the expression "From 12-17-1993 to 12-8-1996"
+        - Extent in time defined by the expression "14h30 - 16h22 4th July 1945"
+
+    In First Order Logic:
+        SP10(x) ⇒ E52(x)
+        SP10(x) ⇒ E89(x)
+
+    Properties:
+        (none added yet)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='SP11 Temporal Reference System')
+class SP11TemporalReferenceSystem(E29DesignOrProcedure):
+    """'SP11 Temporal Reference System' CRMgeo entity;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP11
+
+    SubClass Of:
+        E29 Design or Procedure
+
+    Scope Note:
+        This class comprises systems that are used to describe positions and extents
+        in a Reference Time. If relativistic effects are negligible in the wider
+        spacetime area of interest and the speeds of associated things, then there is
+        only one unique global reference time. The typical way to measure time is to
+        count the cycles of a periodic process for which we have a hypothesis of
+        constant frequency, such as oscillations of a crystal, molecular arrangement,
+        rotation of earth around itself or around the sun. The origin for a Temporal
+        Reference System is fixed on a reference event. As long as the number of
+        cycles passed from that reference event until now are known, the temporal
+        reference system exists and expressions in this Reference System can be
+        interpreted with respect to the Reference Time.
+
+    Examples:
+        - Gregorian Calendar
+        - Coordinated Universal Time (UTC)
+        - Julian date
+        - ISO 8601
+
+    In First Order Logic:
+        SP11(x) ⇒ E29(x)
+
+    Properties:
+        (none added yet)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='SP13 Phenomenal Time-Span')
+class SP13PhenomenalTimeSpan(E52TimeSpan, ABC):
+    """'SP13 Phenomenal Time-Span' CRMgeo entity;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP13
+
+    SubClass Of:
+        E52 Time-Span
+
+    Scope Note:
+        This class comprises instances of E52 Time-Spans whose extent and position is
+        defined by the temporal projection of the spatiotemporal extent that can be
+        observed or measured. Thus they derive their identity through the extent in
+        time of a real world phenomenon.
+
+    Examples:
+        - Duration of the phenomenal temporal extent of the Trafalgar battle
+        - The real duration of the Ming Dynasty
+        - The real extent of the lifetime of Caesar starting with his birth and
+          ending with his death
+
+    In First Order Logic:
+        SP13(x) ⇒ E52(x)
+
+    Properties:
+        (none added yet)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
 __crmgeo_namespace__ = {
     'SP1PhenomenalSpacetimeVolume': SP1PhenomenalSpacetimeVolume,
     'SP2PhenomenalPlace': SP2PhenomenalPlace,
     'SP3ReferenceSpace': SP3ReferenceSpace,
     'SP4SpatialCoordinateReferenceSystem': SP4SpatialCoordinateReferenceSystem,
     'SP6DeclarativePlace': SP6DeclarativePlace,
+    'SP7DeclarativeSpacetimeVolume': SP7DeclarativeSpacetimeVolume,
+    'SP10DeclarativeTimeSpan': SP10DeclarativeTimeSpan,
+    'SP11TemporalReferenceSystem': SP11TemporalReferenceSystem,
+    'SP13PhenomenalTimeSpan': SP13PhenomenalTimeSpan,
 }
 
 
@@ -271,3 +438,7 @@ SP2PhenomenalPlace.model_rebuild(_types_namespace=__namespace__)
 SP3ReferenceSpace.model_rebuild(_types_namespace=__namespace__)
 SP4SpatialCoordinateReferenceSystem.model_rebuild(_types_namespace=__namespace__)
 SP6DeclarativePlace.model_rebuild(_types_namespace=__namespace__)
+SP7DeclarativeSpacetimeVolume.model_rebuild(_types_namespace=__namespace__)
+SP10DeclarativeTimeSpan.model_rebuild(_types_namespace=__namespace__)
+SP11TemporalReferenceSystem.model_rebuild(_types_namespace=__namespace__)
+SP13PhenomenalTimeSpan.model_rebuild(_types_namespace=__namespace__)
