@@ -33,7 +33,7 @@ Q19 has reference event              SP11 -> E5
 
 from __future__ import annotations
 
-from typing import List, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING
 
 from pydantic import Field
 
@@ -43,12 +43,16 @@ from pyheritage.cidoc.base import PropertyMixin
 if TYPE_CHECKING:
     from pyheritage.cidoc.core.entities import (  # noqa: F401 – used in docstrings
         E18PhysicalThing,
+        E26PhysicalFeature,
         E53Place,
     )
-    from pyheritage.cidoc.crmgeo.entities import (
+    from pyheritage.cidoc.crmgeo.entities import (  # noqa: F401 – SP5 used in docstrings only
         SP1PhenomenalSpacetimeVolume,
         SP2PhenomenalPlace,
         SP3ReferenceSpace,
+        SP4SpatialCoordinateReferenceSystem,
+        SP5GeometricPlaceExpression,
+        SP6DeclarativePlace,
         SP13PhenomenalTimeSpan,
     )
 
@@ -58,6 +62,11 @@ __all__ = (
     'Q3HasTemporalProjection',
     'Q4HasSpatialProjection',
     'Q5DefinedIn',
+    'Q6IsAtRestRelativeTo',
+    'Q7Describes',
+    'Q8IsFixedOn',
+    'Q9IsExpressedInTermsOf',
+    'Q10DefinesPlace',
 )
 
 
@@ -245,4 +254,222 @@ class Q5DefinedIn(PropertyMixin):
 
     q5_defined_in: SP3ReferenceSpace = Field(
         description='Q5 defined in (is reference space for)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class Q6IsAtRestRelativeTo(PropertyMixin):
+    """'Q6 is at rest relative to (is reference space for)' CRMgeo property;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#Q6
+
+    Domain:
+        SP3 Reference Space
+    Range:
+        E18 Physical Thing
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of SP3 Reference Space with an instance
+        of E18 Physical Thing that is at rest in it, i.e., no part moves relative to
+        the reference space. The reference space is valid as long as the reference
+        object exists. The fact that some things are at rest in a reference space is
+        essential for the determination of relative positions to earth-bound features.
+
+    Properties:
+        -
+    Examples:
+        - The Space inside and around H.M.S. Victory (SP3) is at rest relative to
+          H.M.S. Victory (E22)
+
+    In First Order Logic:
+        Q6(x,y) ⊃ SP3(x)
+        Q6(x,y) ⊃ E18(y)
+
+    """
+
+    q6_is_at_rest_relative_to: List[E18PhysicalThing] = Field(
+        default=None,
+        description='Q6 is at rest relative to (is reference space for)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class Q7Describes(PropertyMixin):
+    """'Q7 describes (is described by)' CRMgeo property;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#Q7
+
+    Domain:
+        SP4 Spatial Coordinate Reference System
+    Range:
+        SP3 Reference Space
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary, dependent (1,1:0,n)
+
+    Scope Note:
+        This property associates an instance of SP4 Spatial Coordinate Reference
+        System with an instance of SP3 Reference Space it describes by relating a
+        Coordinate System to fixed real world features of that reference space.
+
+    Properties:
+        -
+    Examples:
+        - The Coordinate Reference System WGS 84 (SP4) describes the earth-bound
+          reference space (SP3)
+
+    In First Order Logic:
+        Q7(x,y) ⊃ SP4(x)
+        Q7(x,y) ⊃ SP3(y)
+
+    """
+
+    q7_describes: SP3ReferenceSpace = Field(
+        description='Q7 describes (is described by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class Q8IsFixedOn(PropertyMixin):
+    """'Q8 is fixed on (fixes)' CRMgeo property;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#Q8
+
+    Domain:
+        SP4 Spatial Coordinate Reference System
+    Range:
+        E26 Physical Feature
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one (0,1:0,n)
+
+    Scope Note:
+        This property associates an instance of SP4 Spatial Coordinate Reference
+        System with the instance of E26 Physical Feature on which the origin of
+        its coordinate system is, or was, fixed with respect to the SP3 Reference
+        Space it describes.
+
+    Properties:
+        -
+    Examples:
+        - The Coordinate Reference System (SP4) of the Space inside and around
+          H.M.S. Victory (SP3) is fixed on the middle mast of the H.M.S. Victory
+          (E26)
+
+    In First Order Logic:
+        Q8(x,y) ⊃ SP4(x)
+        Q8(x,y) ⊃ E26(y)
+
+    """
+
+    q8_is_fixed_on: Optional[E26PhysicalFeature] = Field(
+        default=None,
+        description='Q8 is fixed on (fixes)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class Q9IsExpressedInTermsOf(PropertyMixin):
+    """'Q9 is expressed in terms of' CRMgeo property;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#Q9
+
+    Domain:
+        SP5 Geometric Place Expression
+    Range:
+        SP4 Spatial Coordinate Reference System
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary, dependent (1,1:0,n)
+
+    Scope Note:
+        This property associates an instance of SP5 Geometric Place Expression
+        with the instance of SP4 Spatial Coordinate Reference System in terms of
+        which its coordinates are expressed.
+
+    Properties:
+        -
+    Examples:
+        - The geometric place expression "45.67, 88.56" (SP5) is expressed in terms
+          of WGS 84 (SP4)
+
+    In First Order Logic:
+        Q9(x,y) ⊃ SP5(x)
+        Q9(x,y) ⊃ SP4(y)
+
+    """
+
+    q9_is_expressed_in_terms_of: SP4SpatialCoordinateReferenceSystem = Field(
+        description='Q9 is expressed in terms of',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class Q10DefinesPlace(PropertyMixin):
+    """'Q10 defines place (is defined by)' CRMgeo property;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#Q10
+
+    Domain:
+        SP5 Geometric Place Expression
+    Range:
+        SP6 Declarative Place
+    SubProperty Of:
+        E53 Place. P168 place is defined by (defines place): E94 Space Primitive
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of SP5 Geometric Place Expression
+        with an instance of SP6 Declarative Place that it defines. The same
+        geometric place expression may define several places over time, if the
+        reference features related to the SP4 Spatial Coordinate Reference System
+        move with respect to the SP3 Reference Space, e.g., due to continental
+        drift. However, during normal documentation practice and for the time
+        span relevant to the documented context, this effect can be neglected.
+
+    Properties:
+        -
+    Examples:
+        - The GML point with coordinates 45.67, 88.56 in WGS84 (SP5) defines
+          the declarative place of the Orinoco river in the map of Diego Ribeiro
+          (SP6)
+
+    In First Order Logic:
+        Q10(x,y) ⊃ SP5(x)
+        Q10(x,y) ⊃ SP6(y)
+        Q10(x,y) ⇒ P168(x,y)
+
+    """
+
+    q10_defines_place: List[SP6DeclarativePlace] = Field(
+        default=None,
+        description='Q10 defines place (is defined by)',
     )
