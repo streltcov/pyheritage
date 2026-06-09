@@ -41,6 +41,11 @@ from pyheritage.cidoc.crmgeo.properties import (
     Q8IsFixedOn,
     Q9IsExpressedInTermsOf,
     Q10DefinesPlace,
+    Q11Approximates,
+    Q12Approximates,
+    Q13Approximates,
+    Q14DefinesTime,
+    Q15IsExpressedInTermsOf,
 )
 
 
@@ -54,6 +59,7 @@ __all__ = (
     'SP7DeclarativeSpacetimeVolume',
     'SP10DeclarativeTimeSpan',
     'SP11TemporalReferenceSystem',
+    'SP14TimeExpression',
     'SP13PhenomenalTimeSpan',
 )
 
@@ -258,7 +264,7 @@ class SP5GeometricPlaceExpression(Q9IsExpressedInTermsOf, Q10DefinesPlace, E1CRM
 
 
 @entity_register(label='SP6 Declarative Place')
-class SP6DeclarativePlace(E53Place, E89PropositionalObject):
+class SP6DeclarativePlace(Q11Approximates, E53Place, E89PropositionalObject):
     """'SP6 Declarative Place' CRMgeo entity;
 
     https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP6
@@ -304,7 +310,7 @@ class SP6DeclarativePlace(E53Place, E89PropositionalObject):
 
 
 @entity_register(label='SP7 Declarative Spacetime Volume')
-class SP7DeclarativeSpacetimeVolume(E92SpaceTimeVolume, E89PropositionalObject):
+class SP7DeclarativeSpacetimeVolume(Q12Approximates, E92SpaceTimeVolume, E89PropositionalObject):
     """'SP7 Declarative Spacetime Volume' CRMgeo entity;
 
     https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP7
@@ -350,7 +356,7 @@ class SP7DeclarativeSpacetimeVolume(E92SpaceTimeVolume, E89PropositionalObject):
 
 
 @entity_register(label='SP10 Declarative Time-Span')
-class SP10DeclarativeTimeSpan(E52TimeSpan, E89PropositionalObject):
+class SP10DeclarativeTimeSpan(Q13Approximates, E52TimeSpan, E89PropositionalObject):
     """'SP10 Declarative Time-Span' CRMgeo entity;
 
     https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP10
@@ -461,6 +467,42 @@ class SP13PhenomenalTimeSpan(E52TimeSpan, ABC):
 # ******************************************************************************************************************* #
 
 
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='SP14 Time Expression')
+class SP14TimeExpression(Q14DefinesTime, Q15IsExpressedInTermsOf, E1CRMEntity, ABC):
+    """'SP14 Time Expression' CRMgeo entity;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP14
+
+    SubClass Of:
+        E1 CRM Entity
+
+    Scope Note:
+        This class comprises expressions that define the extent and position
+        of instances of SP10 Declarative Time-Span in terms of a specific SP11
+        Temporal Reference System. It may consist of calendar dates, clock
+        times, or other temporal descriptions.
+
+    Examples:
+        - The time expression "1961"
+        - The time expression "From 12-17-1993 to 12-8-1996"
+        - The time expression "14h30 - 16h22 4th July 1945"
+
+    In First Order Logic:
+        SP14(x) ⇒ E1(x)
+
+    Properties:
+        Q14 defines time: SP10 Declarative Time-Span
+        Q15 is expressed in terms of: SP11 Temporal Reference System
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
 __crmgeo_namespace__ = {
     'SP1PhenomenalSpacetimeVolume': SP1PhenomenalSpacetimeVolume,
     'SP2PhenomenalPlace': SP2PhenomenalPlace,
@@ -471,6 +513,7 @@ __crmgeo_namespace__ = {
     'SP7DeclarativeSpacetimeVolume': SP7DeclarativeSpacetimeVolume,
     'SP10DeclarativeTimeSpan': SP10DeclarativeTimeSpan,
     'SP11TemporalReferenceSystem': SP11TemporalReferenceSystem,
+    'SP14TimeExpression': SP14TimeExpression,
     'SP13PhenomenalTimeSpan': SP13PhenomenalTimeSpan,
 }
 
@@ -487,4 +530,5 @@ SP6DeclarativePlace.model_rebuild(_types_namespace=__namespace__)
 SP7DeclarativeSpacetimeVolume.model_rebuild(_types_namespace=__namespace__)
 SP10DeclarativeTimeSpan.model_rebuild(_types_namespace=__namespace__)
 SP11TemporalReferenceSystem.model_rebuild(_types_namespace=__namespace__)
+SP14TimeExpression.model_rebuild(_types_namespace=__namespace__)
 SP13PhenomenalTimeSpan.model_rebuild(_types_namespace=__namespace__)
