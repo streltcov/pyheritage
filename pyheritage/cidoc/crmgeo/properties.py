@@ -4,29 +4,29 @@
 
 (Mixin classes for entity models);
 
-CRMgeo v1.2 (original 2015)
+CRMgeo v2.0 (2026)
 
 ------------------------------------------------
 Properties
 ------------------------------------------------
-Q2  occupied                         E18 -> SP1
-Q3  has temporal projection          SP1 -> SP13
-Q4  has spatial projection           SP1 -> SP2
-Q5  defined in                       E53 -> SP3
-Q6  is at rest in relation to        SP3 -> E18
-Q7  describes                        SP4 -> SP3
-Q8  is fixed on                      SP4 -> E26
-Q9  is expressed in terms of         SP5 -> SP4
-Q10 defines place                    SP5 -> SP6
-Q11 approximates                     SP6 -> SP2
-Q12 approximates                     SP7 -> SP1
-Q13 approximates                     SP10 -> SP13
-Q14 defines time                     SP14 -> SP10
-Q15 is expressed in terms of         SP14 -> SP11
-Q16 defines spacetime volume         SP12 -> SP7
-Q17 is expressed in terms of         SP12 -> SP11
-Q18 is expressed in terms of         SP12 -> SP4
-Q19 has reference event              SP11 -> E5
+Q2  occupied                             E18 -> SP1
+Q3  has temporal projection              SP1 -> SP13
+Q4  has spatial projection               SP1 -> SP2
+Q5  defined in                           E53 -> SP3
+Q6  is at rest in relation to            SP3 -> E18
+Q7  describes                            SP4 -> SP3
+Q8  is fixed on                          SP4 -> E26
+Q9  place is expressed in terms of       SP6 -> SP4
+Q10 place is defined by                  SP6 -> E94
+Q11 approximates place                   SP6 -> SP2
+Q12 approximates spacetime               SP7 -> SP1
+Q13 approximates time                    SP10 -> SP13
+Q14 defines time                         E61 -> SP10
+Q15 time is expressed in terms of        SP10 -> SP11
+Q16 defines spacetime volume             E95 -> SP7
+Q17 time is expressed in terms of        SP7 -> SP11
+Q18 place is expressed in terms of       SP7 -> SP4
+Q19 has reference event                  SP11 -> E5
 
 """
 
@@ -42,22 +42,24 @@ from pyheritage.cidoc.base import PropertyMixin
 
 if TYPE_CHECKING:
     from pyheritage.cidoc.core.entities import (  # noqa: F401 – used in docstrings
+        E5Event,
         E18PhysicalThing,
         E26PhysicalFeature,
         E53Place,
+        E61TimePrimitive,
+        E94SpacePrimitive,
+        E95SpaceTimePrimitive,
     )
-    from pyheritage.cidoc.crmgeo.entities import (  # noqa: F401 – SP5, SP14 used in docstrings only
+    from pyheritage.cidoc.crmgeo.entities import (  # noqa: F401 – used in docstrings
         SP1PhenomenalSpacetimeVolume,
         SP2PhenomenalPlace,
         SP3ReferenceSpace,
         SP4SpatialCoordinateReferenceSystem,
-        SP5GeometricPlaceExpression,
         SP6DeclarativePlace,
         SP7DeclarativeSpacetimeVolume,
         SP10DeclarativeTimeSpan,
         SP11TemporalReferenceSystem,
         SP13PhenomenalTimeSpan,
-        SP14TimeExpression,
     )
 
 
@@ -69,13 +71,17 @@ __all__ = (
     'Q6IsAtRestRelativeTo',
     'Q7Describes',
     'Q8IsFixedOn',
-    'Q9IsExpressedInTermsOf',
-    'Q10DefinesPlace',
-    'Q11Approximates',
-    'Q12Approximates',
-    'Q13Approximates',
+    'Q9PlaceIsExpressedInTermsOf',
+    'Q10PlaceIsDefinedBy',
+    'Q11ApproximatesPlace',
+    'Q12ApproximatesSpacetime',
+    'Q13ApproximatesTime',
     'Q14DefinesTime',
-    'Q15IsExpressedInTermsOf',
+    'Q15TimeIsExpressedInTermsOf',
+    'Q16DefinesSpacetimeVolume',
+    'Q17TimeIsExpressedInTermsOf',
+    'Q18PlaceIsExpressedInTermsOf',
+    'Q19HasReferenceEvent',
 )
 
 
@@ -398,13 +404,13 @@ class Q8IsFixedOn(PropertyMixin):
 # ******************************************************************************************************************* #
 
 
-class Q9IsExpressedInTermsOf(PropertyMixin):
-    """'Q9 is expressed in terms of' CRMgeo property;
+class Q9PlaceIsExpressedInTermsOf(PropertyMixin):
+    """'Q9 place is expressed in terms of (expresses place)' CRMgeo property;
 
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#Q9
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#Q9
 
     Domain:
-        SP5 Geometric Place Expression
+        SP6 Declarative Place
     Range:
         SP4 Spatial Coordinate Reference System
     SubProperty Of:
@@ -412,85 +418,81 @@ class Q9IsExpressedInTermsOf(PropertyMixin):
     SuperProperty Of:
         -
     Quantification:
-        many to one, necessary, dependent (1,1:0,n)
+        many to many (0,n:0,n)
 
     Scope Note:
-        This property associates an instance of SP5 Geometric Place Expression
-        with the instance of SP4 Spatial Coordinate Reference System in terms of
-        which its coordinates are expressed.
+        This property defines the coordinate reference system in terms of which
+        a Space Primitive is formulated.
 
     Properties:
         -
     Examples:
-        - The geometric place expression "45.67, 88.56" (SP5) is expressed in terms
-          of WGS 84 (SP4)
+        - The declarative place in terms of WGS 84 (SP4)
 
     In First Order Logic:
-        Q9(x,y) ⊃ SP5(x)
+        Q9(x,y) ⊃ SP6(x)
         Q9(x,y) ⊃ SP4(y)
 
     """
 
-    q9_is_expressed_in_terms_of: SP4SpatialCoordinateReferenceSystem = Field(
-        description='Q9 is expressed in terms of',
+    q9_place_is_expressed_in_terms_of: SP4SpatialCoordinateReferenceSystem = Field(
+        description='Q9 place is expressed in terms of',
     )
 
 
 # ******************************************************************************************************************* #
 
 
-class Q10DefinesPlace(PropertyMixin):
-    """'Q10 defines place (is defined by)' CRMgeo property;
+class Q10PlaceIsDefinedBy(PropertyMixin):
+    """'Q10 place is defined by (defines place)' CRMgeo property;
 
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#Q10
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#Q10
 
     Domain:
-        SP5 Geometric Place Expression
-    Range:
         SP6 Declarative Place
+    Range:
+        E94 Space Primitive
     SubProperty Of:
         E53 Place. P168 place is defined by (defines place): E94 Space Primitive
     SuperProperty Of:
         -
     Quantification:
-        many to many (0,n:0,n)
+        one to many, dependent (0,n:1,1)
 
     Scope Note:
-        This property associates an instance of SP5 Geometric Place Expression
-        with an instance of SP6 Declarative Place that it defines. The same
-        geometric place expression may define several places over time, if the
-        reference features related to the SP4 Spatial Coordinate Reference System
-        move with respect to the SP3 Reference Space, e.g., due to continental
-        drift. However, during normal documentation practice and for the time
-        span relevant to the documented context, this effect can be neglected.
+        This property associates an instance of SP6 Declarative Place with the
+        instance of E94 Space Primitive that defines it. Syntactic variants or
+        use of different scripts may result in multiple instances of E94 Space
+        Primitive defining exactly the same place. Transformations between
+        different reference systems always result in new definitions of places
+        approximating each other and not in alternative definitions.
 
     Properties:
         -
     Examples:
-        - The GML point with coordinates 45.67, 88.56 in WGS84 (SP5) defines
-          the declarative place of the Orinoco river in the map of Diego Ribeiro
-          (SP6)
+        - The centroid from https://sws.geonames.org/735927 (SP6) place is
+          defined by 40°31'17.9"N 21°15'48.3"E (E94)
 
     In First Order Logic:
-        Q10(x,y) ⊃ SP5(x)
-        Q10(x,y) ⊃ SP6(y)
-        Q10(x,y) ⇒ P168(x,y)
+        Q10(x,y) ⊃ SP6(x)
+        Q10(x,y) ⊃ E94(y)
+        Q10(x,y) ⇔ P168(x,y)
 
     """
 
-    q10_defines_place: List[SP6DeclarativePlace] = Field(
+    q10_place_is_defined_by: List[E94SpacePrimitive] = Field(
         default=None,
-        description='Q10 defines place (is defined by)',
+        description='Q10 place is defined by (defines place)',
     )
 
 
 # ******************************************************************************************************************* #
 
 
-class Q11Approximates(PropertyMixin):
-    """'Q11 approximates (is approximated by)' CRMgeo property;
+class Q11ApproximatesPlace(PropertyMixin):
+    """'Q11 approximates place (place is approximated by)' CRMgeo property;
 
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#Q11
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#Q11
 
     Domain:
         SP6 Declarative Place
@@ -504,117 +506,111 @@ class Q11Approximates(PropertyMixin):
         many to many (0,n:0,n)
 
     Scope Note:
-        This property associates an instance of SP6 Declarative Place with an
-        instance of SP2 Phenomenal Place that it approximates within the accuracy
-        of the respective geometric expression and the precision of the reference
-        features.
+        This property approximates a SP2 Phenomenal Place which is defined in
+        the same reference space. The property does not state the quality or
+        accuracy of the approximation, but states the intention to approximate
+        the place.
 
     Properties:
         -
     Examples:
-        - The declarative place defined by a point with coordinates 45.67, 88.56
-          in WGS 84 approximates the phenomenal place of the Orinoco river mouth
-          (SP2)
+        - The declarative place with point shape which is defined in terms of
+          coordinates taken from https://sws.geonames.org/735927 (SP6)
+          approximates place Kastoria, Greece (SP2)
 
     In First Order Logic:
         Q11(x,y) ⊃ SP6(x)
         Q11(x,y) ⊃ SP2(y)
-        Q11(x,y) ⇒ P189(x,y)
 
     """
 
-    q11_approximates: List[SP2PhenomenalPlace] = Field(
+    q11_approximates_place: List[SP2PhenomenalPlace] = Field(
         default=None,
-        description='Q11 approximates (is approximated by)',
+        description='Q11 approximates place (place is approximated by)',
     )
 
 
 # ******************************************************************************************************************* #
 
 
-class Q12Approximates(PropertyMixin):
-    """'Q12 approximates (is approximated by)' CRMgeo property;
+class Q12ApproximatesSpacetime(PropertyMixin):
+    """'Q12 approximates spacetime (spacetime is approximated by)' CRMgeo property;
 
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#Q12
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#Q12
 
     Domain:
         SP7 Declarative Spacetime Volume
     Range:
         SP1 Phenomenal Spacetime Volume
     SubProperty Of:
-        E92 Spacetime Volume. P189 approximates (is approximated by): E92 Spacetime Volume
+        -
     SuperProperty Of:
         -
     Quantification:
         many to many (0,n:0,n)
 
     Scope Note:
-        This property associates an instance of SP7 Declarative Spacetime Volume
-        with an instance of SP1 Phenomenal Spacetime Volume that it approximates
-        within the accuracy of the respective spacetime volume expression and the
-        precision of the reference features.
+        This property approximates an E53 Place which is defined in the same
+        reference space. The property does not state the quality or accuracy of
+        the approximation, but states the intention to approximate the place.
 
     Properties:
         -
     Examples:
-        - The declarative spacetime volume (SP7) of the Danube river flood in
-          Austria between 6th and 9th of August 2002 approximates the phenomenal
-          spacetime volume (SP1)
+        - The declared maximum extent of the Byzantine Empire (SP7) approximates
+          spacetime the phenomenal maximum extent of the Byzantine Empire (SP1)
 
     In First Order Logic:
         Q12(x,y) ⊃ SP7(x)
         Q12(x,y) ⊃ SP1(y)
-        Q12(x,y) ⇒ P189(x,y)
 
     """
 
-    q12_approximates: List[SP1PhenomenalSpacetimeVolume] = Field(
+    q12_approximates_spacetime: List[SP1PhenomenalSpacetimeVolume] = Field(
         default=None,
-        description='Q12 approximates (is approximated by)',
+        description='Q12 approximates spacetime (spacetime is approximated by)',
     )
 
 
 # ******************************************************************************************************************* #
 
 
-class Q13Approximates(PropertyMixin):
-    """'Q13 approximates (is approximated by)' CRMgeo property;
+class Q13ApproximatesTime(PropertyMixin):
+    """'Q13 approximates time (time is approximated by)' CRMgeo property;
 
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#Q13
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#Q13
 
     Domain:
         SP10 Declarative Time-Span
     Range:
         SP13 Phenomenal Time-Span
     SubProperty Of:
-        E52 Time-Span. P189 approximates (is approximated by): E52 Time-Span
+        -
     SuperProperty Of:
         -
     Quantification:
         many to many (0,n:0,n)
 
     Scope Note:
-        This property associates an instance of SP10 Declarative Time-Span with
-        an instance of SP13 Phenomenal Time-Span that it approximates within the
-        accuracy of the respective time expression and the precision of the
-        temporal reference system.
+        This property approximates a E52 Time-Span. The property does not state
+        the quality or accuracy of the approximation, but states the intention
+        to approximate the time span.
 
     Properties:
         -
     Examples:
-        - The declarative time-span "1961" (SP10) approximates the phenomenal
-          time-span of a particular year (SP13)
+        - September 1939 - September 1945 (SP10) approximates time the
+          phenomenal duration of the Second World War (SP13)
 
     In First Order Logic:
         Q13(x,y) ⊃ SP10(x)
         Q13(x,y) ⊃ SP13(y)
-        Q13(x,y) ⇒ P189(x,y)
 
     """
 
-    q13_approximates: List[SP13PhenomenalTimeSpan] = Field(
+    q13_approximates_time: List[SP13PhenomenalTimeSpan] = Field(
         default=None,
-        description='Q13 approximates (is approximated by)',
+        description='Q13 approximates time (time is approximated by)',
     )
 
 
@@ -622,53 +618,64 @@ class Q13Approximates(PropertyMixin):
 
 
 class Q14DefinesTime(PropertyMixin):
-    """'Q14 defines time (is defined by)' CRMgeo property;
+    """'Q14 defines time (time is defined by)' CRMgeo property;
 
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#Q14
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#Q14
 
     Domain:
-        SP14 Time Expression
+        E61 Time Primitive
     Range:
         SP10 Declarative Time-Span
     SubProperty Of:
-        -
+        E61 Time Primitive. P170 defines time (time is defined by): E52 Time-Span
     SuperProperty Of:
         -
     Quantification:
-        one to one, necessary, dependent (1,1:0,n)
+        many to one (0,1:0,n)
 
     Scope Note:
-        This property associates an instance of SP14 Time Expression with an
-        instance of SP10 Declarative Time-Span that it defines. Given the
-        temporal reference system used, the expression may define different
-        time spans at different times, due to the refinement of knowledge.
+        This property associates an instance of E61 Time Primitive with the
+        instance of SP10 Declarative Time Span it defines. Syntactic variants
+        or use of different scripts may result in multiple instances of E61
+        Time Primitive defining exactly the same time span. Transformations
+        between different temporal reference systems in general result in new
+        definitions of time spans approximating each other.
 
     Properties:
         -
     Examples:
-        - The time expression "1961" (SP14) defines the declarative time-span (SP10)
+        - "1800/1/1 0:00:00 - 1899/31/12 23:59:59" (E61) defines time the
+          19th century (SP10)
 
     In First Order Logic:
-        Q14(x,y) ⊃ SP14(x)
+        Q14(x,y) ⊃ E61(x)
         Q14(x,y) ⊃ SP10(y)
+        Q14(x,y) ⇔ P170(x,y)
+
+    Note:
+        Defined as a standalone mixin — domain E61 is a core CRM entity, so
+        this mixin is NOT applied to E61TimePrimitive (would create circular
+        dependency). Consumers may subclass E61TimePrimitive with this mixin
+        if needed.
 
     """
 
-    q14_defines_time: SP10DeclarativeTimeSpan = Field(
-        description='Q14 defines time (is defined by)',
+    q14_defines_time: Optional[SP10DeclarativeTimeSpan] = Field(
+        default=None,
+        description='Q14 defines time (time is defined by)',
     )
 
 
 # ******************************************************************************************************************* #
 
 
-class Q15IsExpressedInTermsOf(PropertyMixin):
-    """'Q15 is expressed in terms of' CRMgeo property;
+class Q15TimeIsExpressedInTermsOf(PropertyMixin):
+    """'Q15 time is expressed in terms of (expresses time)' CRMgeo property;
 
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#Q15
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#Q15
 
     Domain:
-        SP14 Time Expression
+        SP10 Declarative Time-Span
     Range:
         SP11 Temporal Reference System
     SubProperty Of:
@@ -676,25 +683,202 @@ class Q15IsExpressedInTermsOf(PropertyMixin):
     SuperProperty Of:
         -
     Quantification:
-        many to one, necessary, dependent (1,1:0,n)
+        many to many (0,n:0,n)
 
     Scope Note:
-        This property associates an instance of SP14 Time Expression with an
-        instance of SP11 Temporal Reference System in terms of which its time
-        values are expressed.
+        This property defines the temporal reference system in terms of which
+        a SP10 Declarative Time-Span is formulated.
 
     Properties:
         -
     Examples:
-        - The time expression "1961" (SP14) is expressed in terms of the
+        - The declarative time span (SP10) defined by "1800/1/1 0:00:00 -
+          1899/31/12 23:59:59" (E61) time is expressed in terms of the
           Gregorian Calendar (SP11)
 
     In First Order Logic:
-        Q15(x,y) ⊃ SP14(x)
+        Q15(x,y) ⊃ SP10(x)
         Q15(x,y) ⊃ SP11(y)
 
     """
 
-    q15_is_expressed_in_terms_of: SP11TemporalReferenceSystem = Field(
-        description='Q15 is expressed in terms of',
+    q15_time_is_expressed_in_terms_of: List[SP11TemporalReferenceSystem] = Field(
+        default=None,
+        description='Q15 time is expressed in terms of (expresses time)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class Q16DefinesSpacetimeVolume(PropertyMixin):
+    """'Q16 defines spacetime volume (spacetime volume is defined by)' CRMgeo property;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#Q16
+
+    Domain:
+        E95 Spacetime Primitive
+    Range:
+        SP7 Declarative Spacetime Volume
+    SubProperty Of:
+        E95 Spacetime Primitive. P169 defines spacetime volume
+        (spacetime volume is defined by): E92 Spacetime Volume
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property associates an instance of E95 Spacetime Primitive with the
+        instance of SP7 Declarative Spacetime Volume it defines. Syntactic
+        variants or use of different scripts may result in multiple instances of
+        E95 Spacetime Primitive defining exactly the same SP7 Declarative
+        Spacetime Volume. Transformations between different temporal or spatial
+        reference systems in general result in new definitions of Spacetime
+        Volumes approximating each other.
+
+    Properties:
+        -
+    Examples:
+        - The KML Placemark defining the Byzantine Empire maximum extent (E95)
+          defines spacetime volume the declared maximum extent of the Byzantine
+          Empire between 555 and 565 (SP7)
+
+    In First Order Logic:
+        Q16(x,y) ⊃ E95(x)
+        Q16(x,y) ⊃ SP7(y)
+        Q16(x,y) ⇔ P169(x,y)
+
+    Note:
+        Defined as a standalone mixin — domain E95 is a core CRM entity, so
+        this mixin is NOT applied to E95SpaceTimePrimitive (would create
+        circular dependency). Consumers may subclass E95SpaceTimePrimitive
+        with this mixin if needed.
+
+    """
+
+    q16_defines_spacetime_volume: SP7DeclarativeSpacetimeVolume = Field(
+        description='Q16 defines spacetime volume (spacetime volume is defined by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class Q17TimeIsExpressedInTermsOf(PropertyMixin):
+    """'Q17 time is expressed in terms of (expresses time)' CRMgeo property;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#Q17
+
+    Domain:
+        SP7 Declarative Spacetime Volume
+    Range:
+        SP11 Temporal Reference System
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property defines the temporal reference system in terms of which
+        a SP7 Declarative Spacetime Volume is formulated.
+
+    Properties:
+        -
+    Examples:
+        - The declared maximum extent of the Byzantine Empire (SP7) time is
+          expressed in terms of the proleptic Gregorian Calendar (SP11)
+
+    In First Order Logic:
+        Q17(x,y) ⊃ SP7(x)
+        Q17(x,y) ⊃ SP11(y)
+
+    """
+
+    q17_time_is_expressed_in_terms_of: List[SP11TemporalReferenceSystem] = Field(
+        default=None,
+        description='Q17 time is expressed in terms of (expresses time)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class Q18PlaceIsExpressedInTermsOf(PropertyMixin):
+    """'Q18 place is expressed in terms of (expresses place)' CRMgeo property;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#Q18
+
+    Domain:
+        SP7 Declarative Spacetime Volume
+    Range:
+        SP4 Spatial Coordinate Reference System
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property defines the spatial coordinate reference system in terms
+        of which a SP7 Declarative Spacetime Volume is formulated.
+
+    Properties:
+        -
+    Examples:
+        - The declared maximum extent of the Byzantine Empire (SP7) place is
+          expressed in terms of Longitude-Latitude in WGS84 (SP4)
+
+    In First Order Logic:
+        Q18(x,y) ⊃ SP7(x)
+        Q18(x,y) ⊃ SP4(y)
+
+    """
+
+    q18_place_is_expressed_in_terms_of: List[SP4SpatialCoordinateReferenceSystem] = Field(
+        default=None,
+        description='Q18 place is expressed in terms of (expresses place)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class Q19HasReferenceEvent(PropertyMixin):
+    """'Q19 has reference event (is reference event of)' CRMgeo property;
+
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#Q19
+
+    Domain:
+        SP11 Temporal Reference System
+    Range:
+        E5 Event
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to one, necessary (1,1:0,n)
+
+    Scope Note:
+        This property defines the reference event for a SP11 Temporal Reference
+        System. The origin for a Temporal Reference System is fixed on a
+        reference event.
+
+    Properties:
+        -
+    Examples:
+        - The Gregorian Calendar (SP11) has reference event Birth of Christ (E67)
+
+    In First Order Logic:
+        Q19(x,y) ⊃ SP11(x)
+        Q19(x,y) ⊃ E5(y)
+
+    """
+
+    q19_has_reference_event: E5Event = Field(
+        description='Q19 has reference event (is reference event of)',
     )
