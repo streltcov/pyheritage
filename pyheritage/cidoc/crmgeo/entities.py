@@ -2,7 +2,7 @@
 
 """CRMgeo entity models;
 
-CRMgeo v1.2 (original 2015)
+CRMgeo v2.0 (2026)
 
 Entities
 --------
@@ -10,15 +10,11 @@ SP1  Phenomenal Spacetime Volume
 SP2  Phenomenal Place
 SP3  Reference Space
 SP4  Spatial Coordinate Reference System
-SP5  Geometric Place Expression
 SP6  Declarative Place
 SP7  Declarative Spacetime Volume
 SP10 Declarative Time-Span
 SP11 Temporal Reference System
-SP12 Spacetime Volume Expression
 SP13 Phenomenal Time-Span
-SP14 Time Expression
-SP15 Geometry
 
 """
 
@@ -32,20 +28,23 @@ from pyheritage.cidoc.core.entities import (
     E29DesignOrProcedure,
     E52TimeSpan,
     E53Place,
-    E89PropositionalObject,
     E92SpaceTimeVolume,
 )
 from pyheritage.cidoc.crmgeo.properties import (
+    Q3HasTemporalProjection,
+    Q4HasSpatialProjection,
     Q6IsAtRestRelativeTo,
     Q7Describes,
     Q8IsFixedOn,
-    Q9IsExpressedInTermsOf,
-    Q10DefinesPlace,
-    Q11Approximates,
-    Q12Approximates,
-    Q13Approximates,
-    Q14DefinesTime,
-    Q15IsExpressedInTermsOf,
+    Q9PlaceIsExpressedInTermsOf,
+    Q10PlaceIsDefinedBy,
+    Q11ApproximatesPlace,
+    Q12ApproximatesSpacetime,
+    Q13ApproximatesTime,
+    Q15TimeIsExpressedInTermsOf,
+    Q17TimeIsExpressedInTermsOf,
+    Q18PlaceIsExpressedInTermsOf,
+    Q19HasReferenceEvent,
 )
 
 
@@ -54,27 +53,25 @@ __all__ = (
     'SP2PhenomenalPlace',
     'SP3ReferenceSpace',
     'SP4SpatialCoordinateReferenceSystem',
-    'SP5GeometricPlaceExpression',
     'SP6DeclarativePlace',
     'SP7DeclarativeSpacetimeVolume',
     'SP10DeclarativeTimeSpan',
     'SP11TemporalReferenceSystem',
-    'SP14TimeExpression',
     'SP13PhenomenalTimeSpan',
 )
 
 
 @entity_register(label='SP1 Phenomenal Spacetime Volume')
-class SP1PhenomenalSpacetimeVolume(E92SpaceTimeVolume, ABC):
+class SP1PhenomenalSpacetimeVolume(Q3HasTemporalProjection, Q4HasSpatialProjection, E92SpaceTimeVolume, ABC):
     """'SP1 Phenomenal Spacetime Volume' CRMgeo entity;
 
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP1
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#SP1
 
     SubClass Of:
         E92 Spacetime Volume
 
     SuperClass Of:
-        SP2 Phenomenal Place
+        E4 Period
 
     Scope Note:
         This class comprises the 4 dimensional point sets (volumes) which material
@@ -98,7 +95,8 @@ class SP1PhenomenalSpacetimeVolume(E92SpaceTimeVolume, ABC):
         SP1(x) ⇒ E92(x)
 
     Properties:
-        (none added yet)
+        Q3 has temporal projection: SP13 Phenomenal Time-Span
+        Q4 has spatial projection: SP2 Phenomenal Place
 
     """
 
@@ -227,67 +225,34 @@ class SP4SpatialCoordinateReferenceSystem(Q7Describes, Q8IsFixedOn, E29DesignOrP
 # ******************************************************************************************************************* #
 
 
-@entity_register(label='SP5 Geometric Place Expression')
-class SP5GeometricPlaceExpression(Q9IsExpressedInTermsOf, Q10DefinesPlace, E1CRMEntity, ABC):
-    """'SP5 Geometric Place Expression' CRMgeo entity;
-
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP5
-
-    SubClass Of:
-        E1 CRM Entity
-
-    SuperClass Of:
-        SP15 Geometry
-
-    Scope Note:
-        This class comprises the expressions that define the extent and position
-        of instances of SP6 Declarative Place in terms of a specific SP4 Spatial
-        Coordinate Reference System. It may consist of coordinates or other
-        geometric descriptions. Instances of SP5 Geometric Place Expression are
-        regarded as immaterial items in the sense of information objects.
-
-    Examples:
-        - The GML point representation "45.67 88.56"
-        - A polygon approximating the boundaries of the UK
-
-    In First Order Logic:
-        SP5(x) ⇒ E1(x)
-
-    Properties:
-        Q9 is expressed in terms of: SP4 Spatial Coordinate Reference System
-        Q10 defines place: SP6 Declarative Place
-
-    """
-
-
-# ******************************************************************************************************************* #
-
-
 @entity_register(label='SP6 Declarative Place')
-class SP6DeclarativePlace(Q11Approximates, E53Place, E89PropositionalObject):
+class SP6DeclarativePlace(
+    Q9PlaceIsExpressedInTermsOf,
+    Q10PlaceIsDefinedBy,
+    Q11ApproximatesPlace,
+    E53Place,
+):
     """'SP6 Declarative Place' CRMgeo entity;
 
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP6
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#SP6
 
     SubClass Of:
         E53 Place
-        E89 Propositional Object
 
     SuperClass Of:
-        SP15 Geometry
+        Point (external)
 
     Scope Note:
         This class comprises instances of E53 Place whose extent and position is
-        defined by a SP5 Geometric Place Expression. There is one implicit or explicit
-        SP3 Reference Space in which the SP5 Place Expression describes the intended
-        place. Even though SP5 Geometric Place Expressions have an unlimited precision,
+        defined by an E94 Space Primitive. There is one implicit or explicit
+        SP3 Reference Space in which the E94 Space Primitive describes the intended
+        place. Even though E94 Space Primitives have an unlimited precision,
         measurement devices and the precision of the position of reference features
         relating the SP4 Spatial Coordinate Reference System to a SP3 Reference Space
         impose limitations to the determination of an SP6 Declarative Place in the real
-        world. Several SP5 Geometric Place Expressions may denote the same SP6
-        Declarative Place if their precision falls within the same range. Instances of
-        SP6 Declarative Places may be used to approximate instances of E53 Places or
-        parts of them.
+        world. Several E94 Space Primitives may denote the same SP6 Declarative Place
+        if their precision falls within the same range. Instances of SP6 Declarative
+        Places may be used to approximate instances of E53 Places or parts of them.
 
     Examples:
         - The place defined by a GML point with coordinates 45.67, 88.56 in WGS84
@@ -298,10 +263,11 @@ class SP6DeclarativePlace(Q11Approximates, E53Place, E89PropositionalObject):
 
     In First Order Logic:
         SP6(x) ⇒ E53(x)
-        SP6(x) ⇒ E89(x)
 
     Properties:
-        (none added yet)
+        Q9 place is expressed in terms of: SP4 Spatial Coordinate Reference System
+        Q10 place is defined by: E94 Space Primitive
+        Q11 approximates place: SP2 Phenomenal Place
 
     """
 
@@ -310,24 +276,28 @@ class SP6DeclarativePlace(Q11Approximates, E53Place, E89PropositionalObject):
 
 
 @entity_register(label='SP7 Declarative Spacetime Volume')
-class SP7DeclarativeSpacetimeVolume(Q12Approximates, E92SpaceTimeVolume, E89PropositionalObject):
+class SP7DeclarativeSpacetimeVolume(
+    Q12ApproximatesSpacetime,
+    Q17TimeIsExpressedInTermsOf,
+    Q18PlaceIsExpressedInTermsOf,
+    E92SpaceTimeVolume,
+):
     """'SP7 Declarative Spacetime Volume' CRMgeo entity;
 
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP7
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#SP7
 
     SubClass Of:
         E92 Spacetime Volume
-        E89 Propositional Object
 
     Scope Note:
         This class comprises instances of E92 Spacetime Volumes whose temporal and
-        spatial extent and position is defined by a SP12 Spacetime Volume Expression.
-        There is one implicit or explicit SP3 Reference Space in which the SP12
-        Spacetime Volume Expression describes the intended Spacetime Volume. As we
+        spatial extent and position is defined by a E95 Spacetime Primitive.
+        There is one implicit or explicit SP3 Reference Space in which the E95
+        Spacetime Primitive describes the intended Spacetime Volume. As we
         restrict the model to Galilean physics and explicitly exclude systems with
         velocities close to the speed of light we do not model a "Reference Time" as
-        it would be necessary for relativistic physics. Even though SP12 Spacetime
-        Volume Expressions have an unlimited precision, measurement devices and the
+        it would be necessary for relativistic physics. Even though E95 Spacetime
+        Primitives have an unlimited precision, measurement devices and the
         precision of the position of reference features relating the SP4 Spatial
         Coordinate Reference System to a SP3 Reference Space impose limitations to
         the determination of the spatial part of an SP7 Declarative Spacetime Volume
@@ -344,10 +314,11 @@ class SP7DeclarativeSpacetimeVolume(Q12Approximates, E92SpaceTimeVolume, E89Prop
 
     In First Order Logic:
         SP7(x) ⇒ E92(x)
-        SP7(x) ⇒ E89(x)
 
     Properties:
-        (none added yet)
+        Q12 approximates spacetime: SP1 Phenomenal Spacetime Volume
+        Q17 time is expressed in terms of: SP11 Temporal Reference System
+        Q18 place is expressed in terms of: SP4 Spatial Coordinate Reference System
 
     """
 
@@ -356,18 +327,21 @@ class SP7DeclarativeSpacetimeVolume(Q12Approximates, E92SpaceTimeVolume, E89Prop
 
 
 @entity_register(label='SP10 Declarative Time-Span')
-class SP10DeclarativeTimeSpan(Q13Approximates, E52TimeSpan, E89PropositionalObject):
+class SP10DeclarativeTimeSpan(
+    Q13ApproximatesTime,
+    Q15TimeIsExpressedInTermsOf,
+    E52TimeSpan,
+):
     """'SP10 Declarative Time-Span' CRMgeo entity;
 
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP10
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#SP10
 
     SubClass Of:
         E52 Time-Span
-        E89 Propositional Object
 
     Scope Note:
         This class comprises instances of E52 Time-Spans that represent the Time
-        Span defined by a SP14 Time Expression. Thus they derive their identity
+        Span defined by a E61 Time Primitive. Thus they derive their identity
         through an expression defining an extent in time. Even though SP10 Declarative
         Time Spans have an unlimited precision, measurement devices and the possible
         precision within the SP11 Temporal Reference System impose limitations to the
@@ -383,10 +357,10 @@ class SP10DeclarativeTimeSpan(Q13Approximates, E52TimeSpan, E89PropositionalObje
 
     In First Order Logic:
         SP10(x) ⇒ E52(x)
-        SP10(x) ⇒ E89(x)
 
     Properties:
-        (none added yet)
+        Q13 approximates time: SP13 Phenomenal Time-Span
+        Q15 time is expressed in terms of: SP11 Temporal Reference System
 
     """
 
@@ -395,10 +369,10 @@ class SP10DeclarativeTimeSpan(Q13Approximates, E52TimeSpan, E89PropositionalObje
 
 
 @entity_register(label='SP11 Temporal Reference System')
-class SP11TemporalReferenceSystem(E29DesignOrProcedure):
+class SP11TemporalReferenceSystem(Q19HasReferenceEvent, E29DesignOrProcedure):
     """'SP11 Temporal Reference System' CRMgeo entity;
 
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP11
+    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v2.0.html#SP11
 
     SubClass Of:
         E29 Design or Procedure
@@ -426,7 +400,7 @@ class SP11TemporalReferenceSystem(E29DesignOrProcedure):
         SP11(x) ⇒ E29(x)
 
     Properties:
-        (none added yet)
+        Q19 has reference event: E5 Event
 
     """
 
@@ -467,53 +441,16 @@ class SP13PhenomenalTimeSpan(E52TimeSpan, ABC):
 # ******************************************************************************************************************* #
 
 
-# ******************************************************************************************************************* #
-
-
-@entity_register(label='SP14 Time Expression')
-class SP14TimeExpression(Q14DefinesTime, Q15IsExpressedInTermsOf, E1CRMEntity, ABC):
-    """'SP14 Time Expression' CRMgeo entity;
-
-    https://cidoc-crm.org/extensions/crmgeo/html/CRMgeo_v1.2.html#SP14
-
-    SubClass Of:
-        E1 CRM Entity
-
-    Scope Note:
-        This class comprises expressions that define the extent and position
-        of instances of SP10 Declarative Time-Span in terms of a specific SP11
-        Temporal Reference System. It may consist of calendar dates, clock
-        times, or other temporal descriptions.
-
-    Examples:
-        - The time expression "1961"
-        - The time expression "From 12-17-1993 to 12-8-1996"
-        - The time expression "14h30 - 16h22 4th July 1945"
-
-    In First Order Logic:
-        SP14(x) ⇒ E1(x)
-
-    Properties:
-        Q14 defines time: SP10 Declarative Time-Span
-        Q15 is expressed in terms of: SP11 Temporal Reference System
-
-    """
-
-
-# ******************************************************************************************************************* #
-
-
 __crmgeo_namespace__ = {
+    'E94SpacePrimitive': _core_entities_module.E94SpacePrimitive,
     'SP1PhenomenalSpacetimeVolume': SP1PhenomenalSpacetimeVolume,
     'SP2PhenomenalPlace': SP2PhenomenalPlace,
     'SP3ReferenceSpace': SP3ReferenceSpace,
     'SP4SpatialCoordinateReferenceSystem': SP4SpatialCoordinateReferenceSystem,
-    'SP5GeometricPlaceExpression': SP5GeometricPlaceExpression,
     'SP6DeclarativePlace': SP6DeclarativePlace,
     'SP7DeclarativeSpacetimeVolume': SP7DeclarativeSpacetimeVolume,
     'SP10DeclarativeTimeSpan': SP10DeclarativeTimeSpan,
     'SP11TemporalReferenceSystem': SP11TemporalReferenceSystem,
-    'SP14TimeExpression': SP14TimeExpression,
     'SP13PhenomenalTimeSpan': SP13PhenomenalTimeSpan,
 }
 
@@ -525,10 +462,8 @@ SP1PhenomenalSpacetimeVolume.model_rebuild(_types_namespace=__namespace__)
 SP2PhenomenalPlace.model_rebuild(_types_namespace=__namespace__)
 SP3ReferenceSpace.model_rebuild(_types_namespace=__namespace__)
 SP4SpatialCoordinateReferenceSystem.model_rebuild(_types_namespace=__namespace__)
-SP5GeometricPlaceExpression.model_rebuild(_types_namespace=__namespace__)
 SP6DeclarativePlace.model_rebuild(_types_namespace=__namespace__)
 SP7DeclarativeSpacetimeVolume.model_rebuild(_types_namespace=__namespace__)
 SP10DeclarativeTimeSpan.model_rebuild(_types_namespace=__namespace__)
 SP11TemporalReferenceSystem.model_rebuild(_types_namespace=__namespace__)
-SP14TimeExpression.model_rebuild(_types_namespace=__namespace__)
 SP13PhenomenalTimeSpan.model_rebuild(_types_namespace=__namespace__)
