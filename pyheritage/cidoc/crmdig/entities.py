@@ -24,9 +24,12 @@ D35 Area
 """
 
 
+from abc import ABC
+
 from pyheritage.cidoc.base import entity_register
 from pyheritage.cidoc.core.entities import (
     E22HumanMadeObject,
+    E31Document,
     E65Creation,
     E73InformationObject,
     E89PropositionalObject,
@@ -35,10 +38,15 @@ from pyheritage.cidoc.core.entities import (
 
 __all__ = (
     'D1DigitalObject',
+    'D7DigitalMachineEvent',
     'D8DigitalDevice',
+    'D9DataObject',
+    'D10SoftwareExecution',
     'D13DigitalInformationCarrier',
+    'D14Software',
     'D29AnnotationObject',
     'D30AnnotationEvent',
+    'D35Area',
 )
 
 
@@ -199,5 +207,177 @@ class D1DigitalObject(E73InformationObject):
 
     Properties:
         (none)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='D14 Software')
+class D14Software(D1DigitalObject):
+    """'D14 Software' CRMDig entity;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D14
+
+    SubClass Of:
+        D1 Digital Object
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises software codes, computer programs, procedures and functions that
+        are used to operate a system of digital objects;
+
+    Examples:
+        -
+
+    In First Order Logic:
+        D14(x) => D1(x)
+
+    Properties:
+        (none)
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='D35 Area')
+class D35Area(D1DigitalObject):
+    """'D35 Area' CRMDig entity;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D35
+
+    SubClass Of:
+        D1 Digital Object
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class describes a part (of any shape or size) of interest in basically any media
+        object stored in the Object Repository, i.e., a text, an image, a video or a 3D model.
+        It points to content consisting of just a portion or area of a file;
+
+    Examples:
+        -
+
+    In First Order Logic:
+        D35(x) => D1(x)
+
+    Properties:
+        L49 is primary area of (has primary area): D1 Digital Object
+        L50 is propagated area (has propagated area): D1 Digital Object
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='D9 Data Object')
+class D9DataObject(E31Document):
+    """'D9 Data Object' CRMDig entity;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D9
+
+    SubClass Of:
+        D1 Digital Object
+        E31 Document
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises instances of D1 Digital Object that are the result of measurements
+        or other observations and/or their algorithmic evaluation in the form of structured data,
+        such as encoded formal propositions, CSV files or equivalent representations;
+
+    Examples:
+        -
+
+    In First Order Logic:
+        D9(x) => D1(x)
+        D9(x) => E31(x)
+
+    Properties:
+        L61 contains value set of (has value set representation): E54 Dimension
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='D7 Digital Machine Event')
+class D7DigitalMachineEvent(E65Creation, ABC):
+    """'D7 Digital Machine Event' CRMDig entity;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D7
+
+    SubClass Of:
+        E11 Modification
+        E65 Creation
+
+    SuperClass Of:
+        D10 Software Execution
+        D11 Digital Measurement Event
+        D12 Data Transfer Event
+
+    Scope Note:
+        This class comprises events that happen on physical digital devices following a human
+        activity that intentionally caused its immediate or delayed initiation and results in
+        the creation of a new instance of D1 Digital Object on behalf of the human actor.
+
+    Examples:
+        -
+
+    In First Order Logic:
+        D7(x) => E11(x)
+        D7(x) => E65(x)
+
+    Properties:
+        L10 had input (was input of): D1 Digital Object
+        L11 had output (was output of): D1 Digital Object
+        L12 happened on device (was device for): D8 Digital Device
+        L18 has modified (was modified by): D13 Digital Information Carrier
+        L23 used software or firmware (was software or firmware used by): D14 Software
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='D10 Software Execution')
+class D10SoftwareExecution(D7DigitalMachineEvent):
+    """'D10 Software Execution' CRMDig entity;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D10
+
+    SubClass Of:
+        D7 Digital Machine Event
+
+    SuperClass Of:
+        D3 Formal Derivation
+
+    Scope Note:
+        This class comprises events by which a digital device runs a software program or a
+        series of computing operations on a digital object as a single task, which is completely
+        determined by its digital input, the software and the generic properties of the device.
+
+    Examples:
+        -
+
+    In First Order Logic:
+        D10(x) => D7(x)
+
+    Properties:
+        L2 used as source (was source for): D1 Digital Object
+        L13 used parameters (parameters for): D1 Digital Object
+        L24 created logfile (was logfile created by): D1 Digital Object
 
     """
