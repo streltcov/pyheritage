@@ -49,6 +49,9 @@ if TYPE_CHECKING:
     from pyheritage.cidoc.crmdig.entities import (
         D1DigitalObject,
         D8DigitalDevice,
+        D9DataObject,
+        D13DigitalInformationCarrier,
+        D14Software,
     )
 
 
@@ -61,6 +64,14 @@ __all__ = (
     'L13UsedParameters',
     'L14Transferred',
     'L15HasSender',
+    'L16HasReceiver',
+    'L18HasModified',
+    'L19Stores',
+    'L20HasCreated',
+    'L21UsedAsDerivationSource',
+    'L22CreatedDerivative',
+    'L23UsedSoftwareOrFirmware',
+    'L24CreatedLogfile',
 )
 
 
@@ -388,4 +399,325 @@ class L15HasSender(PropertyMixin):
     l15_has_sender: List[D8DigitalDevice] = Field(
         default=None,
         description='L15 has sender (was sender for)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L16HasReceiver(PropertyMixin):
+    """'L16 has receiver (was receiver of)' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L16
+
+    Domain:
+        D12 Data Transfer Event
+    Range:
+        D8 Digital Device
+    SubProperty Of:
+        D7 Digital Machine Event. L12 happened on device (was device for): D8 Digital Device
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies an instance of D8 Digital Device used as a medium to receive
+        data through a D12 Data Transfer Event;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L16(x,y) => D12(x)
+        L16(x,y) => D8(y)
+        L16(x,y) => L12(x,y)
+
+    """
+
+    l16_has_receiver: List[D8DigitalDevice] = Field(
+        default=None,
+        description='L16 has receiver (was receiver of)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L18HasModified(PropertyMixin):
+    """'L18 has modified (was modified by)' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L18
+
+    Domain:
+        D7 Digital Machine Event
+    Range:
+        D13 Digital Information Carrier
+    SubProperty Of:
+        E11 Modification. P31 has modified (was modified by): E18 Physical Thing
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies a D13 Digital Information Carrier modified in a D7 Digital
+        Machine Event for storing its results;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L18(x,y) => D7(x)
+        L18(x,y) => D13(y)
+        L18(x,y) => P31(x,y)
+
+    """
+
+    l18_has_modified: List[D13DigitalInformationCarrier] = Field(
+        default=None,
+        description='L18 has modified (was modified by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L19Stores(PropertyMixin):
+    """'L19 stores (is stored on)' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L19
+
+    Domain:
+        D13 Digital Information Carrier
+    Range:
+        D1 Digital Object
+    SubProperty Of:
+        E18 Physical Thing. P128 carries (is carried by): E90 Symbolic Object
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of a D13 Digital Information Carrier with the
+        instance of Digital Object that is stored on it;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L19(x,y) => D13(x)
+        L19(x,y) => D1(y)
+        L19(x,y) => P128(x,y)
+
+    """
+
+    l19_stores: List[D1DigitalObject] = Field(
+        default=None,
+        description='L19 stores (is stored on)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L20HasCreated(PropertyMixin):
+    """'L20 has created (was created by)' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L20
+
+    Domain:
+        D11 Digital Measurement Event
+    Range:
+        D9 Data Object
+    SubProperty Of:
+        D7 Digital Machine Event. L11 had output (was output of): D1 Digital Object
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of D11 Digital Measurement Event with an
+        instance of D9 Data Object that was created for storing the results, i.e.,
+        observed values, of the measurement;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L20(x,y) => D11(x)
+        L20(x,y) => D9(y)
+        L20(x,y) => L11(x,y)
+
+    """
+
+    l20_has_created: List[D9DataObject] = Field(
+        default=None,
+        description='L20 has created (was created by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L21UsedAsDerivationSource(PropertyMixin):
+    """'L21 used as derivation source (was derivation source for)' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L21
+
+    Domain:
+        D3 Formal Derivation
+    Range:
+        D1 Digital Object
+    SubProperty Of:
+        D10 Software Execution. L2 used as source (was source for): D1 Digital Object
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of a D3 Formal Derivation with the instance
+        of D1 Digital Object that is used as a derivation source;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L21(x,y) => D3(x)
+        L21(x,y) => D1(y)
+        L21(x,y) => L2(x,y)
+
+    """
+
+    l21_used_as_derivation_source: List[D1DigitalObject] = Field(
+        default=None,
+        description='L21 used as derivation source (was derivation source for)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L22CreatedDerivative(PropertyMixin):
+    """'L22 created derivative (was derivative created by)' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L22
+
+    Domain:
+        D3 Formal Derivation
+    Range:
+        D1 Digital Object
+    SubProperty Of:
+        D7 Digital Machine Event. L11 had output (was output of): D1 Digital Object
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of a D3 Formal Derivation with the instance
+        of D1 Digital Object that is used to create a version of;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L22(x,y) => D3(x)
+        L22(x,y) => D1(y)
+        L22(x,y) => L11(x,y)
+
+    """
+
+    l22_created_derivative: List[D1DigitalObject] = Field(
+        default=None,
+        description='L22 created derivative (was derivative created by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L23UsedSoftwareOrFirmware(PropertyMixin):
+    """'L23 used software or firmware (was software or firmware used by)' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L23
+
+    Domain:
+        D7 Digital Machine Event
+    Range:
+        D14 Software
+    SubProperty Of:
+        E7 Activity. P16 used specific object (was used for): E70 Thing
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of D7 Digital Machine Event with the instance
+        of D14 Software that it used;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L23(x,y) => D7(x)
+        L23(x,y) => D14(y)
+        L23(x,y) => P16(x,y)
+
+    """
+
+    l23_used_software_or_firmware: List[D14Software] = Field(
+        default=None,
+        description='L23 used software or firmware (was software or firmware used by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L24CreatedLogfile(PropertyMixin):
+    """'L24 created logfile (was logfile created by)' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L24
+
+    Domain:
+        D10 Software Execution
+    Range:
+        D1 Digital Object
+    SubProperty Of:
+        D7 Digital Machine Event. L11 had output (was output of): D1 Digital Object
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies the logfile that was created by an instance of D10
+        Software Execution in order to record all the activities in the system;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L24(x,y) => D10(x)
+        L24(x,y) => D1(y)
+        L24(x,y) => L11(x,y)
+
+    """
+
+    l24_created_logfile: List[D1DigitalObject] = Field(
+        default=None,
+        description='L24 created logfile (was logfile created by)',
     )
