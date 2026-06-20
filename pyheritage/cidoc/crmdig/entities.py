@@ -29,13 +29,38 @@ from abc import ABC
 from pyheritage.cidoc.base import entity_register
 from pyheritage.cidoc.core import entities as _core_entities
 from pyheritage.cidoc.core.entities import (
+    E11Modification,
     E22HumanMadeObject,
     E31Document,
     E65Creation,
     E73InformationObject,
     E89PropositionalObject,
 )
+from pyheritage.cidoc.crmdig.properties import (
+    L1Digitized,
+    L2UsedAsSource,
+    L10HadInput,
+    L11HadOutput,
+    L12HappenedOnDevice,
+    L13UsedParameters,
+    L14Transferred,
+    L15HasSender,
+    L16HasReceiver,
+    L18HasModified,
+    L19Stores,
+    L20HasCreated,
+    L21UsedAsDerivationSource,
+    L22CreatedDerivative,
+    L23UsedSoftwareOrFirmware,
+    L24CreatedLogfile,
+    L43Annotates,
+    L48CreatedAnnotation,
+    L49IsPrimaryAreaOf,
+    L50IsPropagatedArea,
+    L61ContainsValueSetOf,
+)
 from pyheritage.cidoc.crmsci import entities as _crmsci_entities
+from pyheritage.cidoc.crmsci.entities import S21Measurement
 
 
 __all__ = (
@@ -88,7 +113,7 @@ class D8DigitalDevice(E22HumanMadeObject):
 
 
 @entity_register(label='D13 Digital Information Carrier')
-class D13DigitalInformationCarrier(E22HumanMadeObject):
+class D13DigitalInformationCarrier(L19Stores, E22HumanMadeObject):
     """'D13 Digital Information Carrier' CRMDig entity;
 
     https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D13
@@ -121,7 +146,7 @@ class D13DigitalInformationCarrier(E22HumanMadeObject):
 
 
 @entity_register(label='D29 Annotation Object')
-class D29AnnotationObject(E89PropositionalObject):
+class D29AnnotationObject(L43Annotates, E89PropositionalObject):
     """'D29 Annotation Object' CRMDig entity;
 
     https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D29
@@ -154,7 +179,7 @@ class D29AnnotationObject(E89PropositionalObject):
 
 
 @entity_register(label='D30 Annotation Event')
-class D30AnnotationEvent(E65Creation):
+class D30AnnotationEvent(L48CreatedAnnotation, E65Creation):
     """'D30 Annotation Event' CRMDig entity;
 
     https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D30
@@ -252,7 +277,7 @@ class D14Software(D1DigitalObject):
 
 
 @entity_register(label='D35 Area')
-class D35Area(D1DigitalObject):
+class D35Area(L49IsPrimaryAreaOf, L50IsPropagatedArea, D1DigitalObject):
     """'D35 Area' CRMDig entity;
 
     https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D35
@@ -285,7 +310,7 @@ class D35Area(D1DigitalObject):
 
 
 @entity_register(label='D9 Data Object')
-class D9DataObject(E31Document):
+class D9DataObject(L61ContainsValueSetOf, D1DigitalObject, E31Document):
     """'D9 Data Object' CRMDig entity;
 
     https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D9
@@ -319,7 +344,16 @@ class D9DataObject(E31Document):
 
 
 @entity_register(label='D7 Digital Machine Event')
-class D7DigitalMachineEvent(E65Creation, ABC):
+class D7DigitalMachineEvent(
+    L10HadInput,
+    L11HadOutput,
+    L12HappenedOnDevice,
+    L18HasModified,
+    L23UsedSoftwareOrFirmware,
+    E11Modification,
+    E65Creation,
+    ABC
+):
     """'D7 Digital Machine Event' CRMDig entity;
 
     https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D7
@@ -336,7 +370,7 @@ class D7DigitalMachineEvent(E65Creation, ABC):
     Scope Note:
         This class comprises events that happen on physical digital devices following a human
         activity that intentionally caused its immediate or delayed initiation and results in
-        the creation of a new instance of D1 Digital Object on behalf of the human actor.
+        the creation of a new instance of D1 Digital Object on behalf of the human actor;
 
     Examples:
         -
@@ -359,7 +393,7 @@ class D7DigitalMachineEvent(E65Creation, ABC):
 
 
 @entity_register(label='D10 Software Execution')
-class D10SoftwareExecution(D7DigitalMachineEvent):
+class D10SoftwareExecution(L2UsedAsSource, L13UsedParameters, L24CreatedLogfile, D7DigitalMachineEvent):
     """'D10 Software Execution' CRMDig entity;
 
     https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D10
@@ -373,7 +407,7 @@ class D10SoftwareExecution(D7DigitalMachineEvent):
     Scope Note:
         This class comprises events by which a digital device runs a software program or a
         series of computing operations on a digital object as a single task, which is completely
-        determined by its digital input, the software and the generic properties of the device.
+        determined by its digital input, the software and the generic properties of the device;
 
     Examples:
         -
@@ -393,7 +427,7 @@ class D10SoftwareExecution(D7DigitalMachineEvent):
 
 
 @entity_register(label='D11 Digital Measurement Event')
-class D11DigitalMeasurementEvent(D7DigitalMachineEvent):
+class D11DigitalMeasurementEvent(L20HasCreated, D7DigitalMachineEvent, S21Measurement):
     """'D11 Digital Measurement Event' CRMDig entity;
 
     https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D11
@@ -408,7 +442,7 @@ class D11DigitalMeasurementEvent(D7DigitalMachineEvent):
     Scope Note:
         This class comprises actions measuring physical properties using a digital device, that
         are determined by a systematic procedure and creates an instance of D9 Data Object,
-        which is stored on an instance of D13 Digital Information Carrier.
+        which is stored on an instance of D13 Digital Information Carrier;
 
     Examples:
         -
@@ -427,7 +461,7 @@ class D11DigitalMeasurementEvent(D7DigitalMachineEvent):
 
 
 @entity_register(label='D12 Data Transfer Event')
-class D12DataTransferEvent(D7DigitalMachineEvent):
+class D12DataTransferEvent(L14Transferred, L15HasSender, L16HasReceiver, D7DigitalMachineEvent):
     """'D12 Data Transfer Event' CRMDig entity;
 
     https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D12
@@ -440,7 +474,7 @@ class D12DataTransferEvent(D7DigitalMachineEvent):
 
     Scope Note:
         This class comprises events that transfer a digital object from one digital carrier to
-        another. Normally, the digital object remains the same.
+        another. Normally, the digital object remains the same;
 
     Examples:
         -
@@ -460,7 +494,7 @@ class D12DataTransferEvent(D7DigitalMachineEvent):
 
 
 @entity_register(label='D3 Formal Derivation')
-class D3FormalDerivation(D10SoftwareExecution):
+class D3FormalDerivation(L21UsedAsDerivationSource, L22CreatedDerivative, D10SoftwareExecution):
     """'D3 Formal Derivation' CRMDig entity;
 
     https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D3
@@ -474,7 +508,7 @@ class D3FormalDerivation(D10SoftwareExecution):
     Scope Note:
         This class comprises events that result in the creation of a D1 Digital Object from
         another one following a deterministic algorithm, such that the resulting instance of
-        digital object shares representative properties with the original object.
+        digital object shares representative properties with the original object;
 
     Examples:
         -
@@ -493,7 +527,7 @@ class D3FormalDerivation(D10SoftwareExecution):
 
 
 @entity_register(label='D2 Digitization Process')
-class D2DigitizationProcess(D11DigitalMeasurementEvent):
+class D2DigitizationProcess(L1Digitized, D11DigitalMeasurementEvent):
     """'D2 Digitization Process' CRMDig entity;
 
     https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D2
@@ -508,7 +542,7 @@ class D2DigitizationProcess(D11DigitalMeasurementEvent):
         This class comprises events that result in the creation of instances of D9 Data Object
         that represent the appearance, form or recorded inner structure of an instance of E18
         Physical Thing such as paper documents, statues, buildings, paintings, biological
-        objects etc.
+        objects etc.;
 
     Examples:
         -
