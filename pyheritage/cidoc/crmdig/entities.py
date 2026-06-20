@@ -27,6 +27,7 @@ D35 Area
 from abc import ABC
 
 from pyheritage.cidoc.base import entity_register
+from pyheritage.cidoc.core import entities as _core_entities
 from pyheritage.cidoc.core.entities import (
     E22HumanMadeObject,
     E31Document,
@@ -34,14 +35,19 @@ from pyheritage.cidoc.core.entities import (
     E73InformationObject,
     E89PropositionalObject,
 )
+from pyheritage.cidoc.crmsci import entities as _crmsci_entities
 
 
 __all__ = (
     'D1DigitalObject',
+    'D2DigitizationProcess',
+    'D3FormalDerivation',
     'D7DigitalMachineEvent',
     'D8DigitalDevice',
     'D9DataObject',
     'D10SoftwareExecution',
+    'D11DigitalMeasurementEvent',
+    'D12DataTransferEvent',
     'D13DigitalInformationCarrier',
     'D14Software',
     'D29AnnotationObject',
@@ -381,3 +387,182 @@ class D10SoftwareExecution(D7DigitalMachineEvent):
         L24 created logfile (was logfile created by): D1 Digital Object
 
     """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='D11 Digital Measurement Event')
+class D11DigitalMeasurementEvent(D7DigitalMachineEvent):
+    """'D11 Digital Measurement Event' CRMDig entity;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D11
+
+    SubClass Of:
+        D7 Digital Machine Event
+        S21 Measurement
+
+    SuperClass Of:
+        D2 Digitization Process
+
+    Scope Note:
+        This class comprises actions measuring physical properties using a digital device, that
+        are determined by a systematic procedure and creates an instance of D9 Data Object,
+        which is stored on an instance of D13 Digital Information Carrier.
+
+    Examples:
+        -
+
+    In First Order Logic:
+        D11(x) => D7(x)
+        D11(x) => S21(x)
+
+    Properties:
+        L20 has created (was created by): D9 Data Object
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='D12 Data Transfer Event')
+class D12DataTransferEvent(D7DigitalMachineEvent):
+    """'D12 Data Transfer Event' CRMDig entity;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D12
+
+    SubClass Of:
+        D7 Digital Machine Event
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises events that transfer a digital object from one digital carrier to
+        another. Normally, the digital object remains the same.
+
+    Examples:
+        -
+
+    In First Order Logic:
+        D12(x) => D7(x)
+
+    Properties:
+        L14 transferred (was transferred by): D1 Digital Object
+        L15 has sender (was sender for): D8 Digital Device
+        L16 has receiver (was receiver of): D8 Digital Device
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='D3 Formal Derivation')
+class D3FormalDerivation(D10SoftwareExecution):
+    """'D3 Formal Derivation' CRMDig entity;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D3
+
+    SubClass Of:
+        D10 Software Execution
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises events that result in the creation of a D1 Digital Object from
+        another one following a deterministic algorithm, such that the resulting instance of
+        digital object shares representative properties with the original object.
+
+    Examples:
+        -
+
+    In First Order Logic:
+        D3(x) => D10(x)
+
+    Properties:
+        L21 used as derivation source (was derivation source for): D1 Digital Object
+        L22 created derivative (was derivative created by): D1 Digital Object
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='D2 Digitization Process')
+class D2DigitizationProcess(D11DigitalMeasurementEvent):
+    """'D2 Digitization Process' CRMDig entity;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#D2
+
+    SubClass Of:
+        D11 Digital Measurement Event
+
+    SuperClass Of:
+        (none)
+
+    Scope Note:
+        This class comprises events that result in the creation of instances of D9 Data Object
+        that represent the appearance, form or recorded inner structure of an instance of E18
+        Physical Thing such as paper documents, statues, buildings, paintings, biological
+        objects etc.
+
+    Examples:
+        -
+
+    In First Order Logic:
+        D2(x) => D11(x)
+
+    Properties:
+        L1 digitized (was digitized by): E18 Physical Thing
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+__crmdig_namespace__ = {
+    'D10SoftwareExecution': D10SoftwareExecution,
+    'D11DigitalMeasurementEvent': D11DigitalMeasurementEvent,
+    'D12DataTransferEvent': D12DataTransferEvent,
+    'D13DigitalInformationCarrier': D13DigitalInformationCarrier,
+    'D14Software': D14Software,
+    'D1DigitalObject': D1DigitalObject,
+    'D2DigitizationProcess': D2DigitizationProcess,
+    'D29AnnotationObject': D29AnnotationObject,
+    'D30AnnotationEvent': D30AnnotationEvent,
+    'D35Area': D35Area,
+    'D3FormalDerivation': D3FormalDerivation,
+    'D7DigitalMachineEvent': D7DigitalMachineEvent,
+    'D8DigitalDevice': D8DigitalDevice,
+    'D9DataObject': D9DataObject,
+}
+
+__namespace__ = {
+    **_core_entities.__namespace__,
+    **_crmsci_entities.__crmsci_namespace__,
+    **__crmdig_namespace__,
+}
+
+
+# ******************************************************************************************************************* #
+
+
+D10SoftwareExecution.model_rebuild(_types_namespace=__namespace__)
+D11DigitalMeasurementEvent.model_rebuild(_types_namespace=__namespace__)
+D12DataTransferEvent.model_rebuild(_types_namespace=__namespace__)
+D13DigitalInformationCarrier.model_rebuild(_types_namespace=__namespace__)
+D14Software.model_rebuild(_types_namespace=__namespace__)
+D1DigitalObject.model_rebuild(_types_namespace=__namespace__)
+D2DigitizationProcess.model_rebuild(_types_namespace=__namespace__)
+D29AnnotationObject.model_rebuild(_types_namespace=__namespace__)
+D30AnnotationEvent.model_rebuild(_types_namespace=__namespace__)
+D35Area.model_rebuild(_types_namespace=__namespace__)
+D3FormalDerivation.model_rebuild(_types_namespace=__namespace__)
+D7DigitalMachineEvent.model_rebuild(_types_namespace=__namespace__)
+D8DigitalDevice.model_rebuild(_types_namespace=__namespace__)
+D9DataObject.model_rebuild(_types_namespace=__namespace__)
