@@ -45,13 +45,18 @@ from pyheritage.cidoc.base import PropertyMixin
 
 
 if TYPE_CHECKING:
-    from pyheritage.cidoc.core.entities import E18PhysicalThing
+    from pyheritage.cidoc.core.entities import (
+        E1CRMEntity,
+        E18PhysicalThing,
+        E54Dimension,
+    )
     from pyheritage.cidoc.crmdig.entities import (
         D1DigitalObject,
         D8DigitalDevice,
         D9DataObject,
         D13DigitalInformationCarrier,
         D14Software,
+        D29AnnotationObject,
     )
 
 
@@ -72,6 +77,12 @@ __all__ = (
     'L22CreatedDerivative',
     'L23UsedSoftwareOrFirmware',
     'L24CreatedLogfile',
+    'L43Annotates',
+    'L48CreatedAnnotation',
+    'L49IsPrimaryAreaOf',
+    'L50IsPropagatedArea',
+    'L54IsSameAs',
+    'L61ContainsValueSetOf',
 )
 
 
@@ -720,4 +731,242 @@ class L24CreatedLogfile(PropertyMixin):
     l24_created_logfile: List[D1DigitalObject] = Field(
         default=None,
         description='L24 created logfile (was logfile created by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L43Annotates(PropertyMixin):
+    """'L43 annotates (is annotated by)' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L43
+
+    Domain:
+        D29 Annotation Object
+    Range:
+        E1 CRM Entity
+    SubProperty Of:
+        E89 Propositional Object. P129 is about (is subject of): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of D29 Annotation Object with a relevant
+        instance of E1 CRM Entity explicitly referred to in the annotation object;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L43(x,y) => D29(x)
+        L43(x,y) => E1(y)
+        L43(x,y) => P129(x,y)
+
+    """
+
+    l43_annotates: List[E1CRMEntity] = Field(
+        default=None,
+        description='L43 annotates (is annotated by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L48CreatedAnnotation(PropertyMixin):
+    """'L48 created annotation (was annotation created by)' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L48
+
+    Domain:
+        D30 Annotation Event
+    Range:
+        D29 Annotation Object
+    SubProperty Of:
+        E65 Creation. P94 has created (was created by): E28 Conceptual Object
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property identifies the D29 Annotation Object (associations) that came into
+        existence as a result of a D30 Annotation Event;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L48(x,y) => D30(x)
+        L48(x,y) => D29(y)
+        L48(x,y) => P94(x,y)
+
+    """
+
+    l48_created_annotation: List[D29AnnotationObject] = Field(
+        default=None,
+        description='L48 created annotation (was annotation created by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L49IsPrimaryAreaOf(PropertyMixin):
+    """'L49 is primary area of (has primary area)' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L49
+
+    Domain:
+        D35 Area
+    Range:
+        D1 Digital Object
+    SubProperty Of:
+        E90 Symbolic Object. P106 is composed of (forms part of): E90 Symbolic Object
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property describes the association between an instance of a particular D35
+        Area declared in an original instance of D1 Digital Object;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L49(x,y) => D35(x)
+        L49(x,y) => D1(y)
+        L49(x,y) => P106(x,y)
+
+    """
+
+    l49_is_primary_area_of: List[D1DigitalObject] = Field(
+        default=None,
+        description='L49 is primary area of (has primary area)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L50IsPropagatedArea(PropertyMixin):
+    """'L50 is propagated area (has propagated area)' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L50
+
+    Domain:
+        D35 Area
+    Range:
+        D1 Digital Object
+    SubProperty Of:
+        E90 Symbolic Object. P106 is composed of (forms part of): E90 Symbolic Object
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property describes the association between an instance of D35 Area and the
+        instance of D1 Digital Object to which it is propagated;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L50(x,y) => D35(x)
+        L50(x,y) => D1(y)
+        L50(x,y) => P106(x,y)
+
+    """
+
+    l50_is_propagated_area: List[D1DigitalObject] = Field(
+        default=None,
+        description='L50 is propagated area (has propagated area)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L54IsSameAs(PropertyMixin):
+    """'L54 is same as' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L54
+
+    Domain:
+        E1 CRM Entity
+    Range:
+        E1 CRM Entity
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property describes a non-unique identification applied to E1 CRM Entity;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L54(x,y) => E1(x)
+        L54(x,y) => E1(y)
+
+    """
+
+    l54_is_same_as: List[E1CRMEntity] = Field(
+        default=None,
+        description='L54 is same as',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class L61ContainsValueSetOf(PropertyMixin):
+    """'L61 contains value set of (has value set representation)' CRMDig property;
+
+    https://cidoc-crm.org/extensions/crmdig/html/CRMdig_v5.0.html#L61
+
+    Domain:
+        D9 Data Object
+    Range:
+        E54 Dimension
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of D9 Data Object with an instance of E54
+        Dimension, in the case that the former contains the set of values of the respective
+        dimension in a digital format;
+
+    Properties:
+        -
+    Examples:
+        -
+    In First Order Logic:
+        L61(x,y) => D9(x)
+        L61(x,y) => E54(y)
+
+    """
+
+    l61_contains_value_set_of: List[E54Dimension] = Field(
+        default=None,
+        description='L61 contains value set of (has value set representation)',
     )
