@@ -6,7 +6,7 @@
 
 # pylint: disable=E0401,C0116,W0612
 
-from pyheritage.cidoc.core.entities import E31Document
+from pyheritage.cidoc.core.entities import E1CRMEntity, E31Document
 from pyheritage.cidoc.crmdig.entities import D1DigitalObject, D9DataObject
 from pyheritage.cidoc.crmdig.properties import L61ContainsValueSetOf
 
@@ -40,6 +40,12 @@ class TestD9DataObject:
     def test_mro_includes_l61(self) -> None:
         """Verify L61 (contains value set of) mixin is in D9 MRO;"""
         assert L61ContainsValueSetOf in D9DataObject.__mro__
+
+    # ------------------------- #
+
+    def test_inherits_from_e1(self) -> None:
+        """Verify D9 ultimately inherits from E1 CRM Entity;"""
+        assert issubclass(D9DataObject, E1CRMEntity)
 
     # ------------------------- #
 

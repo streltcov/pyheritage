@@ -8,8 +8,10 @@
 
 from tests.cidoc.crmdig.helpers import make_s4_kwargs
 
+from pyheritage.cidoc.core.entities import E1CRMEntity
 from pyheritage.cidoc.crmdig.entities import (
     D7DigitalMachineEvent,
+    D9DataObject,
     D11DigitalMeasurementEvent,
 )
 from pyheritage.cidoc.crmdig.properties import L20HasCreated
@@ -45,6 +47,21 @@ class TestD11DigitalMeasurementEvent:
     def test_mro_includes_l20(self) -> None:
         """Verify L20 (has created) mixin is in D11 MRO;"""
         assert L20HasCreated in D11DigitalMeasurementEvent.__mro__
+
+    # ------------------------- #
+
+    def test_inherits_from_e1(self) -> None:
+        """Verify D11 ultimately inherits from E1 CRM Entity;"""
+        assert issubclass(D11DigitalMeasurementEvent, E1CRMEntity)
+
+    # ------------------------- #
+
+    def test_l20_can_set_value(self) -> None:
+        """Verify L20 (has created) accepts D9 Data Object;"""
+        obj = D11DigitalMeasurementEvent(**make_s4_kwargs('D11'))
+        data = D9DataObject()
+        obj.l20_has_created = [data]
+        assert obj.l20_has_created == [data]
 
     # ------------------------- #
 

@@ -6,6 +6,7 @@
 
 # pylint: disable=E0401,C0116,W0612
 
+from pyheritage.cidoc.core.entities import E1CRMEntity
 from pyheritage.cidoc.crmdig.entities import D1DigitalObject, D35Area
 from pyheritage.cidoc.crmdig.properties import (
     L49IsPrimaryAreaOf,
@@ -42,6 +43,21 @@ class TestD35Area:
     def test_mro_includes_l50(self) -> None:
         """Verify L50 (is propagated area) mixin is in D35 MRO;"""
         assert L50IsPropagatedArea in D35Area.__mro__
+
+    # ------------------------- #
+
+    def test_inherits_from_e1(self) -> None:
+        """Verify D35 ultimately inherits from E1 CRM Entity;"""
+        assert issubclass(D35Area, E1CRMEntity)
+
+    # ------------------------- #
+
+    def test_l49_can_set_value(self) -> None:
+        """Verify L49 (is primary area of) accepts D1 Digital Object;"""
+        obj = D35Area()
+        parent = D1DigitalObject()
+        obj.l49_is_primary_area_of = [parent]
+        assert obj.l49_is_primary_area_of == [parent]
 
     # ------------------------- #
 

@@ -9,9 +9,11 @@
 from tests.cidoc.crmdig.helpers import make_e7_kwargs
 
 from pyheritage.cidoc.crmdig.entities import (
+    D1DigitalObject,
     D3FormalDerivation,
     D10SoftwareExecution,
 )
+from pyheritage.cidoc.core.entities import E1CRMEntity
 from pyheritage.cidoc.crmdig.properties import (
     L21UsedAsDerivationSource,
     L22CreatedDerivative,
@@ -47,6 +49,22 @@ class TestD3FormalDerivation:
     def test_mro_includes_l22(self) -> None:
         """Verify L22 (created derivative) mixin is in D3 MRO;"""
         assert L22CreatedDerivative in D3FormalDerivation.__mro__
+
+    # ------------------------- #
+
+    def test_inherits_from_e1(self) -> None:
+        """Verify D3 ultimately inherits from E1 CRM Entity;"""
+        assert issubclass(D3FormalDerivation, E1CRMEntity)
+
+    # ------------------------- #
+
+    def test_l21_can_set_value(self) -> None:
+        """Verify L21 (used as derivation source) accepts D1 Digital Object;"""
+        obj = D3FormalDerivation(**make_e7_kwargs('D3'))
+        src = D1DigitalObject()
+        obj.l21_used_as_derivation_source = [src]
+
+        assert obj.l21_used_as_derivation_source == [src]
 
     # ------------------------- #
 

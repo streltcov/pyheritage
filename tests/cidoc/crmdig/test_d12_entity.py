@@ -9,9 +9,11 @@
 from tests.cidoc.crmdig.helpers import make_e7_kwargs
 
 from pyheritage.cidoc.crmdig.entities import (
+    D1DigitalObject,
     D7DigitalMachineEvent,
     D12DataTransferEvent,
 )
+from pyheritage.cidoc.core.entities import E1CRMEntity
 from pyheritage.cidoc.crmdig.properties import (
     L14Transferred,
     L15HasSender,
@@ -54,6 +56,21 @@ class TestD12DataTransferEvent:
     def test_mro_includes_l16(self) -> None:
         """Verify L16 (has receiver) mixin is in D12 MRO;"""
         assert L16HasReceiver in D12DataTransferEvent.__mro__
+
+    # ------------------------- #
+
+    def test_inherits_from_e1(self) -> None:
+        """Verify D12 ultimately inherits from E1 CRM Entity;"""
+        assert issubclass(D12DataTransferEvent, E1CRMEntity)
+
+    # ------------------------- #
+
+    def test_l14_can_set_value(self) -> None:
+        """Verify L14 (transferred) accepts D1 Digital Object;"""
+        obj = D12DataTransferEvent(**make_e7_kwargs('D12'))
+        data = D1DigitalObject()
+        obj.l14_transferred = [data]
+        assert obj.l14_transferred == [data]
 
     # ------------------------- #
 

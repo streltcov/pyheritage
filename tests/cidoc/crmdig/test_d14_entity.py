@@ -6,6 +6,7 @@
 
 # pylint: disable=E0401,C0116,W0612
 
+from pyheritage.cidoc.core.entities import E1CRMEntity
 from pyheritage.cidoc.crmdig.entities import D1DigitalObject, D14Software
 
 
@@ -26,6 +27,12 @@ class TestD14Software:
     def test_inherits_from_d1(self) -> None:
         """Verify D14 inherits from D1 Digital Object;"""
         assert issubclass(D14Software, D1DigitalObject)
+
+    # ------------------------- #
+
+    def test_inherits_from_e1(self) -> None:
+        """Verify D14 ultimately inherits from E1 CRM Entity;"""
+        assert issubclass(D14Software, E1CRMEntity)
 
     # ------------------------- #
 

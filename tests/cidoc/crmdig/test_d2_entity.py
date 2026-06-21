@@ -12,6 +12,7 @@ from pyheritage.cidoc.crmdig.entities import (
     D2DigitizationProcess,
     D11DigitalMeasurementEvent,
 )
+from pyheritage.cidoc.core.entities import E1CRMEntity
 from pyheritage.cidoc.crmdig.properties import L1Digitized
 
 
@@ -38,6 +39,12 @@ class TestD2DigitizationProcess:
     def test_mro_includes_l1(self) -> None:
         """Verify L1 (digitized) mixin is in D2 MRO;"""
         assert L1Digitized in D2DigitizationProcess.__mro__
+
+    # ------------------------- #
+
+    def test_inherits_from_e1(self) -> None:
+        """Verify D2 ultimately inherits from E1 CRM Entity;"""
+        assert issubclass(D2DigitizationProcess, E1CRMEntity)
 
     # ------------------------- #
 

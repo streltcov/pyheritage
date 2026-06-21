@@ -9,9 +9,11 @@
 from tests.cidoc.crmdig.helpers import make_e7_kwargs
 
 from pyheritage.cidoc.crmdig.entities import (
+    D1DigitalObject,
     D7DigitalMachineEvent,
     D10SoftwareExecution,
 )
+from pyheritage.cidoc.core.entities import E1CRMEntity
 from pyheritage.cidoc.crmdig.properties import (
     L2UsedAsSource,
     L13UsedParameters,
@@ -54,6 +56,21 @@ class TestD10SoftwareExecution:
     def test_mro_includes_l24(self) -> None:
         """Verify L24 (created logfile) mixin is in D10 MRO;"""
         assert L24CreatedLogfile in D10SoftwareExecution.__mro__
+
+    # ------------------------- #
+
+    def test_inherits_from_e1(self) -> None:
+        """Verify D10 ultimately inherits from E1 CRM Entity;"""
+        assert issubclass(D10SoftwareExecution, E1CRMEntity)
+
+    # ------------------------- #
+
+    def test_l2_can_set_value(self) -> None:
+        """Verify L2 (used as source) accepts D1 Digital Object;"""
+        obj = D10SoftwareExecution(**make_e7_kwargs('D10'))
+        src = D1DigitalObject()
+        obj.l2_used_as_source = [src]
+        assert obj.l2_used_as_source == [src]
 
     # ------------------------- #
 
