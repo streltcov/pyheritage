@@ -30,6 +30,7 @@ from abc import ABC
 from pydantic import Field
 
 from pyheritage.cidoc.base import entity_register
+from pyheritage.cidoc.core import entities as _core_entities
 from pyheritage.cidoc.core.entities import (
     E2TemporalEntity,
     E7Activity,
@@ -53,6 +54,9 @@ __all__ = (
     'I12AdoptedBelief',
     'I13IntendedMeaningBelief',
     'I14ProvenanceBelief',
+    'I15ProvenanceAssessment',
+    'I16MeaningComprehension',
+    'I17CategoricalHypothesisBuilding',
 )
 
 
@@ -555,3 +559,162 @@ class I14ProvenanceBelief(I2Belief):
         J19 that (is subject of): I10 Provenance Statement
 
     """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='I15 Provenance Assessment')
+class I15ProvenanceAssessment(I1Argumentation):
+    """'I15 Provenance Assessment' CRMinf entity model;
+
+    https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I15
+
+    SubClass Of:
+        I1 Argumentation
+
+    SuperClass Of:
+        -
+
+    Scope Note:
+        This class comprises activities of making arguments and concluding about the likely provenance of
+        instances of E70 Thing existing at the time of this assessment. These activities may further be about
+        the provenance of things referred to or represented by existing information objects, and subsequent
+        references;
+
+    Examples:
+        - the assessment by Ernst Pernicka et al. about the provenance of the Nebra Sky Disc
+          (Pernicka et al. 2020)
+
+    In First Order Logic:
+        I15(x) ⇒ I1(x)
+
+    Properties:
+        J21 concluded provenance (was assessed by): I14 Provenance Belief
+
+    """
+
+
+@entity_register(label='I16 Meaning Comprehension')
+class I16MeaningComprehension(I1Argumentation):
+    """'I16 Meaning Comprehension' CRMinf entity model;
+
+    https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I16
+
+    SubClass Of:
+        I1 Argumentation
+
+    SuperClass Of:
+        -
+
+    Scope Note:
+        This class comprises processes of interpreting the intended meaning of parts or the whole of the content
+        of an instance of E73 Information Object as propositions. Such interpretations may include the
+        disambiguation of the meaning of words and expressions, expanding abbreviations, resolving named entities,
+        references and co-references, and complementing missing text parts, without however arguing about the
+        actual truth of the information;
+
+        In principle, any use of an information object pertaining to its meaning implies an instance of I16
+        Meaning Comprehension. However, in practical applications, texts in natural language are often clear
+        enough so that no explicit explanation of the interpretation is needed for the user. In such cases, there
+        is no need to create explicit instances of I16 Meaning Comprehension, but the adopted belief may directly
+        be linked via J14 adopted interpretation of (has adopted interpretation), or the instance of I16 Meaning
+        Comprehension may be made implicit to an instance of I7 Belief Adoption by multiple instantiation;
+
+        Explicit documentation of instances of I16 Meaning Comprehension are useful, if the interpretations are
+        not obvious and if competing arguments about them exist;
+
+    Examples:
+        - My understanding of the statements about Emperor Nero's whereabouts in Rome while it was burning from
+          July 19 in 64 AD in the extant book De Vita Caesarum attributed to Gaius Suetonius Tranquillus
+          (Wikipedia, 2023);
+
+    In First Order Logic:
+        I16(x) ⇒ I1(x)
+
+    Properties:
+        J22 interpreted meaning of (was interpreted by): E73 Information Object
+        J23 interpreted meaning as (was interpretation by): I13 Intended Meaning Belief
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='I17 Categorical Hypothesis Building')
+class I17CategoricalHypothesisBuilding(I5InferenceMaking):
+    """'I17 Categorical Hypothesis Building' CRMinf entity model;
+
+    https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I17
+
+    SubClass Of:
+        I5 Inference Making
+
+    SuperClass Of:
+        -
+
+    Scope Note:
+        This class comprises the action of making categorical hypotheses based on inference rules and theories.
+        By categorical hypotheses we mean assumptions about the kinds of interactions and related kinds of
+        structures of a domain that have the character of "laws" of nature or human behavior, be it necessary
+        or probabilistic. Categorical hypotheses are developed by "induction" from finite numbers of observation
+        and the absence of observations of particular kinds. As such, categorical hypotheses are always subject
+        to falsification by new evidence. Instances of I17 Categorical Hypothesis Building include making and
+        questioning categorical hypotheses;
+
+    Examples:
+        - hypothesising that "no binding before the 9th century is made with spine supports" by Szirmai (I17)
+          [documented in section 7.1 and 7.2 of "The Archaeology of Medieval bookbinding"]
+          (Szirmai, J.A. 1999)
+
+    In First Order Logic:
+        I17(x) ⇒ I5(x)
+
+    Properties:
+        -
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+__crminf_namespace__: dict[str, type] = {
+    'I10ProvenanceStatement': I10ProvenanceStatement,
+    'I11Situation': I11Situation,
+    'I12AdoptedBelief': I12AdoptedBelief,
+    'I13IntendedMeaningBelief': I13IntendedMeaningBelief,
+    'I14ProvenanceBelief': I14ProvenanceBelief,
+    'I15ProvenanceAssessment': I15ProvenanceAssessment,
+    'I16MeaningComprehension': I16MeaningComprehension,
+    'I17CategoricalHypothesisBuilding': I17CategoricalHypothesisBuilding,
+    'I1Argumentation': I1Argumentation,
+    'I2Belief': I2Belief,
+    'I3InferenceLogic': I3InferenceLogic,
+    'I4PropositionSet': I4PropositionSet,
+    'I5InferenceMaking': I5InferenceMaking,
+    'I6BeliefValue': I6BeliefValue,
+    'I7BeliefAdoption': I7BeliefAdoption,
+}
+
+__namespace__: dict[str, type] = {
+    **_core_entities.__namespace__,
+    **__crminf_namespace__,
+}
+
+I1Argumentation.model_rebuild(_types_namespace=__namespace__)
+I2Belief.model_rebuild(_types_namespace=__namespace__)
+I3InferenceLogic.model_rebuild(_types_namespace=__namespace__)
+I4PropositionSet.model_rebuild(_types_namespace=__namespace__)
+I5InferenceMaking.model_rebuild(_types_namespace=__namespace__)
+I6BeliefValue.model_rebuild(_types_namespace=__namespace__)
+I7BeliefAdoption.model_rebuild(_types_namespace=__namespace__)
+I10ProvenanceStatement.model_rebuild(_types_namespace=__namespace__)
+I11Situation.model_rebuild(_types_namespace=__namespace__)
+I12AdoptedBelief.model_rebuild(_types_namespace=__namespace__)
+I13IntendedMeaningBelief.model_rebuild(_types_namespace=__namespace__)
+I14ProvenanceBelief.model_rebuild(_types_namespace=__namespace__)
+I15ProvenanceAssessment.model_rebuild(_types_namespace=__namespace__)
+I16MeaningComprehension.model_rebuild(_types_namespace=__namespace__)
+I17CategoricalHypothesisBuilding.model_rebuild(_types_namespace=__namespace__)
