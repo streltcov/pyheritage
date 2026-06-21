@@ -31,7 +31,9 @@ from pydantic import Field
 
 from pyheritage.cidoc.base import entity_register
 from pyheritage.cidoc.core.entities import (
+    E2TemporalEntity,
     E7Activity,
+    E13AttributeAssignment,
     E59PrimitiveValue,
     E73InformationObject,
     E89PropositionalObject,
@@ -40,10 +42,17 @@ from pyheritage.cidoc.core.entities import (
 
 __all__ = (
     'I1Argumentation',
+    'I2Belief',
     'I3InferenceLogic',
     'I4PropositionSet',
+    'I5InferenceMaking',
     'I6BeliefValue',
+    'I7BeliefAdoption',
+    'I10ProvenanceStatement',
     'I11Situation',
+    'I12AdoptedBelief',
+    'I13IntendedMeaningBelief',
+    'I14ProvenanceBelief',
 )
 
 
@@ -243,5 +252,306 @@ class I1Argumentation(E7Activity, ABC):
 
     Properties:
         J2 concluded that (was concluded by): I2 Belief
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='I2 Belief')
+class I2Belief(E2TemporalEntity, ABC):
+    """'I2 Belief' CRMinf entity model;
+
+    https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I2
+
+    SubClass Of:
+        E2 Temporal Entity
+
+    SuperClass Of:
+        I12 Adopted Belief
+        I13 Intended Meaning Belief
+        I14 Provenance Belief
+
+    Scope Note:
+        This class comprises the notion that the associated I4 Proposition Set is held to have a particular
+        I6 Belief Value by a particular E39 Actor. This can be understood as the period of time that an
+        individual group holds a particular set of propositions to be true, false, or somewhere in between;
+
+    Examples:
+        - Ian Hodder's belief from 1996 on, that Floor B was earlier than wall C of building 1 in the north
+          area of Catalhöyük (Hodder 1999).
+
+    In First Order Logic:
+        I2(x) ⇒ E2(x)
+
+    Properties:
+        J4 that (is subject of): I4 Proposition Set
+        J5 holds to be: I6 Belief Value
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='I5 Inference Making')
+class I5InferenceMaking(I1Argumentation, E13AttributeAssignment):
+    """'I5 Inference Making' CRMinf entity model;
+
+    https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I5
+
+    SubClass Of:
+        I1 Argumentation
+        E13 Attribute Assignment
+
+    SuperClass Of:
+        I17 Categorical Hypothesis Building
+        S6 Data Evaluation
+        S7 Simulation or Prediction
+
+    Scope Note:
+        This class comprises the action of making honest propositions and statements about particular states of
+        affairs in reality or possible realities, or categorical descriptions of reality by using inferences from
+        other statements based on hypotheses and any form of formal or informal logic. It includes evaluations,
+        calculations, and interpretations, based on mathematical formulations and propositions;
+
+        It is characterized by the use of an existing I2 Belief as the premise that, taken together with a set
+        of I3 Inference Logic, draws a further I2 Belief as a conclusion;
+
+        Documenting instances of I5 Inference making primarily enables tracing the dependency of knowledge from
+        conclusion to premise through subsequent inferences possibly back to primary evidence, so that the range
+        of influence of knowledge revision at any intermediate stage of complex inference chains on current
+        convictions can be narrowed down by query. The explicit reference to the applied inference logic further
+        allows scholars and scientists to assess if they can or would follow the documented argument. The class
+        is not intended to promote the use of computationally decidable systems of logic as replacements of
+        scholarly justifications of arguments, even though it allows for documenting the use of decidable logic,
+        if that was deemed adequate for the problem at hand. Principles of scholarly justifications of arguments
+        are also regarded as kinds of inference logic;
+
+    Examples:
+        - My classification and dating of this bowl (fictitious)
+
+    In First Order Logic:
+        I5(x) ⇒ I1(x)
+        I5(x) ⇒ E13(x)
+
+    Properties:
+        J1 used as premise (was premise for): I2 Belief
+        J3 applied (was applied by): I3 Inference Logic
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='I7 Belief Adoption')
+class I7BeliefAdoption(I1Argumentation):
+    """'I7 Belief Adoption' CRMinf entity model;
+
+    https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I7
+
+    SubClass Of:
+        I1 Argumentation
+
+    SuperClass Of:
+        -
+
+    Scope Note:
+        This class comprises the action of an E39 Actor adopting propositions taken from an interpretation of
+        the intended meaning of an instance of E73 Information Object as being true, or in some way likely to
+        be true. The adopted propositions constitute the conclusion of the action in the form of a new instance
+        of I12 Adopted belief of the actor adopting it;
+
+        The basis of I7 Belief Adoption is the justification of trust in the source of the adopted propositions,
+        rather than the application of rules for inferring the respective propositions from logical premises;
+
+        Typical examples are the citation of academic papers or the reuse of datasets;
+
+        Where an instance of I7 Belief Adoption is based on personal communication (marked as pers.comm. in the
+        studied text), this should be represented by using P2 has type: "Pers.Comm.", directly from the instance
+        of I7 Belief Adoption;
+
+    Examples:
+        - Francesca Bologna's adoption of Tacitus' belief where Emperor Nero was when the Great Fire started.
+          (Bologna 2021);
+
+    In First Order Logic:
+        I7(x) ⇒ I1(x)
+
+    Properties:
+        J7 is based on evidence from (is evidence for): E73 Information Object
+        J13 adopted interpretation (was concluded by): I12 Adopted Belief
+        J15 assumed meaning (was assumed by): I13 Intended Meaning Belief
+        J18 assumed provenance (was assumed by): I14 Provenance Belief
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='I10 Provenance Statement')
+class I10ProvenanceStatement(I4PropositionSet):
+    """'I10 Provenance Statement' CRMinf entity model;
+
+    https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I10
+
+    SubClass Of:
+        I4 Proposition Set
+
+    SuperClass Of:
+        -
+
+    Scope Note:
+        This class comprises statements about the provenance of instances of E70 Thing existing at the time of
+        making the provenance statements. An instance of I10 Provenance Statement must contain propositions about
+        the presence of the respective instances of E70 Thing in an event or spatiotemporal context of reference.
+        Characteristically, it may pertain to the writing by a known author at a known or unknown date or place,
+        or to the existence of the text known to some public, regardless of the truth of authorship.
+
+        In case that only information objects exist describing the proper thing of interest, such as a photo, or
+        photo of a photo, of a lost archaeological object, an instance of I10 Provenance Statement should contain
+        the relevant chain of intermediate events transferring the information from the proper thing of interest
+        up to the extant information objects taken into account, or refer to it.
+
+        The property J20 is about the provenance of can be used to link the instance of I10 Provenance Statement
+        as a whole, with the proper thing of interest. It constitutes a constraint to the provenance statement
+        that it must contain the description of the relevant context of reference, and, if applicable, to the
+        relevant chain of intermediate events transferring the information.
+
+    Examples:
+        - The statement: "The copy of Tacitus, Publius Cornelius. The Annals. Book 15 [15.6] at the hands of
+          Francesca Bologna from the British Museum in 2021 represents a text written by the ancient Roman
+          historian, Publius Cornelius Tacitus."
+
+    In First Order Logic:
+        I10(x) ⇒ I4(x)
+
+    Properties:
+        J20 is about the provenance of (has provenance claim): E70 Thing
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='I12 Adopted Belief')
+class I12AdoptedBelief(I2Belief):
+    """'I12 Adopted Belief' CRMinf entity model;
+
+    https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I12
+
+    SubClass Of:
+        I2 Belief
+
+    SuperClass Of:
+        -
+
+    Scope Note:
+        This class comprises the notion that an instance of E39 Actor adopted the meaning of an associated
+        instance of I4 Proposition Set by arguments of trust from a source created by another instance of E39
+        Actor, and holds it as being true or in some way likely to be true. This source can be documented via
+        the property J14 adopted interpretation of (has adopted interpretation). The used interpretation of the
+        meaning of the source may be a belief of the adopting Actor or another one and can be documented as an
+        instance of I13 Intended Meaning Belief, if this detail is relevant;
+
+    Examples:
+        - Francesca Bologna's belief that Nero was at Antium, when the Great Fire broke out and did not return
+          to Rome until the fire approached his house (Bologna 2021);
+
+    In First Order Logic:
+        I12(x) ⇒ I2(x)
+
+    Properties:
+        J14 adopted interpretation of (has adopted interpretation): E73 Information Object
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='I13 Intended Meaning Belief')
+class I13IntendedMeaningBelief(I2Belief):
+    """'I13 Intended Meaning Belief' CRMinf entity model;
+
+    https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I13
+
+    SubClass Of:
+        I2 Belief
+
+    SuperClass Of:
+        -
+
+    Scope Note:
+        This class comprises beliefs on the part of an instance of E39 Actor that a particular I4 Proposition
+        Set formally represents (in part or in its entirety) the intended meaning that was created by another
+        instance of E39 Actor, without considering an opinion yet about its truth or trustworthiness;
+
+        The belief constitutes an interpretation of the source. The respective proposition set can be documented
+        using the property J16 assumed meaning (is supposed meaning in), whereas the respective source can be
+        documented via the property J17 about (has interpretation) and holds as being true or in some way likely
+        to be true;
+
+    Examples:
+        - Francesca Bologna's belief that Publius Cornelius Tacitus meant that "Nero was at Antium when the
+          Great Fire broke out and did not return to Rome until the fire approached his house". (Bologna 2021)
+        - Francesca Bologna's belief that Gaius Suetonius Tranquillus meant that "Nero was singing in Rome
+          while it burned from July 19 in 64 AD". (Bologna 2021)
+
+    In First Order Logic:
+        I13(x) ⇒ I2(x)
+
+    Properties:
+        J16 assumed meaning (is supposed meaning in): I4 Proposition Set
+        J17 about (has interpretation): E73 Information Object
+
+    """
+
+
+# ******************************************************************************************************************* #
+
+
+@entity_register(label='I14 Provenance Belief')
+class I14ProvenanceBelief(I2Belief):
+    """'I14 Provenance Belief' CRMinf entity model;
+
+    https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I14
+
+    SubClass Of:
+        I2 Belief
+
+    SuperClass Of:
+        -
+
+    Scope Note:
+        This class comprises beliefs of an Actor that a particular instance of E70 Thing, in general available
+        to this Actor, is identical to one present in a relevant event or context of reference in the past, such
+        as a text in a book being sufficiently identical to the one in the claimed author's original manuscript
+        or edition in order to be used by the Actor for citation. Other examples are the provenance of
+        archaeological objects in collections, which may pertain to the claimed excavation spot or to the
+        inferred context of their creation;
+
+        The term "in general available" means that the thing is either physically in the hands of the actor or
+        that the actor or an actor of their trust has the principled ability to get access to the thing. In case
+        that only information objects exist describing the proper thing of interest, such as a photo of a lost
+        archaeological object, an instance of I14 Provenance Belief should be based on arguments including
+        references to provenance beliefs about descriptions, representations and the described things;
+
+        A formal description about the assumed provenance can be documented via the property J19 that. Note
+        that, depending on the intended argumentation about the respective instance of E70 Thing, different
+        aspects of provenance may be described about the same instance of E70 Thing;
+
+    Examples:
+        - Francesca Bologna's belief about the authenticity of Tacitus, Publius Cornelius. The Annals. Book 15;
+
+    In First Order Logic:
+        I14(x) ⇒ I2(x)
+
+    Properties:
+        J19 that (is subject of): I10 Provenance Statement
 
     """
