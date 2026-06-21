@@ -84,8 +84,8 @@ max-args = 15
 max-bool-expr = 5
 max-branches = 12
 max-locals = 15
-# set to 50 to fit CIDOC properties number;
-max-parents = 50
+# set to 60 to fit CIDOC properties number;
+max-parents = 60
 max-positional-arguments = 5
 max-public-methods = 30
 max-returns = 6
