@@ -95,15 +95,15 @@ class J1UsedAsPremise(PropertyMixin):
 
     Scope Note:
         This property associates an instance of I2 Belief with the instance of I5 Inference Making that used it
-        as a premise.
+        as a premise;
 
     Properties:
         -
     Examples:
         - My classification and dating of this bowl (I5) *used as premise* my belief that Dragendorff type 29
-          bowls are from the 1st century AD (I2).
+          bowls are from the 1st century AD (I2);
         - My classification and dating of this bowl (I5) *used as premise* my belief in the observations of this
-          bowl (I2).
+          bowl (I2);
 
     In First Order Logic:
         J1(x,y) ⇒ I5(x)
@@ -145,14 +145,14 @@ class J2ConcludedThat(PropertyMixin):
         one to many, necessary, dependent (1,n:1,1)
 
     Scope Note:
-        This property associates an instance of I2 Belief with the instance of I1 Argumentation that concluded it.
+        This property associates an instance of I2 Belief with the instance of I1 Argumentation that concluded it;
 
     Properties:
         -
     Examples:
         - Ian Hodder's re-examination, in 1996, of the physical relation of wall C and floor B of building 1
           in the north area of Catalhöyük (I1) *concluded that* Ian Hodder believed from 1996 on, that Floor B
-          was earlier than wall C of building 1 in the north area of Catalhöyük (I2) (Hodder 1999).
+          was earlier than wall C of building 1 in the north area of Catalhöyük (I2) (Hodder 1999);
 
     In First Order Logic:
         J2(x,y) ⇒ I1(x)
@@ -192,12 +192,12 @@ class J3Applied(PropertyMixin):
 
     Scope Note:
         This property associates an instance of I3 Inference Logic with the instance of I5 Inference Making that
-        used it to draw its conclusion.
+        used it to draw its conclusion;
 
     Properties:
         -
     Examples:
-        - My classification and dating of this bowl (I5) *applied* use of a typology (I3).
+        - My classification and dating of this bowl (I5) *applied* use of a typology (I3);
 
     In First Order Logic:
         J3(x,y) ⇒ I5(x)
@@ -234,12 +234,12 @@ class J4That(PropertyMixin):
 
     Scope Note:
         This property associates an instance of I4 Proposition Set with the instance of I2 Belief that holds an
-        opinion about it.
+        opinion about it;
 
     Properties:
         -
     Examples:
-        - Dragendorff's belief concerning type 29 Bowls (I2) *that* type 29 Bowls are from the 1st century AD (I4).
+        - Dragendorff's belief concerning type 29 Bowls (I2) *that* type 29 Bowls are from the 1st century AD (I4);
 
     In First Order Logic:
         J4(x,y) ⇒ I2(x)
@@ -275,7 +275,7 @@ class J5HoldsToBe(PropertyMixin):
 
     Scope Note:
         This property associates an instance of I2 Belief with the I6 Belief Value that reflects the opinion of
-        the instance of I2 Belief about the I4 Proposition Set associated with it.
+        the instance of I2 Belief about the I4 Proposition Set associated with it;
 
     Properties:
         -
@@ -314,7 +314,7 @@ class J7IsBasedOnEvidenceFrom(PropertyMixin):
 
     Scope Note:
         This property associates an instance of I7 Belief Adoption with the instance of E73 Information Object
-        that was a source of or evidence for the I4 Proposition Set that was adopted.
+        that was a source of or evidence for the I4 Proposition Set that was adopted;
 
     Properties:
         -
@@ -361,7 +361,7 @@ class J13AdoptedInterpretation(PropertyMixin):
         was established and possibly selected from the interpretation of the source or sources referred to by the
         property J14 adopted interpretation of. This property implies a relation of trust in the reliability of
         the sources. The actual believed content, i.e., propositions about some past reality that have been
-        adopted from the source, should be documented using the property J4 that.
+        adopted from the source, should be documented using the property J4 that;
 
     Properties:
         -
@@ -408,7 +408,7 @@ class J14AdoptedInterpretationOf(PropertyMixin):
         This property associates an instance of I12 Adopted Belief with a source or sources of interpretation
         from which the belief was established and possibly selected. In some cases of scholarly arguments,
         multiple source referring to a common topic may have been interpreted in order to form a particular
-        belief about the topic referred to.
+        belief about the topic referred to;
 
     Properties:
         -
@@ -452,7 +452,7 @@ class J15AssumedMeaning(PropertyMixin):
     Scope Note:
         This property associates an instance of I7 Belief Adoption with an instance of I13 Intended Meaning
         Belief about a meaning believed to be expressed in the source or sources referred to by the property
-        J14 adopted interpretation of.
+        J14 adopted interpretation of;
 
     Properties:
         -
@@ -460,7 +460,7 @@ class J15AssumedMeaning(PropertyMixin):
         - Francesca Bologna adopting the belief of Tacitus concerning Emperor Nero's whereabouts at the
           beginning of the Great Fire (I7) *assumed meaning* the belief of Francesca Bologna that what Publius
           Cornelius Tacitus meant was "Nero was at Antium when the Great Fire broke out and did not return to
-          Rome until the fire approached his house" (I13) (Bologna 2021).
+          Rome until the fire approached his house" (I13) (Bologna 2021);
 
     In First Order Logic:
         J15(x,y) ⇒ I7(x)
@@ -498,14 +498,14 @@ class J16AssumedMeaning(PropertyMixin):
     Scope Note:
         This property associates an instance of I13 Intended Meaning Belief with the instance of I4 Proposition
         Set that represents the meaning assumed by the holder of the belief to have been intended by the
-        respective source. The latter source can be documented with the property J17 about (has interpretation).
+        respective source. The latter source can be documented with the property J17 about (has interpretation);
 
     Properties:
         -
     Examples:
         - Francesca Bologna's belief that Publius Cornelius Tacitus meant that "Nero was at Antium when the
           Great Fire broke out and did not return to Rome until the fire approached his house" (I13) *assumed
-          meaning* {Nero in July 19, 64 AD ...} I4 (Bologna, 2021).
+          meaning* {Nero in July 19, 64 AD ...} I4 (Bologna, 2021);
 
     In First Order Logic:
         J16(x,y) ⇒ I13(x)
@@ -542,14 +542,14 @@ class J17About(PropertyMixin):
     Scope Note:
         This property associates an instance of I13 Intended Meaning Belief with the instance of E73 Information
         Object that was a source of or evidence for the interpretation of its intended meaning. If sources are
-        fragmentary about or complementary to a specific topic, more than one source may have been used.
+        fragmentary about or complementary to a specific topic, more than one source may have been used;
 
     Properties:
         -
     Examples:
         - Francesca Bologna's belief that Gaius Suetonius Tranquillus meant that Nero was singing in Rome while
           it was burning from July 19 in 64 AD *about* the extant book De Vita Caesarum, attributed to Gaius
-          Suetonius Tranquillus.
+          Suetonius Tranquillus;
 
     In First Order Logic:
         J17(x,y) ⇒ I13(x)
@@ -587,14 +587,14 @@ class J18AssumedProvenance(PropertyMixin):
         This property associates an instance of I7 Belief Adoption with an instance of I14 Provenance Belief
         about the source or sources referred to by the property J14 adopted interpretation of, which justifies
         the conviction that the trusted and adopted content of the source, or its copy at hand, is actually
-        identical, or sufficiently close to the assumed original and its context of creation.
+        identical, or sufficiently close to the assumed original and its context of creation;
 
     Properties:
         -
     Examples:
         - Francesca Bologna adopting the belief of Tacitus concerning Emperor Nero's whereabouts at the
           beginning of the Great Fire (I7) *assumed provenance* her belief about the authenticity of Tacitus,
-          Publius Cornelius. The Annals. Book 15 (I14).
+          Publius Cornelius. The Annals. Book 15 (I14);
 
     In First Order Logic:
         J18(x,y) ⇒ I7(x)
@@ -631,7 +631,7 @@ class J19That(PropertyMixin):
 
     Scope Note:
         This property associates an instance of I14 Provenance Belief with the instance of I10 Provenance
-        Statement that holds an opinion about it.
+        Statement that holds an opinion about it;
 
     Properties:
         -
@@ -639,7 +639,7 @@ class J19That(PropertyMixin):
         - Francesca Bologna's belief about the authenticity of Tacitus, Publius Cornelius. The Annals. Book 15
           *that* the copy of Tacitus, Publius Cornelius. The Annals. Book 15[15.6] at the hands of Francesca
           Bologna from the British Museum in 2021 represents a text written by the ancient Roman historian,
-          Publius Cornelius Tacitus.
+          Publius Cornelius Tacitus;
 
     In First Order Logic:
         J19(x,y) ⇒ I14(x)
@@ -676,7 +676,7 @@ class J20IsAboutTheProvenanceOf(PropertyMixin):
 
     Scope Note:
         This property associates an instance of I10 Provenance Statement with an instance of E70 Thing, the
-        provenance of which the statement describes.
+        provenance of which the statement describes;
 
     Properties:
         -
@@ -684,7 +684,7 @@ class J20IsAboutTheProvenanceOf(PropertyMixin):
         - The statement: "The exemplar of The Merchant of Venice, Quarto 1 (1600) owned by The British Library,
           shelf number BL C.34.k.22 was published in 1600 AD by Thomas Heyes" (I10) *is about the provenance of*
           the exemplar of The Merchant of Venice, Quarto 1 (1600), owned by the British Library, shelf number
-          BL C.34.k.22 (E70).
+          BL C.34.k.22 (E70);
 
     In First Order Logic:
         J20(x,y) ⇒ I10(x)
@@ -720,12 +720,12 @@ class J21ConcludedProvenance(PropertyMixin):
 
     Scope Note:
         This property describes the naming or identification of any real-world item by a name or any other
-        identifier.
+        identifier;
 
         This property associates an instance of I15 Provenance Assessment with an instance of I14 Provenance
         Belief that constitutes the conclusion of the assessment. An instance of I15 Provenance Assessment may
         conclude more than one instances of I14 Provenance Belief, typically about different objects considered
-        in the same assessment.
+        in the same assessment;
 
     Properties:
         -
@@ -770,14 +770,14 @@ class J22InterpretedMeaningOf(PropertyMixin):
     Scope Note:
         This property associates an instance of I16 Meaning Comprehension with the instance of E73 Information
         Object that was the source of or evidence for the interpretation of its intended meaning. If sources are
-        fragmentary about or complementary to a specific topic, more than one source may have been used.
+        fragmentary about or complementary to a specific topic, more than one source may have been used;
 
     Properties:
         -
     Examples:
         - My understanding of the statements about Emperor Nero's whereabouts in Rome while it was burning
           from July 19 in 64 AD (I16) interpreted meaning of the extant book De Vita Caesarum by Gaius
-          Suetonius Tranquillus.
+          Suetonius Tranquillus;
 
     In First Order Logic:
         J22(x,y) ⇒ I16(x)
@@ -815,14 +815,14 @@ class J23InterpretedMeaningAs(PropertyMixin):
     Scope Note:
         This property associates an instance of I16 Meaning Comprehension with the instance of I13 Intended
         Meaning Belief that was the result of the interpretation of the intended meaning of the analysed
-        source(s).
+        source(s);
 
     Properties:
         -
     Examples:
         - My understanding of the statements about Emperor Nero's whereabouts in Rome while it was burning
           from July 19 in 64 AD (I16) *interpreted meaning as* believing that it meant Nero was singing in
-          Rome while it was burning from July 19 in 64 AD (I13).
+          Rome while it was burning from July 19 in 64 AD (I13);
 
     In First Order Logic:
         J23(x,y) ⇒ I16(x)

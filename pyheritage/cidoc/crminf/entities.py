@@ -39,6 +39,25 @@ from pyheritage.cidoc.core.entities import (
     E73InformationObject,
     E89PropositionalObject,
 )
+from pyheritage.cidoc.crminf.properties import (
+    J1UsedAsPremise,
+    J2ConcludedThat,
+    J3Applied,
+    J4That,
+    J5HoldsToBe,
+    J7IsBasedOnEvidenceFrom,
+    J13AdoptedInterpretation,
+    J14AdoptedInterpretationOf,
+    J15AssumedMeaning,
+    J16AssumedMeaning,
+    J17About,
+    J18AssumedProvenance,
+    J19That,
+    J20IsAboutTheProvenanceOf,
+    J21ConcludedProvenance,
+    J22InterpretedMeaningOf,
+    J23InterpretedMeaningAs,
+)
 
 
 __all__ = (
@@ -222,7 +241,7 @@ class I11Situation(I4PropositionSet):
 
 
 @entity_register(label='I1 Argumentation')
-class I1Argumentation(E7Activity, ABC):
+class I1Argumentation(J2ConcludedThat, E7Activity, ABC):
     """'I1 Argumentation' CRMinf entity model;
 
     https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I1
@@ -264,7 +283,7 @@ class I1Argumentation(E7Activity, ABC):
 
 
 @entity_register(label='I2 Belief')
-class I2Belief(E2TemporalEntity, ABC):
+class I2Belief(J4That, J5HoldsToBe, E2TemporalEntity, ABC):
     """'I2 Belief' CRMinf entity model;
 
     https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I2
@@ -300,7 +319,7 @@ class I2Belief(E2TemporalEntity, ABC):
 
 
 @entity_register(label='I5 Inference Making')
-class I5InferenceMaking(I1Argumentation, E13AttributeAssignment):
+class I5InferenceMaking(J1UsedAsPremise, J3Applied, I1Argumentation, E13AttributeAssignment):
     """'I5 Inference Making' CRMinf entity model;
 
     https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I5
@@ -351,7 +370,13 @@ class I5InferenceMaking(I1Argumentation, E13AttributeAssignment):
 
 
 @entity_register(label='I7 Belief Adoption')
-class I7BeliefAdoption(I1Argumentation):
+class I7BeliefAdoption(
+    J7IsBasedOnEvidenceFrom,
+    J13AdoptedInterpretation,
+    J15AssumedMeaning,
+    J18AssumedProvenance,
+    I1Argumentation,
+):
     """'I7 Belief Adoption' CRMinf entity model;
 
     https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I7
@@ -397,7 +422,7 @@ class I7BeliefAdoption(I1Argumentation):
 
 
 @entity_register(label='I10 Provenance Statement')
-class I10ProvenanceStatement(I4PropositionSet):
+class I10ProvenanceStatement(J20IsAboutTheProvenanceOf, I4PropositionSet):
     """'I10 Provenance Statement' CRMinf entity model;
 
     https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I10
@@ -443,7 +468,7 @@ class I10ProvenanceStatement(I4PropositionSet):
 
 
 @entity_register(label='I12 Adopted Belief')
-class I12AdoptedBelief(I2Belief):
+class I12AdoptedBelief(J14AdoptedInterpretationOf, I2Belief):
     """'I12 Adopted Belief' CRMinf entity model;
 
     https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I12
@@ -479,7 +504,7 @@ class I12AdoptedBelief(I2Belief):
 
 
 @entity_register(label='I13 Intended Meaning Belief')
-class I13IntendedMeaningBelief(I2Belief):
+class I13IntendedMeaningBelief(J16AssumedMeaning, J17About, I2Belief):
     """'I13 Intended Meaning Belief' CRMinf entity model;
 
     https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I13
@@ -520,7 +545,7 @@ class I13IntendedMeaningBelief(I2Belief):
 
 
 @entity_register(label='I14 Provenance Belief')
-class I14ProvenanceBelief(I2Belief):
+class I14ProvenanceBelief(J19That, I2Belief):
     """'I14 Provenance Belief' CRMinf entity model;
 
     https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I14
@@ -565,7 +590,7 @@ class I14ProvenanceBelief(I2Belief):
 
 
 @entity_register(label='I15 Provenance Assessment')
-class I15ProvenanceAssessment(I1Argumentation):
+class I15ProvenanceAssessment(J21ConcludedProvenance, I1Argumentation):
     """'I15 Provenance Assessment' CRMinf entity model;
 
     https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I15
@@ -596,7 +621,7 @@ class I15ProvenanceAssessment(I1Argumentation):
 
 
 @entity_register(label='I16 Meaning Comprehension')
-class I16MeaningComprehension(I1Argumentation):
+class I16MeaningComprehension(J22InterpretedMeaningOf, J23InterpretedMeaningAs, I1Argumentation):
     """'I16 Meaning Comprehension' CRMinf entity model;
 
     https://cidoc-crm.org/extensions/crminf/html/CRMinf_v1.0.html#I16
