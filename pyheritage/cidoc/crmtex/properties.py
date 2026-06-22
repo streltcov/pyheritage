@@ -41,11 +41,18 @@ from pyheritage.cidoc.base import PropertyMixin
 
 
 if TYPE_CHECKING:
-    from pyheritage.cidoc.core.entities import E56Language
+    from pyheritage.cidoc.core.entities import (
+        E24PhysicalHumanMadeObject,
+        E56Language,
+    )
     from pyheritage.cidoc.crmtex.entities import (
         TX1WrittenText,
         TX3WritingSystem,
         TX7WrittenTextSegment,
+        TX8Grapheme,
+        TX9Glyph,
+        TX10Style,
+        TX12GraphemeSequence,
     )
 
 
@@ -55,6 +62,12 @@ __all__ = (
     'TXP4HasSegment',
     'TXP5Wrote',
     'TXP6Encodes',
+    'TXP7HasItem',
+    'TXP8HasComponent',
+    'TXP9IsEncodedUsing',
+    'TXP10DecipheredText',
+    'TXP11Transcribed',
+    'TXP12HasStyle',
 )
 
 
@@ -270,4 +283,265 @@ class TXP6Encodes(PropertyMixin):
     txp6_encodes: List[E56Language] = Field(
         default=None,
         description='TXP6 encodes (is encoded by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class TXP7HasItem(PropertyMixin):
+    """'TXP7 has item (is item of)' CRMtex property;
+
+    https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TXP7
+
+    Domain:
+        TX13 Script
+    Range:
+        TX8 Grapheme
+    SubProperty Of:
+        E89 Propositional Object. P67 refers to (is referred to by): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of TX13 Script with an instance of TX8
+        Grapheme that is employed by that script. A script consists of a set of
+        graphemes used for writing;
+
+    Properties:
+        -
+    Examples:
+        - The Latin script (TX13) *has item* the grapheme 'a' (TX8)
+        - The Greek script (TX13) *has item* the grapheme 'α' (TX8)
+
+    In First Order Logic:
+        TXP7(x,y) ⇒ TX13(x)
+        TXP7(x,y) ⇒ TX8(y)
+        TXP7(x,y) ⇒ P67(x,y)
+
+    """
+
+    txp7_has_item: List[TX8Grapheme] = Field(
+        default=None,
+        description='TXP7 has item (is item of)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class TXP8HasComponent(PropertyMixin):
+    """'TXP8 has component (is component of)' CRMtex property;
+
+    https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TXP8
+
+    Domain:
+        TX1 Written Text
+    Range:
+        TX9 Glyph
+    SubProperty Of:
+        E1 CRM Entity. P46 is composed of (forms part of): E1 CRM Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        one to many (0,n:0,1)
+
+    Scope Note:
+        This property states the physical belonging of an instance of TX9 Glyph to an
+        instance of TX1 Written Text. It links a written text to the concrete glyphs
+        that constitute its visible manifestation;
+
+    Properties:
+        -
+    Examples:
+        - The text of the Rosetta Stone (TX1) *has component* the carved hieroglyphic glyphs (TX9)
+        - The text of a papyrus letter (TX1) *has component* the ink strokes forming each character (TX9)
+
+    In First Order Logic:
+        TXP8(x,y) ⇒ TX1(x)
+        TXP8(x,y) ⇒ TX9(y)
+        TXP8(x,y) ⇒ P46(x,y)
+
+    """
+
+    txp8_has_component: List[TX9Glyph] = Field(
+        default=None,
+        description='TXP8 has component (is component of)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class TXP9IsEncodedUsing(PropertyMixin):
+    """'TXP9 is encoded using (encodes)' CRMtex property;
+
+    https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TXP9
+
+    Domain:
+        TX1 Written Text
+    Range:
+        TX3 Writing System
+    SubProperty Of:
+        -
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property is a shortcut associating an instance of TX1 Written Text directly
+        with the instance of TX3 Writing System that was used to encode it, without
+        requiring the explicit documentation of the writing activity;
+
+    Properties:
+        -
+    Examples:
+        - The text of the Codex Sinaiticus (TX1) *is encoded using* the Greek alphabet (TX3)
+        - The Vindolanda tablet text (TX1) *is encoded using* the Latin cursive (TX3)
+
+    In First Order Logic:
+        TXP9(x,y) ⇒ TX1(x)
+        TXP9(x,y) ⇒ TX3(y)
+
+    """
+
+    txp9_is_encoded_using: List[TX3WritingSystem] = Field(
+        default=None,
+        description='TXP9 is encoded using (encodes)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class TXP10DecipheredText(PropertyMixin):
+    """'TXP10 deciphered text (was deciphered by)' CRMtex property;
+
+    https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TXP10
+
+    Domain:
+        TX5 Text Recognition
+    Range:
+        E24 Physical Human-Made Object
+    SubProperty Of:
+        S4 Observation. O8 observed (was observed by): S15 Observable Entity
+    SuperProperty Of:
+        -
+    Quantification:
+        one to one (0,1:0,n)
+
+    Scope Note:
+        This property associates an instance of TX5 Text Recognition with the instance
+        of E24 Physical Human-Made Object carrying the glyphs that were recognised
+        during the text recognition activity;
+
+    Properties:
+        -
+    Examples:
+        - The multispectral imaging of a carbonised papyrus (TX5) *deciphered text* the papyrus roll (E24)
+        - The autoptic examination of a marble inscription (TX5) *deciphered text* the inscribed stele (E24)
+
+    In First Order Logic:
+        TXP10(x,y) ⇒ TX5(x)
+        TXP10(x,y) ⇒ E24(y)
+        TXP10(x,y) ⇒ O8(x,y)
+
+    """
+
+    txp10_deciphered_text: E24PhysicalHumanMadeObject | None = Field(
+        default=None,
+        description='TXP10 deciphered text (was deciphered by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class TXP11Transcribed(PropertyMixin):
+    """'TXP11 transcribed (was transcribed by)' CRMtex property;
+
+    https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TXP11
+
+    Domain:
+        TX6 Transliteration
+    Range:
+        TX12 Grapheme Sequence
+    SubProperty Of:
+        E7 Activity. P16 used specific object (was used for): E70 Thing
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property relates an instance of TX6 Transliteration to the instance of
+        TX12 Grapheme Sequence that it produced. The transliteration activity creates
+        a grapheme sequence that re-encodes the original text in a different writing
+        system;
+
+    Properties:
+        -
+    Examples:
+        - The transliteration of a Greek epigraph into Latin characters (TX6) *transcribed* the grapheme sequence
+          'logos' (TX12)
+        - The transliteration of a Russian text into the Latin alphabet (TX6) *transcribed* the grapheme sequence
+          'russkij' (TX12)
+
+    In First Order Logic:
+        TXP11(x,y) ⇒ TX6(x)
+        TXP11(x,y) ⇒ TX12(y)
+        TXP11(x,y) ⇒ P16(x,y)
+
+    """
+
+    txp11_transcribed: List[TX12GraphemeSequence] = Field(
+        default=None,
+        description='TXP11 transcribed (was transcribed by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class TXP12HasStyle(PropertyMixin):
+    """'TXP12 has style (is style of)' CRMtex property;
+
+    https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TXP12
+
+    Domain:
+        TX1 Written Text
+    Range:
+        TX10 Style
+    SubProperty Of:
+        E7 Activity. P33 used specific technique (was used for): E29 Design or Procedure
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property describes the style of an instance of TX1 Written Text. It
+        associates a written text with the instance of TX10 Style that characterises
+        its graphic appearance;
+
+    Properties:
+        -
+    Examples:
+        - The text of the Lindisfarne Gospels (TX1) *has style* Insular majuscule (TX10)
+        - A Roman square capital inscription (TX1) *has style* Roman square capitals (TX10)
+        - A Carolingian manuscript (TX1) *has style* Carolingian minuscule (TX10)
+
+    In First Order Logic:
+        TXP12(x,y) ⇒ TX1(x)
+        TXP12(x,y) ⇒ TX10(y)
+        TXP12(x,y) ⇒ P33(x,y)
+
+    """
+
+    txp12_has_style: List[TX10Style] = Field(
+        default=None,
+        description='TXP12 has style (is style of)',
     )
