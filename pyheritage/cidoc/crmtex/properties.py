@@ -135,7 +135,7 @@ class TXP2Includes(PropertyMixin):
     Range:
         TX1 Written Text
     SubProperty Of:
-        E25 Human-Made Feature. P56 bears feature (is found on): E26 Physical Feature
+        E19 Physical Object. P56 bears feature (is found on): E26 Physical Feature
     SuperProperty Of:
         -
     Quantification:

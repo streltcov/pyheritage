@@ -41,6 +41,25 @@ from pyheritage.cidoc.crminf import entities as _crminf_entities
 from pyheritage.cidoc.crminf.entities import I1Argumentation
 from pyheritage.cidoc.crmsci import entities as _crmsci_entities
 from pyheritage.cidoc.crmsci.entities import S4Observation
+from pyheritage.cidoc.crmtex.properties import (
+    TXP1UsedWritingSystem,
+    TXP2Includes,
+    TXP4HasSegment,
+    TXP5Wrote,
+    TXP6Encodes,
+    TXP7HasItem,
+    TXP8HasComponent,
+    TXP9IsEncodedUsing,
+    TXP10DecipheredText,
+    TXP11Transcribed,
+    TXP12HasStyle,
+    TXP13DecipheredViaRepresentation,
+    TXP14UsedCopyOrRepresentationOf,
+    TXP15RecordedCorrespondence,
+    TXP16EmploysScript,
+    TXP17HasPart,
+    TXP18Read,
+)
 
 
 __all__ = (
@@ -137,7 +156,7 @@ class TX10Style(E29DesignOrProcedure):
 
 
 @entity_register(label='TX13 Script')
-class TX13Script(E89PropositionalObject):
+class TX13Script(TXP7HasItem, E89PropositionalObject):
     """'TX13 Script' CRMtex entity;
 
     https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TX13
@@ -174,7 +193,7 @@ class TX13Script(E89PropositionalObject):
 
 
 @entity_register(label='TX3 Writing System')
-class TX3WritingSystem(E29DesignOrProcedure):
+class TX3WritingSystem(TXP6Encodes, TXP16EmploysScript, E29DesignOrProcedure):
     """'TX3 Writing System' CRMtex entity;
 
     https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TX3
@@ -211,7 +230,7 @@ class TX3WritingSystem(E29DesignOrProcedure):
 
 
 @entity_register(label='TX12 Grapheme Sequence')
-class TX12GraphemeSequence(E90SymbolicObject, ABC):
+class TX12GraphemeSequence(TXP17HasPart, E90SymbolicObject, ABC):
     """'TX12 Grapheme Sequence' CRMtex entity;
 
     https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TX12
@@ -244,7 +263,7 @@ class TX12GraphemeSequence(E90SymbolicObject, ABC):
 
 
 @entity_register(label='TX1 Written Text')
-class TX1WrittenText(E25HumanMadeFeature, ABC):
+class TX1WrittenText(TXP4HasSegment, TXP8HasComponent, TXP9IsEncodedUsing, TXP12HasStyle, E25HumanMadeFeature, ABC):
     """'TX1 Written Text' CRMtex entity;
 
     https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TX1
@@ -280,7 +299,7 @@ class TX1WrittenText(E25HumanMadeFeature, ABC):
 
 
 @entity_register(label='TX4 Writing Field')
-class TX4WritingField(E25HumanMadeFeature):
+class TX4WritingField(TXP2Includes, E25HumanMadeFeature):
     """'TX4 Writing Field' CRMtex entity;
 
     https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TX4
@@ -315,7 +334,7 @@ class TX4WritingField(E25HumanMadeFeature):
 
 
 @entity_register(label='TX2 Writing')
-class TX2Writing(E65Creation):
+class TX2Writing(TXP1UsedWritingSystem, TXP5Wrote, E65Creation):
     """'TX2 Writing' CRMtex entity;
 
     https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TX2
@@ -351,7 +370,14 @@ class TX2Writing(E65Creation):
 
 
 @entity_register(label='TX5 Text Recognition')
-class TX5TextRecognition(E65Creation, S4Observation):
+class TX5TextRecognition(
+    TXP10DecipheredText,
+    TXP13DecipheredViaRepresentation,
+    TXP14UsedCopyOrRepresentationOf,
+    TXP15RecordedCorrespondence,
+    E65Creation,
+    S4Observation,
+):
     """'TX5 Text Recognition' CRMtex entity;
 
     https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TX5
@@ -388,7 +414,7 @@ class TX5TextRecognition(E65Creation, S4Observation):
 
 
 @entity_register(label='TX6 Transliteration')
-class TX6Transliteration(E65Creation):
+class TX6Transliteration(TXP11Transcribed, E65Creation):
     """'TX6 Transliteration' CRMtex entity;
 
     https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TX6
@@ -527,7 +553,7 @@ class TX11GraphemeOccurrence(TX12GraphemeSequence):
 
 
 @entity_register(label='TX14 Reading')
-class TX14Reading(I1Argumentation):
+class TX14Reading(TXP18Read, I1Argumentation):
     """'TX14 Reading' CRMtex entity;
 
     https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TX14
