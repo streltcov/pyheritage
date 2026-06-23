@@ -43,6 +43,7 @@ from pyheritage.cidoc.base import PropertyMixin
 if TYPE_CHECKING:
     from pyheritage.cidoc.core.entities import (
         E24PhysicalHumanMadeObject,
+        E36VisualItem,
         E56Language,
     )
     from pyheritage.cidoc.crmtex.entities import (
@@ -53,6 +54,7 @@ if TYPE_CHECKING:
         TX9Glyph,
         TX10Style,
         TX12GraphemeSequence,
+        TX13Script,
     )
 
 
@@ -68,6 +70,12 @@ __all__ = (
     'TXP10DecipheredText',
     'TXP11Transcribed',
     'TXP12HasStyle',
+    'TXP13DecipheredViaRepresentation',
+    'TXP14UsedCopyOrRepresentationOf',
+    'TXP15RecordedCorrespondence',
+    'TXP16EmploysScript',
+    'TXP17HasPart',
+    'TXP18Read',
 )
 
 
@@ -544,4 +552,270 @@ class TXP12HasStyle(PropertyMixin):
     txp12_has_style: List[TX10Style] = Field(
         default=None,
         description='TXP12 has style (is style of)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class TXP13DecipheredViaRepresentation(PropertyMixin):
+    """'TXP13 deciphered via the representation (was representation for)' CRMtex property;
+
+    https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TXP13
+
+    Domain:
+        TX5 Text Recognition
+    Range:
+        E36 Visual Item
+    SubProperty Of:
+        E7 Activity. P16 used specific object (was used for): E70 Thing
+    SuperProperty Of:
+        -
+    Quantification:
+        one to one (0,1:0,n)
+
+    Scope Note:
+        This property associates an instance of TX5 Text Recognition with an instance
+        of E36 Visual Item, such as a digital image or a facsimile, that was used as
+        the basis for deciphering the text;
+
+    Properties:
+        -
+    Examples:
+        - The multispectral imaging of a palimpsest (TX5) *deciphered via the representation*
+          the digital image processed with spectral filters (E36)
+        - The reading of a faded inscription (TX5) *deciphered via the representation*
+          a UV photograph of the stone (E36)
+
+    In First Order Logic:
+        TXP13(x,y) ⇒ TX5(x)
+        TXP13(x,y) ⇒ E36(y)
+        TXP13(x,y) ⇒ P16(x,y)
+
+    """
+
+    txp13_deciphered_via_the_representation: E36VisualItem | None = Field(
+        default=None,
+        description='TXP13 deciphered via the representation (was representation for)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class TXP14UsedCopyOrRepresentationOf(PropertyMixin):
+    """'TXP14 used copy or representation of (was represented by)' CRMtex property;
+
+    https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TXP14
+
+    Domain:
+        TX5 Text Recognition
+    Range:
+        TX1 Written Text
+    SubProperty Of:
+        E7 Activity. P16 used specific object (was used for): E70 Thing
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates a non-autoptic instance of TX5 Text Recognition with
+        an instance of TX1 Written Text via a copy or surrogate of the original text,
+        rather than through direct examination of the physical carrier;
+
+    Properties:
+        -
+    Examples:
+        - The remote reading of a carbonised scroll (TX5) *used copy or representation of*
+          the text of the scroll as published in a digital edition (TX1)
+        - The study of an inscription from a squeeze (TX5) *used copy or representation of*
+          the text as reproduced on the paper squeeze (TX1)
+
+    In First Order Logic:
+        TXP14(x,y) ⇒ TX5(x)
+        TXP14(x,y) ⇒ TX1(y)
+        TXP14(x,y) ⇒ P16(x,y)
+
+    """
+
+    txp14_used_copy_or_representation_of: List[TX1WrittenText] = Field(
+        default=None,
+        description='TXP14 used copy or representation of (was represented by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class TXP15RecordedCorrespondence(PropertyMixin):
+    """'TXP15 recorded correspondence (was recorded by)' CRMtex property;
+
+    https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TXP15
+
+    Domain:
+        TX5 Text Recognition
+    Range:
+        TX12 Grapheme Sequence
+    SubProperty Of:
+        E65 Creation. P94 has created (was created by): E28 Conceptual Object
+    SuperProperty Of:
+        -
+    Quantification:
+        one to one (0,1:1,1)
+
+    Scope Note:
+        This property associates an instance of TX5 Text Recognition with the instance
+        of TX12 Grapheme Sequence that was created to record the correspondence between
+        the recognised glyphs and the graphemes of the identified script;
+
+    Properties:
+        -
+    Examples:
+        - The close reading of an Ancient Greek inscription (TX5) *recorded correspondence*
+          the grapheme sequence 'ΑΘΗΝΑ' (TX12)
+        - The digital recognition of a Latin inscription (TX5) *recorded correspondence*
+          the grapheme sequence 'SPQR' (TX12)
+
+    In First Order Logic:
+        TXP15(x,y) ⇒ TX5(x)
+        TXP15(x,y) ⇒ TX12(y)
+        TXP15(x,y) ⇒ P94(x,y)
+
+    """
+
+    txp15_recorded_correspondence: TX12GraphemeSequence | None = Field(
+        default=None,
+        description='TXP15 recorded correspondence (was recorded by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class TXP16EmploysScript(PropertyMixin):
+    """'TXP16 employs script (is script employed by)' CRMtex property;
+
+    https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TXP16
+
+    Domain:
+        TX3 Writing System
+    Range:
+        TX13 Script
+    SubProperty Of:
+        E89 Propositional Object. P148 has component (is component of): E89 Propositional Object
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of TX3 Writing System with the instance
+        of TX13 Script that it employs. A writing system implements a particular script
+        to represent a language;
+
+    Properties:
+        -
+    Examples:
+        - The English writing system (TX3) *employs script* the Latin script (TX13)
+        - The Russian writing system (TX3) *employs script* the Cyrillic script (TX13)
+
+    In First Order Logic:
+        TXP16(x,y) ⇒ TX3(x)
+        TXP16(x,y) ⇒ TX13(y)
+        TXP16(x,y) ⇒ P148(x,y)
+
+    """
+
+    txp16_employs_script: List[TX13Script] = Field(
+        default=None,
+        description='TXP16 employs script (is script employed by)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class TXP17HasPart(PropertyMixin):
+    """'TXP17 has part (is part of)' CRMtex property;
+
+    https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TXP17
+
+    Domain:
+        TX12 Grapheme Sequence
+    Range:
+        TX12 Grapheme Sequence
+    SubProperty Of:
+        E90 Symbolic Object. P106 is composed of (forms part of): E90 Symbolic Object
+    SuperProperty Of:
+        -
+    Quantification:
+        one to many (0,n:0,1)
+
+    Scope Note:
+        This property associates an instance of TX12 Grapheme Sequence with another
+        instance of TX12 Grapheme Sequence that is a part of it at a particular position.
+        A grapheme sequence may be composed of subsequences corresponding to smaller
+        textual units;
+
+    Properties:
+        -
+    Examples:
+        - The grapheme sequence 'catalogue' (TX12) *has part* the subsequence 'cat' (TX12)
+        - The grapheme sequence 'λόγος' (TX12) *has part* the subsequence 'λό' (TX12)
+
+    In First Order Logic:
+        TXP17(x,y) ⇒ TX12(x)
+        TXP17(x,y) ⇒ TX12(y)
+        TXP17(x,y) ⇒ P106(x,y)
+
+    """
+
+    txp17_has_part: List[TX12GraphemeSequence] = Field(
+        default=None,
+        description='TXP17 has part (is part of)',
+    )
+
+
+# ******************************************************************************************************************* #
+
+
+class TXP18Read(PropertyMixin):
+    """'TXP18 read (was read by)' CRMtex property;
+
+    https://cidoc-crm.org/extensions/crmtex/html/CRMtex_v2.0.html#TXP18
+
+    Domain:
+        TX14 Reading
+    Range:
+        TX1 Written Text
+    SubProperty Of:
+        E7 Activity. P16 used specific object (was used for): E70 Thing
+    SuperProperty Of:
+        -
+    Quantification:
+        many to many (0,n:0,n)
+
+    Scope Note:
+        This property associates an instance of TX14 Reading with an instance of TX1
+        Written Text whose meaning was interpreted during the reading activity;
+
+    Properties:
+        -
+    Examples:
+        - The reading of the Rosetta Stone by Jean-François Champollion (TX14) *read*
+          the hieroglyphic text of the Rosetta Stone (TX1)
+        - The palaeographic analysis of a medieval charter (TX14) *read*
+          the text of the charter (TX1)
+
+    In First Order Logic:
+        TXP18(x,y) ⇒ TX14(x)
+        TXP18(x,y) ⇒ TX1(y)
+        TXP18(x,y) ⇒ P16(x,y)
+
+    """
+
+    txp18_read: List[TX1WrittenText] = Field(
+        default=None,
+        description='TXP18 read (was read by)',
     )
