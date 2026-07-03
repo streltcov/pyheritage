@@ -14,7 +14,7 @@ from pydantic import BaseModel, ConfigDict, Field
 __all__ = ('CRMEntityBase', 'PropertyMixin', 'entity_register', )
 
 
-ENTITY_REGISTRY: dict[str, type] = {}
+ENTITY_REGISTRY: dict[str, dict[str, type]] = {}
 
 
 class PropertyMixin(ABC, BaseModel):
@@ -54,18 +54,19 @@ class CRMEntityBase(Identity):
 # ******************************************************************************************************************* #
 
 
-def entity_register(label: str) -> callable:
+def entity_register(label: str, version: str = "7.0") -> callable:
     """Entity decorator;
 
-    Adds entity class to entity registry;
-    Adds CRM code and CRM label to entity class attributes;
+    Adds entity class to versioned entity registry;
+    Adds CRM code, CRM label and CRM version to entity class attributes;
 
     """
     def wrapper(cls: CRMEntityBase) -> CRMEntityBase:
         code = label.split(" ")[0]
         cls.crm_code = code
         cls.crm_label = label
-        ENTITY_REGISTRY[code] = cls.__class__
+        cls.crm_version = version
+        ENTITY_REGISTRY.setdefault(code, {})[version] = cls
 
         return cls
 
