@@ -50,4 +50,24 @@ class VersionMatrixResolver:
         "7.1.3": {"archaeo": None, "dig": "4.0", "sci": None, "inf": "1.0",
                   "geo": "1.2+2024", "lrmoo": "1.0", "act": "0.2",
                   "ba": "1.4", "presso": "1.3"},
-    }
+    }    # ------------------------- #
+
+    def resolve(self, core_version: str, ext_name: str) -> str:
+        """Return the extension version for *ext_name* at *core_version*;
+
+        Raises
+            VersionNotSupported if *core_version* is not in the matrix;
+            ExtensionNotAvailable if the extension is explicitly None;
+
+        """
+        try:
+            ext_ver = self._matrix[core_version][ext_name]
+        except KeyError:
+            raise VersionNotSupported(
+                f"CRM version {core_version!r} is not supported"
+            ) from None
+        if ext_ver is None:
+            raise ExtensionNotAvailable(
+                f"Extension {ext_name!r} is not available for CRM {core_version}"
+            )
+        return ext_ver
