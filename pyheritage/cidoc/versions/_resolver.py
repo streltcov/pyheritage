@@ -43,14 +43,16 @@ class VersionMatrixResolver:
     """
 
     _matrix: ClassVar[dict[str, dict[str, str | None]]] = {
-        "7.0":   {"archaeo": None, "dig": None, "sci": None, "inf": None, "geo": None},
+        "7.0": {"archaeo": None, "dig": None, "sci": None, "inf": None, "geo": None},
         "7.1.1": {"archaeo": None, "dig": None, "sci": None, "inf": None, "geo": None},
         "7.1.2": {"archaeo": "2.1.1", "dig": None, "sci": "2.0", "inf": None,
                   "geo": None, "tex": "2.0", "frbroo": "2.4"},
         "7.1.3": {"archaeo": None, "dig": "4.0", "sci": None, "inf": "1.0",
                   "geo": "1.2+2024", "lrmoo": "1.0", "act": "0.2",
                   "ba": "1.4", "presso": "1.3"},
-    }    # ------------------------- #
+    }
+
+    # ------------------------- #
 
     def resolve(self, core_version: str, ext_name: str) -> str:
         """Return the extension version for *ext_name* at *core_version*;
@@ -71,3 +73,31 @@ class VersionMatrixResolver:
                 f"Extension {ext_name!r} is not available for CRM {core_version}"
             )
         return ext_ver
+
+    # ------------------------- #
+
+    def is_known(self, core_version: str) -> bool:
+        """Return True if 'core_version' is present in the compatibility matrix;
+
+        """
+        return core_version in self._matrix
+
+    # ------------------------- #
+
+    def compatible_extensions(self, core_version: str) -> dict[str, str]:
+        """Return all available extensions for 'core_version' with their versions;
+
+        Raises
+            VersionNotSupported if 'core_version' is not in the matrix;
+
+        """
+        try:
+            return {
+                k: v
+                for k, v in self._matrix[core_version].items()
+                if v is not None
+            }
+        except KeyError:
+            raise VersionNotSupported(
+                f"CRM version {core_version!r} is not supported"
+            ) from None
