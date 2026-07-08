@@ -10,7 +10,12 @@
 import pytest
 
 from pyheritage.cidoc import CRM
+
 # from pyheritage.cidoc.base import ENTITY_REGISTRY
+from pyheritage.cidoc.versions import (  # ExtensionNotAvailable,
+    VersionNotImplemented,
+    VersionNotSupported,
+)
 
 
 class TestCRMFactoryCore:
@@ -28,27 +33,33 @@ class TestCRMFactoryCore:
 
     # ------------------------- #
 
-    def test_explicit_version_7_1_2(self) -> None:
-        crm = CRM(version="7.1.2")
-        assert crm.__version__ == "7.1.2"
+    def test_not_implemented_712_raises(self) -> None:
+        with pytest.raises(VersionNotImplemented):
+            CRM(version="7.1.2")
 
     # ------------------------- #
 
-    def test_explicit_version_7_1_3(self) -> None:
-        crm = CRM(version="7.1.3")
-        assert crm.__version__ == "7.1.3"
+    def test_not_implemented_713_raises(self) -> None:
+        with pytest.raises(VersionNotImplemented):
+            CRM(version="7.1.3")
 
     # ------------------------- #
 
     def test_unsupported_version_raises(self) -> None:
-        with pytest.raises(LookupError):
+        with pytest.raises(VersionNotSupported):
             CRM(version="9.9.9")
 
     # ------------------------- #
 
     def test_unsupported_version_message(self) -> None:
-        with pytest.raises(LookupError, match="9.9.9"):
+        with pytest.raises(VersionNotSupported, match="9.9.9"):
             CRM(version="9.9.9")
+
+    # ------------------------- #
+
+    def test_not_implemented_version_message(self) -> None:
+        with pytest.raises(VersionNotImplemented, match="7.1.2"):
+            CRM(version="7.1.2")
 
     # ------------------------- #
 
@@ -98,25 +109,6 @@ class TestCRMFactoryCore:
         crm = CRM(version="7.0")
         e1 = crm.E1CRMEntity()
         assert e1.id is not None
-
-    # ------------------------- #
-
-    def test_different_versions_return_same_class_when_unchanged(self) -> None:
-        crm_70 = CRM(version="7.0")
-        crm_713 = CRM(version="7.1.3")
-
-        # E1 hasn't changed between 7.0 and 7.1.3 — should be same class
-        assert crm_70.E1CRMEntity is crm_713.E1CRMEntity
-
-    # ------------------------- #
-
-    def test_different_versions_return_different_class_when_changed(self) -> None:
-        crm_70 = CRM(version="7.0")
-        crm_712 = CRM(version="7.1.2")
-
-        # Classes that changed should be different between versions
-        if hasattr(crm_712, "E100SomethingNew"):
-            assert crm_712.E100SomethingNew is not crm_70.E1CRMEntity
 
     # ------------------------- #
 

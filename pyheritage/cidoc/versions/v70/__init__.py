@@ -3,13 +3,11 @@
 """CIDOC-CRM v7.0 version package;
 
 Re-exports core CIDOC-CRM 7.0 entities and properties;
-Child versions (v712, v713) inherit from this package and override selectively;
 
 """
 
 
-from pyheritage.cidoc.versions.v70 import _entities
-from pyheritage.cidoc.versions.v70 import _properties
+from pyheritage.cidoc.versions.v70 import _entities, _properties
 
 
 __all__ = (
